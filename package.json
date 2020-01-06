@@ -1,0 +1,30 @@
+{
+  "name": "github-analysis-report-2019",
+  "version": "1.0.0",
+  "description": "GitHub analysis report 2019 via X-lab",
+  "main": "lib/index.js",
+  "bin": "lib/index.js",
+  "scripts": {
+    "start": "npm run build && node lib/index.js",
+    "build": "tsc",
+    "pkg": "pkg package.json -t node10-win-x64,node10-linux-x64,node10-macos-x64 --out-path=./bin/"
+  },
+  "keywords": [
+    "GitHub",
+    "Data",
+    "analysis"
+  ],
+  "author": "X-lab",
+  "license": "MIT",
+  "dependencies": {
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.4",
+    "yargs": "^15.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.4",
+    "@types/yargs": "^13.0.4",
+    "pkg": "^4.4.2",
+    "tslint": "^5.20.1"
+  }
+}
