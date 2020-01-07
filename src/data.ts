@@ -9,104 +9,90 @@ export enum OperationType {
 }
 
 class TypeData {
-  public totalCount: number;
-  public detail: Map<string, number>;
+  public detail: Map<OperationType, number>;
 
   constructor() {
-    this.totalCount = 0;
-    this.detail = new Map<string, number>();
+    this.detail = new Map<OperationType, number>();
   }
 
-  public add(u: string, c: number) {
-    const count = c + (this.detail.has(u) ? this.detail.get(u) : 0);
-    this.detail.set(u, count);
-    this.totalCount += count;
+  public add(t: OperationType, c: number) {
+    const count = c + (this.detail.has(t) ? this.detail.get(t) : 0);
+    this.detail.set(t, count);
   }
 }
 
-export class Repo {
+export class DetailData {
   public name: string;
   public activity: number;
-  public typeData: Map<OperationType, TypeData>;
-  public userActivity: Map<string, number>;
+  public detail: Map<string, TypeData>;
+  public activityMap: Map<string, number>;
 
   constructor(name: string) {
     this.name = name;
     this.activity = 0;
-    this.userActivity = new Map<string, number>();
-    this.typeData = new Map<OperationType, TypeData>();
+    this.activityMap = new Map<string, number>();
+    this.detail = new Map<string, TypeData>();
   }
 
-  public add(u: string, c: number, type: OperationType) {
-    if (!this.typeData.has(type)) {
-      this.typeData.set(type, new TypeData());
+  public add(k: string, c: number, t: OperationType) {
+    if (!this.detail.has(k)) {
+      this.detail.set(k, new TypeData());
     }
-    const data = this.typeData.get(type);
+    const data = this.detail.get(k);
     if (!data) { return; }
-    data.add(u, c);
+    data.add(t, c);
   }
 
   public calc(weightMap: Map<OperationType, number>) {
     this.activity = 0;
-    this.typeData.forEach((data, type) => {
-      const weight = weightMap.get(type);
-      data.detail.forEach((c, u) => {
-        const credit = this.getCredit(u);
-        this.userActivity.set(u, credit + c * weight);
+    this.detail.forEach((data, k) => {
+      data.detail.forEach((c, type) => {
+        const weight = weightMap.get(type);
+        const credit = this.getCredit(k);
+        this.activityMap.set(k, credit + c * weight);
       });
     });
-    this.userActivity.forEach((c) => {
+    this.activityMap.forEach((c) => {
       this.activity += Math.sqrt(c);
     });
   }
 
-  public print(index: number) {
-    console.log(`${index}:${this.name}, developers: ${this.userActivity.size}, activity: ${Math.round(this.activity)}`);
-  }
-
-  private getCredit(user: string): number {
-    if (!this.userActivity.has(user)) {
-      this.userActivity.set(user, 0);
+  private getCredit(k: string): number {
+    if (!this.activityMap.has(k)) {
+      this.activityMap.set(k, 0);
       return 0;
     }
-    return this.userActivity.get(user);
+    return this.activityMap.get(k);
   }
 }
 
 export default class Data {
-  private data: Map<string, Repo>;
+  private data: Map<string, DetailData>;
 
   constructor() {
-    this.data = new Map<string, Repo>();
+    this.data = new Map<string, DetailData>();
   }
 
-  public add(r: string, u: string, c: number, type: OperationType) {
-    this.init(r);
-    const repo = this.data.get(r);
+  public add(k1: string, k2: string, c: number, type: OperationType) {
+    this.init(k1);
+    const repo = this.data.get(k1);
     if (repo) {
-      repo.add(u, c, type);
+      repo.add(k2, c, type);
     }
   }
 
-  public calc(weightMap: Map<OperationType, number>) {
+  public calc(weightMap: Map<OperationType, number>): DetailData[] {
     this.data.forEach((r) => r.calc(weightMap));
-  }
-
-  public async print(n: number = 0) {
-    if (n <= 0) {
-      n = this.data.size;
-    }
-    console.log(`Total repos: ${this.data.size}`);
     let arr = Array.from(this.data.values());
     arr = arr.sort((a, b) => {
       return b.activity - a.activity;
-    }).slice(0, n);
-    arr.forEach((repo, index) => repo.print(index));
+    });
+    return arr;
   }
 
   private init(r: string) {
     if (!this.data.has(r)) {
-      this.data.set(r, new Repo(r));
+      this.data.set(r, new DetailData(r));
     }
   }
 }

@@ -8,6 +8,8 @@ interface IConfig {
   pullMergedWeight: number;
   dataFilePath: string;
   outputRepoCount: number;
+  onlyChineseRepos: boolean;
+  outputMode: 'repo' | 'dev' | 'company';
 }
 
 const config: IConfig = {
@@ -17,7 +19,9 @@ const config: IConfig = {
   reviewCommentWeight: 4,
   pullMergedWeight: 5,
   dataFilePath: './data/data.json.gz',
-  outputRepoCount: 10,
+  outputRepoCount: 20,
+  onlyChineseRepos: false,
+  outputMode: 'repo',
 };
 
 export default config;
