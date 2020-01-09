@@ -89,7 +89,7 @@
 
 ![global_top_10_dev_cnt.png](./static/global_top_10_dev_cnt.png)
 
-世界活跃度与贡献项目数量 Top 1000 开发者列表请查询[这里](./DataSheet.xlxs)，所有开发者详情可由程序脚本获取。
+世界活跃度与贡献项目数量 Top 1000 开发者列表请查询[这里](./DataSheets.xlxs)，所有开发者详情可由程序脚本获取。
 
 ## 世界 Top 10 项目
 
@@ -97,7 +97,7 @@
 
 ![global_top_10_dev_act](./static/global_top_10_repo_act.png)
 
-世界活跃度与参与开发者数量 Top 1000 项目列表请查询[这里](./DataSheet.xlxs)，所有项目详情可由程序脚本获取。
+世界活跃度与参与开发者数量 Top 1000 项目列表请查询[这里](./DataSheets.xlxs)，所有项目详情可由程序脚本获取。
 
 ## 中国 Top 20 项目分析
 
@@ -106,7 +106,7 @@
 ![chinese_top_20_act](./static/chinese_top_20_act.png)
 
 
-所有中国项目详情列表请查询[这里](./DataSheet.xlxs)，如若发现错误或遗漏，欢迎提交 Issue 或 PR 到 GitHub。
+所有中国项目详情列表请查询[这里](./DataSheets.xlxs)，如若发现错误或遗漏，欢迎提交 Issue 或 PR 到 GitHub。
 
 另外对于其中一些有代表性的项目，我们进行一些协作网络的分析。我们以 pingcap/tidb 和 vuejs/vue 为例，分析了仓库中开发者协同修改文件的网络图。
 
