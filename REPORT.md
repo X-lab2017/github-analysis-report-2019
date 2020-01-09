@@ -69,11 +69,13 @@
 
 对于这 512W 个项目的活跃度分布，如下图：
 
-// TODO
+![activity_distribution_log.png](./static/activity_distribution_log.png)
 
 对于这 512W 个项目的活跃开发者人数分布，如下图：
 
-// TODO
+![logins_distribution_log.png](./static/logins_distribution_log.png)
+
+上述两张图中，我们使用了对数坐标，事实上在所有仓库中，仅有 1399 个项目的活跃度超过了 1000，占总项目数量不足万分之三；而参与开发者数量超过 1000 人的项目仅有 333 个，可谓万里挑一。说明大多数项目还是处于低活跃少参与的状态。
 
 ## 世界 Top 10 开发者账号
 
