@@ -1,26 +1,31 @@
 'use strict';
 
+import { existsSync, writeFileSync } from 'fs';
+import { EOL } from 'os';
+import { isNumber } from 'util';
 import yargs from 'yargs';
-import config from './config';
-import { OperationType } from './data';
+import config, { Sort } from './config';
+import Data, { OperationType } from './data';
 import { Processor } from './processor';
 import { loadChinese, loadChineseCompanies } from './utils';
 
-(async () => {
+export async function main() {
 
   yargs.locale('en-us');
   const argv = yargs.options({
+    f: { type: 'string', default: config.dataFilePath, desc: 'Origin data file path' },
     c: { type: 'number', default: config.issueCommentWeight, desc: 'Issue comment weight' },
     i: { type: 'number', default: config.openIssueWeight, desc: 'Open issue weight' },
     p: { type: 'number', default: config.openPullWeight, desc: 'Open PR weight' },
     r: { type: 'number', default: config.reviewCommentWeight, desc: 'Review comment weight' },
     m: { type: 'number', default: config.pullMergedWeight, desc: 'PR merged weight' },
-    f: { type: 'string', default: config.dataFilePath, desc: 'Origin data file path' },
     n: { type: 'number', default: config.outputRepoCount, desc: 'Output repo count' },
-    top: { type: 'number', default: 10, desc: 'Number to print for detail data' },
+    detail: { type: 'boolean', default: false, desc: 'Whether show detail data' },
+    detailn: { type: 'number', default: 10, desc: 'Number to print for detail data' },
     mode: { choices: ['repo', 'dev', 'company'], default: config.outputMode, desc: 'Output mode' },
-    dev: { type: 'array', default: [], desc: 'Search developers to output' },
-    repo: { type: 'array', default: [], desc: 'Search repo to output' },
+    search: { type: 'array', default: [], desc: 'Search items to output' },
+    compTop: { type: 'array', default: [500, 10000], desc: 'Show top N count for company' },
+    sort: { choices: ['act', 'cnt'], default: 'act', desc: 'Order by activity or repo/developer count' },
     ch: { type: 'boolean', default: config.onlyChineseRepos, desc: 'Only show chinese repos' },
   }).argv;
 
@@ -30,6 +35,11 @@ import { loadChinese, loadChineseCompanies } from './utils';
   }
 
   console.log('Start to load data file.');
+
+  if (!existsSync(argv.f)) {
+    console.error(`Origin data file not exists, path =`, argv.f);
+    return;
+  }
 
   const processor = new Processor();
   const data = await processor.processFile({
@@ -46,157 +56,111 @@ import { loadChinese, loadChineseCompanies } from './utils';
     .set(OperationType.REVIEW_COMMENT, argv.r)
     .set(OperationType.MERGE_PULL, argv.m);
   // calculate the activity
-  const arr = data.calc(weightMap);
+  data.calc(weightMap, argv.sort as Sort);
+  let arr = data.sortedData;
+  const companyData = new Data();
 
   console.log('Calculate done, total count is', arr.length);
   // print out the results
   const table = [];
-  if (argv.mode === 'repo') {
-    // print out repo rank list
-    if (argv.repo.length > 0) {
-      console.log('Gonna print repo detail for', argv.repo);
-      for (const repo of argv.repo) {
-        const ri = arr.findIndex((record) => record.name === repo);
-        if (ri < 0) { continue; }
-        const r = arr[ri];
-        const developers = Array.from(r.activityMap).sort((a, b) => {
-          return b[1] - a[1];
-        });
-        if (developers.length > 0) {
-          developers.slice(0, argv.top).forEach((v, index) => {
-            const detail = r.detail.get(v[0]).detail;
-            table.push({
-              '#Global': ri + 1,
-              '#': index + 1,
-              repo,
-              'developer': v[0],
-              'activity': v[1],
-              'issue comment': detail.get(OperationType.ISSUE_COMMNT) ?? 0,
-              'open issue': detail.get(OperationType.OPEN_ISSUE) ?? 0,
-              'open pull': detail.get(OperationType.OPEN_PULL) ?? 0,
-              'review comment': detail.get(OperationType.REVIEW_COMMENT) ?? 0,
-              'merge pull': detail.get(OperationType.MERGE_PULL) ?? 0,
-            });
-          });
-        }
-      }
-    } else if (!argv.ch) {
-      console.log('Gonna print global top', argv.n);
-      table.push(...arr.slice(0, argv.n).map((r, i) => {
-        return {
-          '#': i + 1,
-          'repo': r.name,
-          'developers': r.activityMap.size,
-          'activity': Math.round(r.activity),
-        };
-      }));
-    } else {
-      console.log('Gonna print chinese top', argv.n);
-      const chineseRepos = loadChinese();
-      let count = 0;
-      for (let i = 0; i < arr.length; i++) {
-        const r = arr[i];
-        if (chineseRepos.findIndex((prefix) => r.name.startsWith(prefix)) >= 0) {
-          count += 1;
-          if (count > argv.n) {
-            break;
-          }
-          table.push({
-            '#': count,
-            '#Global': i + 1,
-            'repo': r.name,
-            'developers': r.activityMap.size,
-            'activity': Math.round(r.activity),
-          });
-        }
-      }
-    }
-  } else if (argv.mode === 'dev') {
-    if (argv.dev.length > 0) {
-      // search developers
-      console.log('Gonna print search developers');
-      for (const login of argv.dev) {
-        const di = arr.findIndex((record) => record.name === login);
-        if (!di) { continue; }
-        const developer = arr[di];
-        const repos = Array.from(developer.activityMap).sort((a, b) => {
-          return b[1] - a[1];
-        });
-        if (repos.length > 0) {
-          repos.slice(0, argv.top).forEach((v, index) => {
-            const detail = developer.detail.get(v[0]).detail;
-            table.push({
-              '#Global': di + 1,
-              '#': index + 1,
-              login,
-              'repo': v[0],
-              'activity': v[1],
-              'issue comment': detail.get(OperationType.ISSUE_COMMNT) ?? 0,
-              'open issue': detail.get(OperationType.OPEN_ISSUE) ?? 0,
-              'open pull': detail.get(OperationType.OPEN_PULL) ?? 0,
-              'review comment': detail.get(OperationType.REVIEW_COMMENT) ?? 0,
-              'merge pull': detail.get(OperationType.MERGE_PULL) ?? 0,
-            });
-          });
-        }
-      }
-    } else {
-      // print top developers
-      console.log('Gonna print global top', argv.n);
-      table.push(...arr.slice(0, argv.n).map((r, i) => {
-        return {
-          '#': i + 1,
-          'developer': r.name,
-          'repos': r.activityMap.size,
-          'activity': Math.round(r.activity),
-        };
-      }));
-    }
-  } else if (argv.mode === 'company') {
-    console.log('Gonna print company top', argv.n);
-    const companyMap =
-      new Map<string, {
-        repos: number, developers: number, activity: number,
-        top500: number, top10000: number, rs: string[],
-      }>();
-    const companies = Array.from(loadChineseCompanies());
-    arr.forEach((r, index) => {
-      const c = companies.find((comp) => comp[1].find((prefix) => r.name.startsWith(prefix)));
-      if (!c) { return; }
-      const compName = c[0];
-      if (!companyMap.has(compName)) {
-        companyMap.set(compName, { repos: 0, developers: 0, activity: 0, top500: 0, top10000: 0, rs: [] });
-      }
-      const detail = companyMap.get(compName);
-      detail.repos += 1;
-      detail.developers += r.activityMap.size;
-      detail.activity += r.activity;
-      if (index < 500) {
-        detail.rs.push(`${index + 1}:${r.name}`);
-        detail.top500++;
-      }
-      if (index < 10000) {
-        detail.top10000++;
-      }
-    });
-    Array.from(companyMap).sort((a, b) => {
-      return b[1].top10000 - a[1].top10000;
-    }).forEach((c, index) => {
-      const [company, detail] = c;
-      table.push({
-        '#': index + 1,
-        company,
-        'Repos': detail.repos,
-        'Developers': detail.developers,
-        'Activity': Math.round(detail.activity),
-        'Top 500': detail.top500,
-        'Top 10000': detail.top10000,
-        'Top 500 repo array': detail.rs.join(','),
-      });
-    });
+
+  let filterFunc = (_: string) => true;
+  if (argv.search.length > 0) {
+    // add filter func for search items
+    filterFunc = (name: string): boolean => argv.search.some((s) => name.match(s));
   }
-  if (table.length > 0) {
-    console.table(table);
+  if (argv.mode === 'company') {
+    // recalculate company data
+    const companies = Array.from(loadChineseCompanies());
+    arr.forEach((item) => {
+      // repo belongs to a company
+      const company = companies.find((c) => c[1].some((r) => item.name.startsWith(r)));
+      if (!company) { return; }
+      for (let t = OperationType.ISSUE_COMMNT; t <= OperationType.MERGE_PULL; t++) {
+        companyData.set(company[0], item.name, item.opCount.get(t) ?? 0, t);
+      }
+    });
+    companyData.calc(weightMap, argv.sort as Sort);
+    arr = companyData.sortedData;
+  } else if (argv.mode === 'repo' && argv.ch) {
+    // add filter func for chinese repos
+    const prefixes = loadChinese();
+    filterFunc = (name: string) => prefixes.some((s) => name.startsWith(s)) && filterFunc(name);
   }
 
-})();
+  const getCountDetail = (opCount: Map<OperationType, number>): any => {
+    return {
+      'issue comment': opCount.get(OperationType.ISSUE_COMMNT) ?? 0,
+      'open issue': opCount.get(OperationType.OPEN_ISSUE) ?? 0,
+      'open PR': opCount.get(OperationType.OPEN_PULL) ?? 0,
+      'review comment': opCount.get(OperationType.REVIEW_COMMENT) ?? 0,
+      'PR merged': opCount.get(OperationType.MERGE_PULL) ?? 0,
+    };
+  };
+  let rank = 0;
+  for (let i = 0; i < arr.length; i++) {
+    if (rank > argv.n) {
+      break;
+    }
+    const item = arr[i];
+    const globalRank = i + 1;
+    if (!filterFunc(item.name)) { continue; }
+    rank++;
+
+    if (argv.detail) {
+      // show detail data
+      item.sortedData.slice(0, argv.detailn).forEach((detail) => {
+        const t: any = {
+          '#': rank,
+          '#Global': globalRank,
+          'name': item.name,
+          'sub name': detail.name,
+          ...getCountDetail(detail.opCount),
+        };
+        table.push(t);
+      });
+    } else {
+      // show brief data
+      const t: any = {
+        '#': rank,
+        '#Global': globalRank,
+        'name': item.name,
+        'activity': item.activity,
+        'count': item.data.size,
+        ...getCountDetail(item.opCount),
+      };
+      if (argv.mode === 'company') {
+        // if company mode, add some other factor
+        if (argv.compTop.length > 0) {
+          const companyRepos = Array.from(item.data.keys());
+          for (const top of argv.compTop) {
+            if (!isNumber(top)) {
+              console.log('Invalid top param', top);
+              continue;
+            }
+            t[`top ${top}`] = companyRepos.filter((r) =>
+              data.sortedData.slice(0, top).map((d) => d.name).includes(r)).length;
+          }
+        }
+      }
+      table.push(t);
+    }
+  }
+
+  if (table.length > 0) {
+    console.table(table);
+    // output to file as csv format
+    const keys = Object.keys(table[0]);
+    let str = keys.join(',') + EOL;
+    table.forEach((record) => {
+      keys.forEach((key) => {
+        str += record[key] + ',';
+      });
+      str += EOL;
+    });
+    writeFileSync('output.csv', str);
+  }
+
+}
+
+main();

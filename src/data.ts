@@ -1,5 +1,7 @@
 'use strict';
 
+import { Sort } from './config';
+
 export enum OperationType {
   ISSUE_COMMNT,
   OPEN_ISSUE,
@@ -8,91 +10,133 @@ export enum OperationType {
   MERGE_PULL,
 }
 
-class TypeData {
-  public detail: Map<OperationType, number>;
+export interface IRecordStructure {
+  [key: string]: Array<{
+    u: string;
+    c: number[];
+  }>;
+}
 
-  constructor() {
-    this.detail = new Map<OperationType, number>();
+class TypeData {
+  public name: string;
+  public opCount: Map<OperationType, number>;
+  public activity: number;
+
+  constructor(name: string) {
+    this.name = name;
+    this.opCount = new Map<OperationType, number>();
   }
 
-  public add(t: OperationType, c: number) {
-    const count = c + (this.detail.has(t) ? this.detail.get(t) : 0);
-    this.detail.set(t, count);
+  public set(t: OperationType, c: number) {
+    this.opCount.set(t, c);
+  }
+
+  public calc(weightMap: Map<OperationType, number>) {
+    this.activity = 0;
+    this.opCount.forEach((c, type) => {
+      const weight = weightMap.get(type);
+      this.activity += c * weight;
+    });
   }
 }
 
 export class DetailData {
   public name: string;
   public activity: number;
-  public detail: Map<string, TypeData>;
-  public activityMap: Map<string, number>;
+  public sortedData: TypeData[];
+  public opCount: Map<OperationType, number>;
+  public data: Map<string, TypeData>;
 
   constructor(name: string) {
     this.name = name;
     this.activity = 0;
-    this.activityMap = new Map<string, number>();
-    this.detail = new Map<string, TypeData>();
+    this.data = new Map<string, TypeData>();
+    this.sortedData = null;
+    this.opCount = new Map<OperationType, number>();
   }
 
-  public add(k: string, c: number, t: OperationType) {
-    if (!this.detail.has(k)) {
-      this.detail.set(k, new TypeData());
+  public set(k: string, c: number, t: OperationType) {
+    if (!this.data.has(k)) {
+      this.data.set(k, new TypeData(k));
     }
-    const data = this.detail.get(k);
-    if (!data) { return; }
-    data.add(t, c);
+    this.data.get(k).set(t, c);
   }
 
   public calc(weightMap: Map<OperationType, number>) {
     this.activity = 0;
-    this.detail.forEach((data, k) => {
-      data.detail.forEach((c, type) => {
-        const weight = weightMap.get(type);
-        const credit = this.getCredit(k);
-        this.activityMap.set(k, credit + c * weight);
-      });
+    this.data.forEach((d) => {
+      d.calc(weightMap);
+      this.activity += Math.sqrt(d.activity);
+      for (let t = OperationType.ISSUE_COMMNT; t <= OperationType.MERGE_PULL; t++) {
+        this.opCount.set(t, (this.opCount.get(t) ?? 0) + (d.opCount.get(t) ?? 0));
+      }
     });
-    this.activityMap.forEach((c) => {
-      this.activity += Math.sqrt(c);
-    });
-  }
-
-  private getCredit(k: string): number {
-    if (!this.activityMap.has(k)) {
-      this.activityMap.set(k, 0);
-      return 0;
-    }
-    return this.activityMap.get(k);
+    this.sortedData = Array.from(this.data.values()).sort((a, b) => b.activity - a.activity);
+    this.activity = Math.round(this.activity);
   }
 }
 
 export default class Data {
+  public sortedData: DetailData[];
+  public opCount: Map<OperationType, number>;
   private data: Map<string, DetailData>;
 
   constructor() {
     this.data = new Map<string, DetailData>();
+    this.sortedData = null;
+    this.opCount = new Map<OperationType, number>();
   }
 
-  public add(k1: string, k2: string, c: number, type: OperationType) {
-    this.init(k1);
-    const repo = this.data.get(k1);
-    if (repo) {
-      repo.add(k2, c, type);
+  public set(k1: string, k2: string, c: number, type: OperationType) {
+    if (!this.data.has(k1)) {
+      this.data.set(k1, new DetailData(k1));
     }
+    this.data.get(k1).set(k2, c, type);
   }
 
-  public calc(weightMap: Map<OperationType, number>): DetailData[] {
-    this.data.forEach((r) => r.calc(weightMap));
-    let arr = Array.from(this.data.values());
-    arr = arr.sort((a, b) => {
-      return b.activity - a.activity;
+  public calc(weightMap: Map<OperationType, number>, sort: Sort): void {
+    this.data.forEach((d) => {
+      d.calc(weightMap);
+      for (let t = OperationType.ISSUE_COMMNT; t <= OperationType.MERGE_PULL; t++) {
+        this.opCount.set(t, (this.opCount.get(t) ?? 0) + (d.opCount.get(t) ?? 0));
+      }
     });
-    return arr;
+    if (sort === 'act') {
+      this.sortedData = Array.from(this.data.values()).sort((a, b) => b.activity - a.activity);
+    } else if (sort === 'cnt') {
+      this.sortedData = Array.from(this.data.values()).sort((a, b) => b.data.size - a.data.size);
+    }
   }
 
-  private init(r: string) {
-    if (!this.data.has(r)) {
-      this.data.set(r, new DetailData(r));
-    }
+  public parse(obj: IRecordStructure): void {
+    this.data = new Map<string, DetailData>();
+    const keys = Object.keys(obj);
+    keys.forEach((k) => {
+      const r = obj[k];
+      const detail = new DetailData(k);
+      r.forEach((v) => {
+        const { u, c: counts } = v;
+        counts.forEach((c, t) => {
+          detail.set(u, c, t);
+        });
+      });
+      this.data.set(k, detail);
+    });
+  }
+
+  public toObj(): IRecordStructure {
+    const obj: IRecordStructure = {};
+    this.data.forEach((v, k) => {
+      obj[k] = Array.from(v.data).map((detail) => {
+        const m = detail[1].opCount;
+        return {
+          u: detail[0],
+          c: [m.get(OperationType.ISSUE_COMMNT) ?? 0, m.get(OperationType.OPEN_ISSUE) ?? 0,
+          m.get(OperationType.OPEN_PULL) ?? 0, m.get(OperationType.REVIEW_COMMENT) ?? 0,
+          m.get(OperationType.MERGE_PULL) ?? 0],
+        };
+      });
+    });
+    return obj;
   }
 }

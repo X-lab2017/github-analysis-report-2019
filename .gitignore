@@ -11,3 +11,5 @@ logs/
 *.lock
 *.js
 lib/
+output.csv
+.cache_*

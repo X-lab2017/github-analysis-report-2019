@@ -1,14 +1,15 @@
 'use strict';
 
 import { once } from 'events';
-import { createReadStream, existsSync } from 'fs';
+import { createReadStream, existsSync, readFileSync, writeFileSync } from 'fs';
 import { createInterface } from 'readline';
-import { createGunzip } from 'zlib';
+import { createGunzip, gunzipSync, gzipSync } from 'zlib';
+import { Mode } from './config';
 import Data from './Data';
 
 interface IProcessorOptions {
   filePath: string;
-  mode: 'repo' | 'dev' | 'company';
+  mode: Mode;
 }
 
 export interface IRecord {
@@ -21,8 +22,19 @@ export interface IRecord {
 export class Processor {
   public async processFile(options: IProcessorOptions): Promise<Data> {
     const data = new Data();
-    if (!existsSync(options.filePath)) {
-      console.error(`File not exists, path = `, options.filePath);
+
+    const getCacheFilePath = (mode: Mode): string => {
+      if (mode === 'dev') {
+        return `.cache_${mode}.gz`;
+      } else {
+        return `.cache_repo.gz`;
+      }
+    };
+    const cacheFilePath = getCacheFilePath(options.mode);
+    if (existsSync(cacheFilePath)) {
+      console.log('Cache file found, path=', cacheFilePath);
+      const o = JSON.parse(gunzipSync(readFileSync(cacheFilePath)).toString());
+      data.parse(o);
       return data;
     }
 
@@ -34,11 +46,11 @@ export class Processor {
 
       let record: any;
       let process: (r: any) => void = (r: any) => {
-        data.add(r.r, r.u, r.c, r.t);
+        data.set(r.r, r.u, r.c, r.t);
       };
       if (options.mode === 'dev') {
         process = (r: any) => {
-          data.add(r.u, r.r, r.c, r.t);
+          data.set(r.u, r.r, r.c, r.t);
         };
       }
       rl.on('line', (line) => {
@@ -52,10 +64,12 @@ export class Processor {
 
       await once(rl, 'close');
     } catch (e) {
-      console.error('Error during processing file, e = ', e);
+      console.error('Error during processing file, e =', e);
       return data;
     }
 
+    const obj = data.toObj();
+    writeFileSync(cacheFilePath, gzipSync(JSON.stringify(obj)));
     return data;
   }
 }

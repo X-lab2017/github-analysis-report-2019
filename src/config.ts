@@ -1,5 +1,8 @@
 'use strict';
 
+export type Mode = 'repo' | 'dev' | 'company';
+export type Sort = 'act' | 'cnt';
+
 interface IConfig {
   issueCommentWeight: number;
   openIssueWeight: number;
@@ -9,7 +12,7 @@ interface IConfig {
   dataFilePath: string;
   outputRepoCount: number;
   onlyChineseRepos: boolean;
-  outputMode: 'repo' | 'dev' | 'company';
+  outputMode: Mode;
 }
 
 const config: IConfig = {
@@ -19,7 +22,7 @@ const config: IConfig = {
   reviewCommentWeight: 4,
   pullMergedWeight: 5,
   dataFilePath: './data/data.json.gz',
-  outputRepoCount: 20,
+  outputRepoCount: 10,
   onlyChineseRepos: false,
   outputMode: 'repo',
 };
