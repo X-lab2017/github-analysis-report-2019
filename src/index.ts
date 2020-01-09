@@ -34,7 +34,7 @@ export async function main() {
     return;
   }
 
-  console.log('Start to load data file.');
+  console.log(new Date(), 'Start to load data file.');
 
   if (!existsSync(argv.f)) {
     console.error(`Origin data file not exists, path =`, argv.f);
@@ -47,7 +47,7 @@ export async function main() {
     mode: argv.mode,
   });
 
-  console.log('Load file done, start calculating.');
+  console.log(new Date(), 'Load file done, start calculating.');
   // set operation weights
   const weightMap = new Map<OperationType, number>()
     .set(OperationType.ISSUE_COMMNT, argv.c)
@@ -60,7 +60,7 @@ export async function main() {
   let arr = data.sortedData;
   const companyData = new Data();
 
-  console.log('Calculate done, total count is', arr.length);
+  console.log(new Date(), 'Calculate done, total count is', arr.length);
   // print out the results
   const table = [];
 
@@ -85,7 +85,8 @@ export async function main() {
   } else if (argv.mode === 'repo' && argv.ch) {
     // add filter func for chinese repos
     const prefixes = loadChinese();
-    filterFunc = (name: string) => prefixes.some((s) => name.startsWith(s)) && filterFunc(name);
+    const oldFilter = filterFunc;
+    filterFunc = (name: string) => prefixes.some((s) => name.startsWith(s)) && oldFilter(name);
   }
 
   const getCountDetail = (opCount: Map<OperationType, number>): any => {
@@ -99,7 +100,7 @@ export async function main() {
   };
   let rank = 0;
   for (let i = 0; i < arr.length; i++) {
-    if (rank > argv.n) {
+    if (argv.n > 0 && rank >= argv.n) {
       break;
     }
     const item = arr[i];
@@ -109,6 +110,7 @@ export async function main() {
 
     if (argv.detail) {
       // show detail data
+      item.sort();
       item.sortedData.slice(0, argv.detailn).forEach((detail) => {
         const t: any = {
           '#': rank,
@@ -147,6 +149,7 @@ export async function main() {
     }
   }
 
+  console.log(new Date(), 'Process done.');
   if (table.length > 0) {
     console.table(table);
     // output to file as csv format
@@ -158,7 +161,7 @@ export async function main() {
       });
       str += EOL;
     });
-    writeFileSync('output.csv', str);
+    writeFileSync(`output-${new Date()}.csv`, str);
   }
 
 }

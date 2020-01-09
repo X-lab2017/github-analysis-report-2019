@@ -71,8 +71,11 @@ export class DetailData {
         this.opCount.set(t, (this.opCount.get(t) ?? 0) + (d.opCount.get(t) ?? 0));
       }
     });
-    this.sortedData = Array.from(this.data.values()).sort((a, b) => b.activity - a.activity);
     this.activity = Math.round(this.activity);
+  }
+
+  public sort() {
+    this.sortedData = Array.from(this.data.values()).sort((a, b) => b.activity - a.activity);
   }
 }
 

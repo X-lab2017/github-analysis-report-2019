@@ -68,49 +68,84 @@
 
 对于这 533W 个项目的活跃度分布，如下图：
 
+// TODO
 
 对于这 533W 个项目的活跃开发者人数分布，如下图：
 
+// TODO
 
 ## 世界 Top 10 开发者账号
 
 根据上述给出的活跃度定义，我们对 2019 年全年活跃开发者进行了活跃度统计与排名，这里给出世界活跃度 Top 10 开发者账号列表：
 
-另外，除活跃度外，还可以以活跃仓库数量进行排名，此类榜单中 Top 10 均为 GitHub App，也说明了 App 的受欢迎程度，世界服务仓库最多的 Top 10 开发者账号列表如下：
+![global_top_10_dev_act](./static/global_top_10_dev_act.png)
 
-世界活跃度 Top 500 开发者列表请查询[这里]()，所有开发者详情可由程序脚本获取。
+从上述列表可以看到，世界活跃度 Top 10 开发者账号均为机器人账号，其中 7 个账号为 GitHub App，从这张列表中也可以看到开发者最常使用的自动化仓库管理、协作功能有哪些，主要集中在依赖更新、自动同步上游、学习、漏洞检测等。
+
+另外，除活跃度外，还可以以活跃仓库数量进行排名，此类榜单中 Top 10 也均为机器人，从该表中也可以看到机器人的受欢迎程序。世界服务仓库最多的 Top 10 开发者账号列表如下：
+
+![global_top_10_dev_cnt.png](./static/global_top_10_dev_cnt.png)
+
+世界活跃度与贡献项目数量 Top 1000 开发者列表请查询[这里](./DataSheet.xlxs)，所有开发者详情可由程序脚本获取。
 
 ## 世界 Top 10 项目
 
 根据上述给出的项目活跃度定义，我们对 2019 年全年活跃项目进行了活跃度统计与排名，这里给出世界活跃度 Top 10 项目的列表：
 
-世界活跃度 Top 500 项目列表请查询[这里]()，所有项目详情可由程序脚本获取。
+![global_top_10_dev_act](./static/global_top_10_repo_act.png)
+
+世界活跃度与参与开发者数量 Top 1000 项目列表请查询[这里](./DataSheet.xlxs)，所有项目详情可由程序脚本获取。
 
 ## 中国 Top 20 项目分析
 
 我们对所有排名的项目，筛选出了中国 Top 20 的项目，列表如下：
 
-对于其中一些有代表性的项目，我们进行一些协作网络的分析，结论如下：
+![chinese_top_20_act](./static/chinese_top_20_act.png)
 
-所有中国项目活跃度列表请查询[这里]()，如若发现错误或遗漏，欢迎提交 Issue 或 PR 到 GitHub。
+
+所有中国项目详情列表请查询[这里](./DataSheet.xlxs)，如若发现错误或遗漏，欢迎提交 Issue 或 PR 到 GitHub。
+
+另外对于其中一些有代表性的项目，我们进行一些协作网络的分析。我们以 pingcap/tidb 和 vuejs/vue 为例，分析了仓库中开发者协同修改文件的网络图。
+
+其中，pingcap/tidb 2019 年 10 月的协作网络如下图：
+
+![tidb_network](./static/tidb_network.png)
+
+而 vuejs/vue 在同一时段的协作网络如下图：
+
+![vue_network](./static/vue_network.png)
+
+图中红色节点为开发者账号，蓝色节点为仓库中的文件。红色节点越大，则表明该账号修改的文件数越多，而红蓝节点之间的边表示该账号修改过该文件，边的粗细表示修改次数。
+
+可以明显看到，tidb 项目社区中有包含多个核心维护者，他们各自维护着不同的模块，周边也有大量的开发者在做出贡献。而 vue 项目中，大部分贡献都是由一个账号（尤雨溪）做出的，其他开发者出现的协作孤岛大多是文档等文件的修改。
+
+由此可以看出不同类型的项目，他们的社区协作网络也呈现出完全不同的形态。更多顶级项目在 2019 年每月的协作网络图请查询[这里]()。
 
 ## 中国 Top 20 项目 Top Contributor 采访
 
-对于中国 Top 10 的项目，我们分析了其每个项目中最活跃的开发者，并就其中的一些开发者进行了采访，为什么他们的项目可以如此活跃，社区管理和运营的技巧是什么？
+对于中国 Top 20 的项目，我们分析了其每个项目中最活跃的开发者，并就其中的一些开发者进行了采访，为什么他们的项目可以如此活跃，社区管理和运营的技巧是什么？
+
+// TODO
 
 ## 技术公司开源项目一览
 
-各大开源项目，基本都有科技公司的支持，我们给出了一个科技公司维护的 GitHub 组织和项目列表，并根据该列表，计算了公司所维护的开源项目在 2019 年的活跃情况与开发者参与情况，并同时给出了在 star、fork 等层面的统计信息，结果如图：
+各大开源项目，基本都有科技公司的支持，我们给出了一个科技公司维护的 GitHub 组织和项目列表，并根据该列表，计算了公司所维护的开源项目在 2019 年的活跃情况与开发者参与情况，结果如图：
 
-各技术公司活跃项目详情请查询这里，如若发现错误或遗漏，欢迎提交 Issue 或 PR 到 GitHub。
+![company_top_act](./static/company_top_act.png)
+
+如若发现数据错误或遗漏，欢迎提交 Issue 或 PR 到 GitHub。
 
 ## 展望
 
+GitHub 2019 数据年报作为 X-lab 的首次 GitHub 数据年报，主要为大家提供了一些统计数据，并简单对社区协作关系做了一些分析工作。未来，X-lab 实验室将投入大量在校学生在 GitHub 数据挖掘的层面，旨在基于真实数据挖掘数据背后的价值，例如协作网络、社区管理、项目变迁等等，也希望可以在不久的将来，向社会提供这些数据分析的能力。
+
 ## 附录
+
 X-lab 将随本报告同时开源本次报告的原始数据与分析程序。
 
 ### 原始数据
-由于原始的日志文本数据数据量较大（约 1.45TB），故随本次报告的开源数据为统计后数据，data.json.gz 文件为压缩后的数据文件，总大小约为 154MB，解压后文件内容为文本内容，每行为一个记录项，由 JSON 格式编码，内容说明如下：
+
+由于原始的日志文本数据数据量较大（约 1.45TB），故随本次报告的开源数据为统计后数据，data.json.gz 文件为压缩后的数据文件，总大小约为 225MB，解压后文件内容为文本内容，总大小约 1.3GB，总行数约 2169 万行。每行为一个记录项，由 JSON 格式编码，内容说明如下：
 
 | 字段 | 类型   | 说明     | 
 |:----|:-------|:--------|
@@ -133,16 +168,6 @@ X-lab 将随本报告同时开源本次报告的原始数据与分析程序。
 
 由于原始数据体积较大，为方便使用，原始数据将通过 CDN 独立分发，地址为：[http://cdn.opensource-service.cn/github-analysis-report-2019/data.json.gz](http://cdn.opensource-service.cn/github-analysis-report-2019/data.json.gz)。
 
-另外，可以下载已经预处理过的数据文件代替原始文件，
-
 ### 分析程序
+
 分析程序随报告一同开源，地址为 [https://github.com/X-lab2017/github-analysis-report-2019](https://github.com/X-lab2017/github-analysis-report-2019)，具体使用方法请参考项目说明。
-
-由于执行文件体积较大，为方便使用，上述仓库中仅包含了项目源代码，可执行二进制文件由 CDN 独立分发，不与仓库一并分发，下载地址分别为：
-
-Linux 可执行文件：[http://cdn.opensource-service.cn/github-analysis-report-2019/linux](http://cdn.opensource-service.cn/github-analysis-report-2019/linux)
-
-MacOS 可执行文件：[http://cdn.opensource-service.cn/github-analysis-report-2019/macos](http://cdn.opensource-service.cn/github-analysis-report-2019/macos)
-
-Windows 可执行文件：[http://cdn.opensource-service.cn/github-analysis-report-2019/win.exe](http://cdn.opensource-service.cn/github-analysis-report-2019/win.exe)
-

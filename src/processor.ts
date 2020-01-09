@@ -58,8 +58,9 @@ export class Processor {
         try {
           record = JSON.parse(line);
           process(record);
-          // tslint:disable-next-line: no-empty
-        } catch { }
+        } catch {
+          console.log('Parse json fail, line=', line);
+        }
       });
 
       await once(rl, 'close');
