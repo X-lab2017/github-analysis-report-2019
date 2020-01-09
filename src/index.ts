@@ -7,7 +7,7 @@ import yargs from 'yargs';
 import config, { Sort } from './config';
 import Data, { OperationType } from './data';
 import { Processor } from './processor';
-import { loadChinese, loadChineseCompanies } from './utils';
+import { loadChinese, loadChineseCompanies, logger } from './utils';
 
 export async function main() {
 
@@ -20,12 +20,12 @@ export async function main() {
     r: { type: 'number', default: config.reviewCommentWeight, desc: 'Review comment weight' },
     m: { type: 'number', default: config.pullMergedWeight, desc: 'PR merged weight' },
     n: { type: 'number', default: config.outputRepoCount, desc: 'Output repo count' },
-    detail: { type: 'boolean', default: false, desc: 'Whether show detail data' },
-    detailn: { type: 'number', default: 10, desc: 'Number to print for detail data' },
+    detail: { type: 'boolean', default: config.showDetail, desc: 'Whether show detail data' },
+    detailn: { type: 'number', default: config.detailNum, desc: 'Number to print for detail data' },
     mode: { choices: ['repo', 'dev', 'company'], default: config.outputMode, desc: 'Output mode' },
-    search: { type: 'array', default: [], desc: 'Search items to output' },
-    compTop: { type: 'array', default: [500, 10000], desc: 'Show top N count for company' },
-    sort: { choices: ['act', 'cnt'], default: 'act', desc: 'Order by activity or repo/developer count' },
+    search: { type: 'array', default: config.searchItems, desc: 'Search items to output' },
+    compTop: { type: 'array', default: config.companyTopN, desc: 'Show top N count for company' },
+    sort: { choices: ['act', 'cnt'], default: config.sortMode, desc: 'Order by activity or repo/developer count' },
     ch: { type: 'boolean', default: config.onlyChineseRepos, desc: 'Only show chinese repos' },
   }).argv;
 
@@ -34,10 +34,10 @@ export async function main() {
     return;
   }
 
-  console.log(new Date(), 'Start to load data file.');
+  logger.info('Start to load data file.');
 
   if (!existsSync(argv.f)) {
-    console.error(`Origin data file not exists, path =`, argv.f);
+    logger.error(`Origin data file not exists, path =`, argv.f);
     return;
   }
 
@@ -47,7 +47,7 @@ export async function main() {
     mode: argv.mode,
   });
 
-  console.log(new Date(), 'Load file done, start calculating.');
+  logger.info('Load file done, start calculating.');
   // set operation weights
   const weightMap = new Map<OperationType, number>()
     .set(OperationType.ISSUE_COMMNT, argv.c)
@@ -60,7 +60,7 @@ export async function main() {
   let arr = data.sortedData;
   const companyData = new Data();
 
-  console.log(new Date(), 'Calculate done, total count is', arr.length);
+  logger.info('Calculate done, total count is', arr.length);
   // print out the results
   const table = [];
 
@@ -117,6 +117,7 @@ export async function main() {
           '#Global': globalRank,
           'name': item.name,
           'sub name': detail.name,
+          'activity': detail.activity,
           ...getCountDetail(detail.opCount),
         };
         table.push(t);
@@ -137,7 +138,7 @@ export async function main() {
           const companyRepos = Array.from(item.data.keys());
           for (const top of argv.compTop) {
             if (!isNumber(top)) {
-              console.log('Invalid top param', top);
+              logger.error('Invalid top param', top);
               continue;
             }
             t[`top ${top}`] = companyRepos.filter((r) =>
@@ -149,7 +150,7 @@ export async function main() {
     }
   }
 
-  console.log(new Date(), 'Process done.');
+  logger.info('Process done.');
   if (table.length > 0) {
     console.table(table);
     // output to file as csv format
@@ -164,6 +165,7 @@ export async function main() {
     writeFileSync(`output-${new Date()}.csv`, str);
   }
 
+  return table;
 }
 
 main();

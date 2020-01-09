@@ -13,6 +13,11 @@ interface IConfig {
   outputRepoCount: number;
   onlyChineseRepos: boolean;
   outputMode: Mode;
+  sortMode: Sort;
+  searchItems: string[];
+  showDetail: boolean;
+  detailNum: number;
+  companyTopN: number[];
 }
 
 const config: IConfig = {
@@ -25,6 +30,11 @@ const config: IConfig = {
   outputRepoCount: 10,
   onlyChineseRepos: false,
   outputMode: 'repo',
+  sortMode: 'act',
+  searchItems: [],
+  showDetail: false,
+  detailNum: 10,
+  companyTopN: [500, 10000],
 };
 
 export default config;

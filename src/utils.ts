@@ -75,3 +75,12 @@ export function loadChineseCompanies(): Map<string, string[]> {
 
   return ret;
 }
+
+export const logger = {
+  info(...args: any[]) {
+    console.log(new Date(), ...args);
+  },
+  error(...args: any[]) {
+    console.error(new Date(), ...args);
+  },
+};

@@ -6,6 +6,7 @@ import { createInterface } from 'readline';
 import { createGunzip, gunzipSync, gzipSync } from 'zlib';
 import { Mode } from './config';
 import Data from './Data';
+import { logger } from './utils';
 
 interface IProcessorOptions {
   filePath: string;
@@ -32,7 +33,7 @@ export class Processor {
     };
     const cacheFilePath = getCacheFilePath(options.mode);
     if (existsSync(cacheFilePath)) {
-      console.log('Cache file found, path=', cacheFilePath);
+      logger.info('Cache file found, path=', cacheFilePath);
       const o = JSON.parse(gunzipSync(readFileSync(cacheFilePath)).toString());
       data.parse(o);
       return data;
@@ -59,13 +60,13 @@ export class Processor {
           record = JSON.parse(line);
           process(record);
         } catch {
-          console.log('Parse json fail, line=', line);
+          logger.info('Parse json fail, line=', line);
         }
       });
 
       await once(rl, 'close');
     } catch (e) {
-      console.error('Error during processing file, e =', e);
+      logger.info('Error during processing file, e =', e);
       return data;
     }
 
