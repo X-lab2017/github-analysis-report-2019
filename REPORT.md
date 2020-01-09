@@ -51,7 +51,7 @@
 
 以上 5 个种行为在该报告模型中，具有不一样的权重，其加权值逐级增加，加权值分别为 1、2、3、4、5，即：
 
-![activity_user](http://latex.codecogs.com/gif.latex?A_u%20%3D%20%20C_%7Bissue%5C_comment%7D%20+%202%20%5Ccdot%20C_%7Bopen%5C_issue%7D%20+%203%20%5Ccdot%20C_%7Bopen%5C_pr%7D%20+%204%20%5Ccdot%20C_%7Breivew%5C_comment%7D%20+%205%20%5Ccdot%20C_%7Bpr%5C_merged%7D)
+![activity_user](http://latex.codecogs.com/gif.latex?A_u%20%3D%20%20C_%7Bissue%5C_comment%7D%20+%202C_%7Bopen%5C_issue%7D%20+%203C_%7Bopen%5C_pr%7D%20+%204C_%7Breivew%5C_comment%7D%20+%205C_%7Bpr%5C_merged%7D)
 
 #### 项目活跃度
 
