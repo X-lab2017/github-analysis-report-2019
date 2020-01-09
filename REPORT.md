@@ -51,13 +51,13 @@
 
 以上 5 个种行为在该报告模型中，具有不一样的权重，其加权值逐级增加，加权值分别为 1、2、3、4、5，即：
 
-![activity_user](http://latex.codecogs.com/gif.latex?A_u%20%3D%20%20C_%7Bissue%5C_comment%7D%20+%202C_%7Bopen%5C_issue%7D%20+%203C_%7Bopen%5C_pr%7D%20+%204C_%7Breivew%5C_comment%7D%20+%205C_%7Bpr%5C_merged%7D)
+![activity_user](./static/activity_user.gif)
 
 #### 项目活跃度
 
 项目活跃度，其定义为某特定项目在一段时间内的活跃评价指标。其活跃度由该段时间内在本项目中产生活跃的开发者活跃度加权计算得到，即：
 
-![activity_repo](http://latex.codecogs.com/gif.latex?A_r%20%3D%20%5Csum%20%5Csqrt%7BA_u%7D)
+![activity_repo](./static/activity_repo.gif)
 
 使用开方的加权方式，用于抹平因核心开发者活跃度过高而导致项目活跃度过高，在该计算方式下，活跃度计算方式对参与人数较多而活跃情况平均的项目更加友好。
 
