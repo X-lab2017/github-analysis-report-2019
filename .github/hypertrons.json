@@ -91,7 +91,8 @@
     "version": 1
   },
   "auto_merge": {
-    "version": 1
+    "version": 1,
+    "sched": "0 */5 * * * *"
   },
   "issue_reminder": {
     "version": 1
