@@ -176,6 +176,26 @@ for Mining Software Repositories, 2018.](https://www.sback.it/publications/fse20
 
 Git2net: [C. Gote, I. Scholtes, and F. Schweitzer, git2net - Mining Time-Stamped Co-Editing Networks from Large git Repositories, 2019 ](https://arxiv.org/pdf/1903.10180.pdf) 
 
+## 开发语言分析
+我们分别对世界项目活跃度 Top1000 的项目、世界项目参与人数 Top1000 的项目和中国开源项目进行了开发语言的统计，可以发现 JavaScript 使用最多。猜测的原因如下：
+
+* Java，Python等语言也占有不少的比例，但是用这些语言开发的项目，大多数也会同时应用了 Javascript ，很多时候 Javascript 属于一种其它语言开发项目过程中必不可少的一种附带语言。
+* GitHub 中开源的 Javascript 项目数量很多。
+
+世界项目活跃度 Top1000 和世界项目参与人数 Top1000 的项目中，Python的使用居于第二位，可能是因为：
+
+* Python 相较于其他主流编程语言具有更好的可读性，简单易学，易于维护。
+* Python 应用范围广，它自带的各种模块加上丰富的第三方模块，免去了很多“重复造轮子”的工作，可以更快地实现多种功能。
+* 人工智能的浪潮进一步推动了 Python 的发展，很多人工智能任务以及大数据分析都会优先使用 Python 实现。
+
+![world_active_project_language](./static/world_active_project_language.png)
+
+![world_participant_project_language](./static/world_participant_project_language.png)
+
+而中国开源项目中Python的使用与Java、Go、C++相比较少。
+
+![china_opensource_project_language](./static/china_opensource_project_language.png)
+
 ## 中国 Top 20 项目 Top Contributor 采访
 
 对于中国 Top 20 的项目，我们分析了其每个项目中最活跃的开发者，并就其中的一些开发者进行了采访，为什么他们的项目可以如此活跃，社区管理和运营的技巧是什么？
