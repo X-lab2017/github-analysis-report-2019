@@ -24,7 +24,7 @@
         "description": "Committer of the project",
         "users": [
           "frank-zsy",
-          "WillWangx",
+          "will-ww",
           "JerryKuan"
         ],
         "commands": []
@@ -43,7 +43,7 @@
         "description": "After approvers' approve, pulls should be merged automatically",
         "users": [
           "frank-zsy",
-          "WillWangx",
+          "will-ww",
           "JerryKuan"
         ],
         "commands": [
