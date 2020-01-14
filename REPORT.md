@@ -105,24 +105,76 @@
 
 ![chinese_top_20_act](./static/chinese_top_20_act.png)
 
+所有中国项目详情列表请查询[这里](https://github.com/X-lab2017/github-analysis-report-2019/blob/master/DataSheets.xlsx)，如若发现错误或遗漏，欢迎提交 Issue 或 PR 到 GitHub。
 
-所有中国项目详情列表请查询[这里](./DataSheets.xlsx)，如若发现错误或遗漏，欢迎提交 Issue 或 PR 到 GitHub。
+从Top 20列表信息中，我们可以看出，`996icu/996·ICU`的综合活跃度数值远远高于其他项目，数值上超过其他项目一个数量级。该项目中数值最高的指标为open issue，同样超出其他项目一个数量级，达到了22080，最低的指标为`review comment`，只有144。`996.ICU` 作为一个现象级开源项目，指发生于2019年3月-4月的 GitHub 事件，中国程序员为抗议 996 工作制，发布了 996.icu 项目，短时间内获得超过20万颗星星，成为太阳系最受欢迎的项目。
 
-另外对于其中一些有代表性的项目，我们进行一些协作网络的分析。我们以 pingcap/tidb 和 vuejs/vue 为例，分析了仓库中开发者协同修改文件的网络图。
+列表中两个比较有趣的项目是`selfteaching/selfteaching-python-camp`和`Advanced-Frontend/Daily-Interview-Question`，这两个项目的活跃排名分别是第四和第十一，分别对应了教育和面试求职两个领域。这侧面反映出大众对这两个领域的需求和关注度非常高。
 
-其中，pingcap/tidb 2019 年 10 月的协作网络如下图：
+另一个非常注目的项目是`pingcap/tidb`，该项目的`review comment`是20个项目中最高的，达到惊人的14913，相对比之下，该项属性下排名第二的`tikv`只有它的一半左右；`issue comment`仅次于`996icu/996·ICU`，`open PR` 仅次于 `selfteaching/selfteaching-python-camp`，均在对应属性下排名第二。
 
-![tidb_network](./static/tidb_network.png)
+**repo协作关系图**
 
-而 vuejs/vue 在同一时段的协作网络如下图：
+针对上文分析方法得出的排名前20的中国开源项目，本文对仓库的历史commits记录进行挖掘。Git仓库中的每一个commit记录由贡献者产生，对仓库的一个或者多个文件产生影响，因此对特定时段内的所有贡献者的提交记录分析能反映出了贡献者的活跃程度、协作模式以及项目社区本身的类型属性。我们通过仓库挖掘的工具对中国活跃程度排名前20的项目commit记录进行挖掘分析，并做可视化展示，相关数据文件参考[这里]()。
 
-![vue_network](./static/vue_network.png)
+从时间维度上，我们将重点放在2019中仓库的提交记录，对于每一个仓库，以单月和全年为粒度分析单个仓库的commit记录，并将仓库的内容贡献模式以二部图的方式可视化展示。数据文件的可视化图中蓝色节点代表仓库文件，红色节点代表用户，节点越大，表面该账号对应的用户修改的文件内容越多，节点间的边的粗细反应了贡献次数。
 
-图中红色节点为开发者账号，蓝色节点为仓库中的文件。红色节点越大，则表明该账号修改的文件数越多，而红蓝节点之间的边表示该账号修改过该文件，边的粗细表示修改次数。
+我们通过几个典型的例子来对分析结果进行说明展示。从可视化的关系图来看，`996.ICU`项目从3月份开始出现提交记录，且3、4两个月份最为活跃，之后热度开始消减。该项目的网络图结构呈现出“二元”形态，即图中存在一个主要贡献者（`n_996Icu`，另一个相对较大的用户节点`ImgbotApp`为机器人账户）, 网络中大多数文件内容由该账户贡献，同时存在一个被频繁修改的文件`README.md`，多数贡献账户只对该文件做出内容贡献。其中`n_996Icu`对`README.md`之间的贡献最频繁，这一点从两者之间的链接权重可以看出，这个模式在该项目的3月份贡献图可以被很清晰的观察到。
 
-可以明显看到，tidb 项目社区中有包含多个核心维护者，他们各自维护着不同的模块，周边也有大量的开发者在做出贡献。而 vue 项目中，大部分贡献都是由一个账号（尤雨溪）做出的，其他开发者出现的协作孤岛大多是文档等文件的修改。
+从`tidb`项目的内容贡献图来看，整个社区存在多个核心维护者，他们各自维护着不同的模块，周边也有大量的开发者在做出贡献。从单月的数据来看，该社区每个月的提交修改非常频繁，相较于其他项目来看，`tidb`以比较快的速度进行演化更新。与之相对比来看，其他项目的单月贡献活跃程度及贡献者多样性远不及`tidb`项目。以`vuejs`下的两个项目（`vue-cli` 和 `vue`）为例，在`vuejs/vue-cli`项目中，从每月贡献图可以看出该项目的大部分贡献由（`Haoqun Jiang`）做出，单月的主要贡献者不超过两名。`vuejs/vue`大部分贡献都是由一个账号（`Evan You` 尤雨溪）做出的，该项目4月份之后内容贡献图呈现出许多协作孤岛的形态，反映出贡献者对少量文件的修改，项目变动不大。
 
-由此可以看出不同类型的项目，他们的社区协作网络也呈现出完全不同的形态。更多顶级项目在 2019 年每月的协作网络图请查询[这里]()。
+**996.ICU项目3月份贡献图**
+
+![996.ICU_03.png](./static/996.ICU_03.png)
+
+
+
+
+
+**996 .ICU全年贡献图**
+
+![996.ICU_full_year](./static/996.ICU_full_year.png)
+
+
+
+**tidb 10月内容共享图**
+
+![tidb_10](./static/tidb_10.png)
+
+
+
+**tidb 2019全年贡献图**
+
+![tidb_full_year](./static/tidb_full_year.png)
+
+
+
+
+
+**vue 3月内容贡献图**
+
+![vue_03](./static/vue_03.png)
+
+
+
+**vue 4月内容贡献图**
+
+![vue_04](./static/vue_04.png)
+
+
+
+由此可以看出不同类型的项目，他们的社区协作网络也呈现出完全不同的形态。更多顶级项目在 2019 年每月的协作网络图请查询[这里](https://github.com/X-lab2017/github-analysis-report-2019/blob/master)。
+
+
+
+**相关工具和文献**
+
+[PyDriller](https://pydriller.readthedocs.io/en/latest/)  : [D. Spadini, M. Aniche, and A. Bacchelli, PyDriller: Python Framework
+for Mining Software Repositories, 2018.](https://www.sback.it/publications/fse2018td.pdf) 
+
+[PathPy](https://www.pathpy.net/) Ingo Scholtes, “Software Package pathpy,”, 2017, [Online].
+
+Git2net: [C. Gote, I. Scholtes, and F. Schweitzer, git2net - Mining Time-Stamped Co-Editing Networks from Large git Repositories, 2019 ](https://arxiv.org/pdf/1903.10180.pdf) 
 
 ## 中国 Top 20 项目 Top Contributor 采访
 
@@ -177,18 +229,18 @@ X-lab 将随本报告同时开源本次报告的原始数据与分析程序。
 
 由于原始的日志文本数据数据量较大（约 1.45TB），故随本次报告的开源数据为统计后数据，data.json.gz 文件为压缩后的数据文件，总大小约为 225MB，解压后文件内容为文本内容，总大小约 1.3GB，总行数约 2169 万行。每行为一个记录项，由 JSON 格式编码，内容说明如下：
 
-| 字段 | 类型   | 说明     | 
+| 字段 | 类型   | 说明     |
 |:----|:-------|:--------|
-| r   | string | 项目名称 | 
-| u   | string | 账号名称 | 
-| t   | number | 操作类型 | 
-| c   | number | 操作次数 | 
+| r   | string | 项目名称 |
+| u   | string | 账号名称 |
+| t   | number | 操作类型 |
+| c   | number | 操作次数 |
 
 其中操作类型的说明如下：
 
 | 数值 | 含义           |
 |:----|:---------------|
-| 0   | Issue comment  | 
+| 0   | Issue comment  |
 | 1   | Opne issue     |
 | 2   | Open PR        |
 | 3   | Reivew comment |
