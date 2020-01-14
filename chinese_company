@@ -35,8 +35,9 @@ apache/rocketmq
 
 Baidu
 baidu
+PaddlePaddle
 ApolloAuto
-clouda-team
+Clouda-team
 mipengine
 mesalock-linux
 ecomfe
@@ -49,38 +50,40 @@ apache/incubator-echarts
 apache/incubator-brpc
 
 Tencent
-tencent
-alloyteam
-tarsCloud
+Tencent
+Alloyteam
+TarsCloud
 weixin
 tencentyun
 
 Huawei
-huawei
+Huawei
 huawei-cloudnative
 huaweicloud
 kubeedge
 kubegene
-liteos
+Liteos
 huawei-noah
-apache/servicecomb
+apache/servicecomb-pack
+apache/servicecomb-java-chassis
+apache/servicecomb-service-center
 
 Meituan
 meituan
-meituan-dianping
+Meituan-Dianping
 dianping
 
 360
-qihoo360
+Qihoo360
 spritejs
 thinkjs
-chimeejs
+Chimeejs
 75team
 0Kee-Team
 
 Xiaomi
-xiaomi
-micode
+XiaoMi
+MiCode
 
 PingCAP
 pingcap
@@ -91,7 +94,7 @@ youzan
 
 JD
 areslabs
-nervjs
+NervJS
 jdf2e
 apache/incubator-shardingsphere
 
@@ -99,7 +102,7 @@ Bytedance
 bytedance
 
 Netease
-netease
+NetEase
 netease-im
 AirtestProject
 163yun
