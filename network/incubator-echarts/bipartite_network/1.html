@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_lwYRSjgU {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_lwYRSjgU line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_lwYRSjgU circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="lwYRSjgU">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='lwYRSjgU_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"lwYRSjgU"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Ovilia", "target": "ISSUE_TEMPLATE.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sushuang", "target": "brush3.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "title.js", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "sushuang", "target": "Geo.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "MapView.js", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "sushuang", "target": "map.html", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "sushuang", "target": "RoamController.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "SunburstPiece.js", "color": "#999999", "width": 2.4459101490553135, "weight": 1.0}, {"source": "sushuang", "target": "visualSolution.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "visualMap-pieces.html", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "ISSUE_TEMPLATE.md", "color": "#999999", "width": 2.291759469228055, "weight": 0.8571428571428571}, {"source": "sushuang", "target": "RadarView.js", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "sushuang", "target": "radarLayout.js", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "sushuang", "target": "radar.html", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "sushuang", "target": "graphic.js", "color": "#999999", "width": 2.9849066497880004, "weight": 1.0}, {"source": "sushuang", "target": "PieSeries.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "PieView.js", "color": "#999999", "width": 2.5794415416798357, "weight": 1.0}, {"source": "sushuang", "target": "labelLayout.js", "color": "#999999", "width": 2.4459101490553135, "weight": 1.0}, {"source": "sushuang", "target": "pie-label.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "FunnelView.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "sushuang", "target": "hoverStyle.html", "color": "#999999", "width": 2.8978952727983707, "weight": 1.0}, {"source": "Clement Ho", "target": "package.json", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "sushuang", "target": "tmp-base.html", "color": "#999999", "width": 3.0649493574615367, "weight": 1.0}, {"source": "Zeng Kun", "target": "TooltipContent.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ovilia", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "custom.js", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "sushuang", "target": "MapDraw.js", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "sushuang", "target": "AxisBuilder.js", "color": "#999999", "width": 2.802585092994046, "weight": 1.0}, {"source": "sushuang", "target": "List.js", "color": "#999999", "width": 2.6972245773362196, "weight": 1.0}, {"source": "sushuang", "target": "AngleAxisView.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "bar-polar-basic.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "Symbol.js", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "sushuang", "target": "GraphView.js", "color": "#999999", "width": 3.0649493574615367, "weight": 1.0}, {"source": "sushuang", "target": "graph-simple.html", "color": "#999999", "width": 2.5794415416798357, "weight": 1.0}, {"source": "sushuang", "target": "Line.js", "color": "#999999", "width": 2.6972245773362196, "weight": 1.0}, {"source": "sushuang", "target": "AxisProxy.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "sliderMove.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "number.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "dataZoom-action.html", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "echarts.js", "color": "#999999", "width": 2.802585092994046, "weight": 1.0}, {"source": "sushuang", "target": "tooltip-setOption.html", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "ContinuousView.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "sushuang", "target": "PiecewiseModel.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "sushuang", "target": "PiecewiseView.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "sushuang", "target": "helper.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "sushuang", "target": "Chart.js", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "sushuang", "target": "package.json", "color": "#999999", "width": 2.1094379124341005, "weight": 0.625}, {"source": "sushuang", "target": "axis-extrema.html", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "sushuang", "target": "axis-interval.html", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "sushuang", "target": "custom-feature.html", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "sushuang", "target": "dataset-charts.html", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "sushuang", "target": "reset.css", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "sushuang", "target": "MapSeries.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "Model.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u7fa1\u8f99", "target": "KEYS", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "ScrollableLegendView.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "legend.html", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "sushuang", "target": "config.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "echarts.all.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "OptionManager.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "CartesianAxisPointer.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "ThemeRiverSeries.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "SingleAxisView.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "SankeySeries.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "CartesianAxisView.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "sankey-vertical.html", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "sankeyLayout.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "sankey-horizontal.html", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "Global.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "bar-stack.html", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "richText-fontsize.html", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "TooltipRichContent.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "bar.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "SliderZoomView.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "funnel.html", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "Grid.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "backwardCompat.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "sankey.html", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "dataZoomInside.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "barPolar.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "sankey-vertical-energy.html", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "GaugeView.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "categoryVisual.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "LinePath.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "dataZoomSelect.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "funnelLayout.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "dataZoom.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "sushuang", "target": "SingleAxisPointer.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}], "nodes": [{"id": "Ovilia", "text": "Ovilia", "color": "#E00B6B", "size": 6.0}, {"id": "ISSUE_TEMPLATE.md", "text": "ISSUE_TEMPLATE.md", "color": "#2E5EAA", "size": 6.0}, {"id": "sushuang", "text": "sushuang", "color": "#E00B6B", "size": 46.5}, {"id": "brush3.html", "text": "brush3.html", "color": "#2E5EAA", "size": 5.5}, {"id": "title.js", "text": "title.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Geo.js", "text": "Geo.js", "color": "#2E5EAA", "size": 5.5}, {"id": "MapView.js", "text": "MapView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "map.html", "text": "map.html", "color": "#2E5EAA", "size": 5.5}, {"id": "RoamController.js", "text": "RoamController.js", "color": "#2E5EAA", "size": 5.5}, {"id": "SunburstPiece.js", "text": "SunburstPiece.js", "color": "#2E5EAA", "size": 5.5}, {"id": "visualSolution.js", "text": "visualSolution.js", "color": "#2E5EAA", "size": 5.5}, {"id": "visualMap-pieces.html", "text": "visualMap-pieces.html", "color": "#2E5EAA", "size": 5.5}, {"id": "RadarView.js", "text": "RadarView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "radarLayout.js", "text": "radarLayout.js", "color": "#2E5EAA", "size": 5.5}, {"id": "radar.html", "text": "radar.html", "color": "#2E5EAA", "size": 5.5}, {"id": "graphic.js", "text": "graphic.js", "color": "#2E5EAA", "size": 5.5}, {"id": "PieSeries.js", "text": "PieSeries.js", "color": "#2E5EAA", "size": 5.5}, {"id": "PieView.js", "text": "PieView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "labelLayout.js", "text": "labelLayout.js", "color": "#2E5EAA", "size": 5.5}, {"id": "pie-label.html", "text": "pie-label.html", "color": "#2E5EAA", "size": 5.5}, {"id": "FunnelView.js", "text": "FunnelView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "hoverStyle.html", "text": "hoverStyle.html", "color": "#2E5EAA", "size": 5.5}, {"id": "Clement Ho", "text": "Clement Ho", "color": "#E00B6B", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 6.0}, {"id": "tmp-base.html", "text": "tmp-base.html", "color": "#2E5EAA", "size": 5.5}, {"id": "Zeng Kun", "text": "Zeng Kun", "color": "#E00B6B", "size": 5.5}, {"id": "TooltipContent.js", "text": "TooltipContent.js", "color": "#2E5EAA", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 5.5}, {"id": "custom.js", "text": "custom.js", "color": "#2E5EAA", "size": 5.5}, {"id": "MapDraw.js", "text": "MapDraw.js", "color": "#2E5EAA", "size": 5.5}, {"id": "AxisBuilder.js", "text": "AxisBuilder.js", "color": "#2E5EAA", "size": 5.5}, {"id": "List.js", "text": "List.js", "color": "#2E5EAA", "size": 5.5}, {"id": "AngleAxisView.js", "text": "AngleAxisView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "bar-polar-basic.html", "text": "bar-polar-basic.html", "color": "#2E5EAA", "size": 5.5}, {"id": "Symbol.js", "text": "Symbol.js", "color": "#2E5EAA", "size": 5.5}, {"id": "GraphView.js", "text": "GraphView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "graph-simple.html", "text": "graph-simple.html", "color": "#2E5EAA", "size": 5.5}, {"id": "Line.js", "text": "Line.js", "color": "#2E5EAA", "size": 5.5}, {"id": "AxisProxy.js", "text": "AxisProxy.js", "color": "#2E5EAA", "size": 5.5}, {"id": "sliderMove.js", "text": "sliderMove.js", "color": "#2E5EAA", "size": 5.5}, {"id": "number.js", "text": "number.js", "color": "#2E5EAA", "size": 5.5}, {"id": "dataZoom-action.html", "text": "dataZoom-action.html", "color": "#2E5EAA", "size": 5.5}, {"id": "echarts.js", "text": "echarts.js", "color": "#2E5EAA", "size": 5.5}, {"id": "tooltip-setOption.html", "text": "tooltip-setOption.html", "color": "#2E5EAA", "size": 5.5}, {"id": "ContinuousView.js", "text": "ContinuousView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "PiecewiseModel.js", "text": "PiecewiseModel.js", "color": "#2E5EAA", "size": 5.5}, {"id": "PiecewiseView.js", "text": "PiecewiseView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "helper.js", "text": "helper.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Chart.js", "text": "Chart.js", "color": "#2E5EAA", "size": 5.5}, {"id": "axis-extrema.html", "text": "axis-extrema.html", "color": "#2E5EAA", "size": 5.5}, {"id": "axis-interval.html", "text": "axis-interval.html", "color": "#2E5EAA", "size": 5.5}, {"id": "custom-feature.html", "text": "custom-feature.html", "color": "#2E5EAA", "size": 5.5}, {"id": "dataset-charts.html", "text": "dataset-charts.html", "color": "#2E5EAA", "size": 5.5}, {"id": "reset.css", "text": "reset.css", "color": "#2E5EAA", "size": 5.5}, {"id": "MapSeries.js", "text": "MapSeries.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Model.js", "text": "Model.js", "color": "#2E5EAA", "size": 5.5}, {"id": "\u7fa1\u8f99", "text": "\u7fa1\u8f99", "color": "#E00B6B", "size": 5.5}, {"id": "KEYS", "text": "KEYS", "color": "#2E5EAA", "size": 5.5}, {"id": "ScrollableLegendView.js", "text": "ScrollableLegendView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "legend.html", "text": "legend.html", "color": "#2E5EAA", "size": 5.5}, {"id": "config.js", "text": "config.js", "color": "#2E5EAA", "size": 5.5}, {"id": "echarts.all.js", "text": "echarts.all.js", "color": "#2E5EAA", "size": 5.5}, {"id": "OptionManager.js", "text": "OptionManager.js", "color": "#2E5EAA", "size": 5.5}, {"id": "CartesianAxisPointer.js", "text": "CartesianAxisPointer.js", "color": "#2E5EAA", "size": 5.5}, {"id": "ThemeRiverSeries.js", "text": "ThemeRiverSeries.js", "color": "#2E5EAA", "size": 5.5}, {"id": "SingleAxisView.js", "text": "SingleAxisView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "SankeySeries.js", "text": "SankeySeries.js", "color": "#2E5EAA", "size": 5.5}, {"id": "CartesianAxisView.js", "text": "CartesianAxisView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "sankey-vertical.html", "text": "sankey-vertical.html", "color": "#2E5EAA", "size": 5.5}, {"id": "sankeyLayout.js", "text": "sankeyLayout.js", "color": "#2E5EAA", "size": 5.5}, {"id": "sankey-horizontal.html", "text": "sankey-horizontal.html", "color": "#2E5EAA", "size": 5.5}, {"id": "Global.js", "text": "Global.js", "color": "#2E5EAA", "size": 5.5}, {"id": "bar-stack.html", "text": "bar-stack.html", "color": "#2E5EAA", "size": 5.5}, {"id": "richText-fontsize.html", "text": "richText-fontsize.html", "color": "#2E5EAA", "size": 5.5}, {"id": "TooltipRichContent.js", "text": "TooltipRichContent.js", "color": "#2E5EAA", "size": 5.5}, {"id": "bar.js", "text": "bar.js", "color": "#2E5EAA", "size": 5.5}, {"id": "SliderZoomView.js", "text": "SliderZoomView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "funnel.html", "text": "funnel.html", "color": "#2E5EAA", "size": 5.5}, {"id": "Grid.js", "text": "Grid.js", "color": "#2E5EAA", "size": 5.5}, {"id": "backwardCompat.js", "text": "backwardCompat.js", "color": "#2E5EAA", "size": 5.5}, {"id": "sankey.html", "text": "sankey.html", "color": "#2E5EAA", "size": 5.5}, {"id": "dataZoomInside.js", "text": "dataZoomInside.js", "color": "#2E5EAA", "size": 5.5}, {"id": "barPolar.js", "text": "barPolar.js", "color": "#2E5EAA", "size": 5.5}, {"id": "sankey-vertical-energy.html", "text": "sankey-vertical-energy.html", "color": "#2E5EAA", "size": 5.5}, {"id": "GaugeView.js", "text": "GaugeView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "categoryVisual.js", "text": "categoryVisual.js", "color": "#2E5EAA", "size": 5.5}, {"id": "LinePath.js", "text": "LinePath.js", "color": "#2E5EAA", "size": 5.5}, {"id": "dataZoomSelect.js", "text": "dataZoomSelect.js", "color": "#2E5EAA", "size": 5.5}, {"id": "funnelLayout.js", "text": "funnelLayout.js", "color": "#2E5EAA", "size": 5.5}, {"id": "dataZoom.js", "text": "dataZoom.js", "color": "#2E5EAA", "size": 5.5}, {"id": "SingleAxisPointer.js", "text": "SingleAxisPointer.js", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_lwYRSjgU")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_lwYRSjgU")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_lwYRSjgU")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#lwYRSjgU_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('lwYRSjgU');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('lwYRSjgU');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

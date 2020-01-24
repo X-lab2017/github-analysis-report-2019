@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_kzbJzLcq {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_kzbJzLcq line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_kzbJzLcq circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="kzbJzLcq">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='kzbJzLcq_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"kzbJzLcq"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "zoomdong", "target": "guide-node-js-logging.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "how-to-build-a-cli-with-node-js.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "twang1727", "target": "easy-coroutines-in-android-viewmodelscope.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Samuel Jie", "target": "blazingly-fast-parsing-part-2-lazy-parsing.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "n_8-useful-javascript-tricks.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "AI.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "LeviDing", "target": "backend.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "LeviDing", "target": "ios.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "LeviDing", "target": "front-end.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "Starrier", "target": "what-tools-do-you-need-to-do-devops.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "android.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "LeviDing", "target": "README.md", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "LeviDing", "target": "n_13-javascript-methods-useful-for-dom-manipulation.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "maintainable-etls.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lsvih", "target": "linear-algebra-linear-transformation-matrix.md", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "Jerry-FD", "target": "how-i-built-an-async-form-validation-library-in-100-lines-of-code-with-react-hooks.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "linear-algebra-vectors.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "linear-algebra-animating-linear-transformations-with-threejs.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "zoomdong", "target": "n_13-javascript-methods-useful-for-dom-manipulation.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "trick-out-your-terminal-in-10-minutes-or-less.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Lucas biu", "target": "effective-bloc-pattern.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "xcode-and-lldb-advanced-debugging-tutorial-part-1.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "LeviDing", "target": "improving-build-speed-in-android-studio.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "javascript-clean-code-best-practices.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "ecmascript-classes-keeping-things-private.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "portandbridge", "target": "ml-kit-tutorial-for-ios-recognizing-text-in-images.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Weslie", "target": "ios-file-provider-extension-tutorial.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "learn-git-concepts-not-commands-1.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zavier Tang", "target": "in-defense-of-the-ternary-statement.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u94b1\u4fca\u9896", "target": "a-deep-dive-into-native-lazy-loading-for-images-and-frames.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "TUARAN", "target": "integrating-third-party-animation-libraries-to-a-project-1.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "learn-git-concepts-not-commands-2.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sun", "target": "the-4px-baseline-grid-the-present.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Samuel Jie", "target": "learning-parser-combinators-with-rust-1.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "--------.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "LeviDing", "target": "learn-git-concepts-not-commands-3.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "the-economics-of-package-management-1.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lsvih", "target": "sorting-algorithms-in-python.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Yuqi", "target": "flutter-layout-cheat-sheet.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "unpacking-hoisting.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "the-economics-of-package-management-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u8d75\u5c0f\u751f", "target": "how-to-perform-object-detection-with-yolov3-in-keras.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "cc Jia", "target": "extreme-rare-event-classification-using-autoencoders-in-keras.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "why-were-switching-to-grpc.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zavier Tang", "target": "ecmascript-classes-keeping-things-private.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "android-data-binding-library-from-observable-fields-to-livedata-in-two-steps.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "\u5f90\u73a5", "target": "n_8-useful-javascript-tricks.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "the-80-20-guide-to-json-stringify-in-javascript.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "xilihuasi", "target": "javascript-clean-code-best-practices.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Charlo", "target": "micro-design-systems-breaking-the-monolith.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "QiaoN", "target": "visualising-machine-learning-datasets-with-googles-facets.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "iceytea", "target": "n_4-css-filters-for-adjusting-color.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "linear-algebra-basic-matrix-operations.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "sun", "target": "enabling-modern-js-on-npm.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "abusing-and-overusing-list-comprehensions-in-python.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "twang1727", "target": "parallel-streaming-of-progressive-images.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "cyril", "target": "typescript-3-0-the-unknown-type.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "the-state-of-fluid-web-typography.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "design.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "dearpork", "target": "vertical-typesetting-revisited.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "dearpork", "target": "unpacking-hoisting.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "locale-changes-and-the-androidviewmodel-antipattern.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Samuel Jie", "target": "learning-parser-combinators-with-rust-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Hao Li", "target": "trick-out-your-terminal-in-10-minutes-or-less.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "websockets-vs-long-polling.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "software-below-the-poverty-line.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "comparing-compilers-in-rust-haskell-c-and-python-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "comparing-compilers-in-rust-haskell-c-and-python-1.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Qiu Hu", "target": "picking-apart-stackoverflow-what-bugs-developers-the-most.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zoomdong", "target": "maintainable-etls.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "http2-causalprof.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "micro-frontends-1.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sun", "target": "how-can-a-designer-become-a-leader.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "animated-qr-data-transfer-with-gomobile-and-gopherjs.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "flutter_go.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "understanding-higher-order-components-in-react.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "LeviDing", "target": "micro-frontends-2.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "LeviDing", "target": "classes-vs-data-structures.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "micro-frontends-3.md", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "\u751f\u7cf8", "target": "the-4px-baseline-grid-the-present.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haitao Liu", "target": "xcode-and-lldb-advanced-debugging-tutorial-part-1.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "micro-frontends-4.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Jalan", "target": "websockets-vs-long-polling.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qiuyuezhong", "target": "improving-build-speed-in-android-studio.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haitao Liu", "target": "xcode-and-lldb-advanced-debugging-tutorial-part-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u94b1\u4fca\u9896", "target": "learn-git-concepts-not-commands-1.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Chenyang Shi", "target": "extreme-rare-event-classification-using-autoencoders-in-keras.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zavier Tang", "target": "understanding-higher-order-components-in-react.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "lsvih", "target": "threads-in-rust.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "agile-agile-blah-blah.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "subscriptions-101-for-android-apps.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "using-node-js-to-read-really-really-large-files-pt-1.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "streams-for-the-win-a-performance-comparison-of-nodejs-methods-for-reading-large-datasets-pt-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "self-host-your-static-assets.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Rickon", "target": "android-data-binding-library-from-observable-fields-to-livedata-in-two-steps.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jerry-FD", "target": "the-80-20-guide-to-json-stringify-in-javascript.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "how-to-build-ios-mobile-group-chat-app-swift-5-pubnub.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u8d75\u5c0f\u751f", "target": "why-one-hot-encode-data-in-machine-learning.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lsvih", "target": "why-one-hot-encode-data-in-machine-learning.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "Starrier", "target": "using-what-if-tool-to-investigate-machine-learning-models.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "classes-vs-data-structures.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "how-to-perform-object-detection-with-yolov3-in-keras.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "the-childrens-illustrated-guide-to-kubernetes.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u94b1\u4fca\u9896", "target": "the-economics-of-package-management-1.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Mirosalva", "target": "enabling-modern-js-on-npm.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zoomdong", "target": "sorting-algorithms-in-python.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "TiaossuP", "target": "how-can-a-designer-become-a-leader.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "others.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "building-a-dynamic-tree-diagram-with-svg-and-vue-js.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "integrals.md", "color": "#999999", "width": 2.8978952727983707, "weight": 1.0}], "nodes": [{"id": "zoomdong", "text": "zoomdong", "color": "#E00B6B", "size": 7.0}, {"id": "guide-node-js-logging.md", "text": "guide-node-js-logging.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Yuqi", "text": "Yuqi", "color": "#E00B6B", "size": 7.0}, {"id": "how-to-build-a-cli-with-node-js.md", "text": "how-to-build-a-cli-with-node-js.md", "color": "#2E5EAA", "size": 5.5}, {"id": "twang1727", "text": "twang1727", "color": "#E00B6B", "size": 6.0}, {"id": "easy-coroutines-in-android-viewmodelscope.md", "text": "easy-coroutines-in-android-viewmodelscope.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Samuel Jie", "text": "Samuel Jie", "color": "#E00B6B", "size": 6.5}, {"id": "blazingly-fast-parsing-part-2-lazy-parsing.md", "text": "blazingly-fast-parsing-part-2-lazy-parsing.md", "color": "#2E5EAA", "size": 5.5}, {"id": "LeviDing", "text": "LeviDing", "color": "#E00B6B", "size": 22.5}, {"id": "n_8-useful-javascript-tricks.md", "text": "n_8-useful-javascript-tricks.md", "color": "#2E5EAA", "size": 6.0}, {"id": "AI.md", "text": "AI.md", "color": "#2E5EAA", "size": 5.5}, {"id": "backend.md", "text": "backend.md", "color": "#2E5EAA", "size": 5.5}, {"id": "ios.md", "text": "ios.md", "color": "#2E5EAA", "size": 5.5}, {"id": "front-end.md", "text": "front-end.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Starrier", "text": "Starrier", "color": "#E00B6B", "size": 6.0}, {"id": "what-tools-do-you-need-to-do-devops.md", "text": "what-tools-do-you-need-to-do-devops.md", "color": "#2E5EAA", "size": 5.5}, {"id": "android.md", "text": "android.md", "color": "#2E5EAA", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 5.5}, {"id": "n_13-javascript-methods-useful-for-dom-manipulation.md", "text": "n_13-javascript-methods-useful-for-dom-manipulation.md", "color": "#2E5EAA", "size": 6.0}, {"id": "maintainable-etls.md", "text": "maintainable-etls.md", "color": "#2E5EAA", "size": 6.0}, {"id": "lsvih", "text": "lsvih", "color": "#E00B6B", "size": 8.5}, {"id": "linear-algebra-linear-transformation-matrix.md", "text": "linear-algebra-linear-transformation-matrix.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Jerry-FD", "text": "Jerry-FD", "color": "#E00B6B", "size": 6.0}, {"id": "how-i-built-an-async-form-validation-library-in-100-lines-of-code-with-react-hooks.md", "text": "how-i-built-an-async-form-validation-library-in-100-lines-of-code-with-react-hooks.md", "color": "#2E5EAA", "size": 5.5}, {"id": "linear-algebra-vectors.md", "text": "linear-algebra-vectors.md", "color": "#2E5EAA", "size": 5.5}, {"id": "linear-algebra-animating-linear-transformations-with-threejs.md", "text": "linear-algebra-animating-linear-transformations-with-threejs.md", "color": "#2E5EAA", "size": 5.5}, {"id": "sun", "text": "sun", "color": "#E00B6B", "size": 14.5}, {"id": "trick-out-your-terminal-in-10-minutes-or-less.md", "text": "trick-out-your-terminal-in-10-minutes-or-less.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Lucas biu", "text": "Lucas biu", "color": "#E00B6B", "size": 5.5}, {"id": "effective-bloc-pattern.md", "text": "effective-bloc-pattern.md", "color": "#2E5EAA", "size": 5.5}, {"id": "xcode-and-lldb-advanced-debugging-tutorial-part-1.md", "text": "xcode-and-lldb-advanced-debugging-tutorial-part-1.md", "color": "#2E5EAA", "size": 6.0}, {"id": "improving-build-speed-in-android-studio.md", "text": "improving-build-speed-in-android-studio.md", "color": "#2E5EAA", "size": 6.0}, {"id": "javascript-clean-code-best-practices.md", "text": "javascript-clean-code-best-practices.md", "color": "#2E5EAA", "size": 6.0}, {"id": "ecmascript-classes-keeping-things-private.md", "text": "ecmascript-classes-keeping-things-private.md", "color": "#2E5EAA", "size": 6.0}, {"id": "portandbridge", "text": "portandbridge", "color": "#E00B6B", "size": 5.5}, {"id": "ml-kit-tutorial-for-ios-recognizing-text-in-images.md", "text": "ml-kit-tutorial-for-ios-recognizing-text-in-images.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Weslie", "text": "Weslie", "color": "#E00B6B", "size": 5.5}, {"id": "ios-file-provider-extension-tutorial.md", "text": "ios-file-provider-extension-tutorial.md", "color": "#2E5EAA", "size": 5.5}, {"id": "learn-git-concepts-not-commands-1.md", "text": "learn-git-concepts-not-commands-1.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Zavier Tang", "text": "Zavier Tang", "color": "#E00B6B", "size": 6.5}, {"id": "in-defense-of-the-ternary-statement.md", "text": "in-defense-of-the-ternary-statement.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u94b1\u4fca\u9896", "text": "\u94b1\u4fca\u9896", "color": "#E00B6B", "size": 6.5}, {"id": "a-deep-dive-into-native-lazy-loading-for-images-and-frames.md", "text": "a-deep-dive-into-native-lazy-loading-for-images-and-frames.md", "color": "#2E5EAA", "size": 5.5}, {"id": "TUARAN", "text": "TUARAN", "color": "#E00B6B", "size": 5.5}, {"id": "integrating-third-party-animation-libraries-to-a-project-1.md", "text": "integrating-third-party-animation-libraries-to-a-project-1.md", "color": "#2E5EAA", "size": 5.5}, {"id": "learn-git-concepts-not-commands-2.md", "text": "learn-git-concepts-not-commands-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-4px-baseline-grid-the-present.md", "text": "the-4px-baseline-grid-the-present.md", "color": "#2E5EAA", "size": 6.0}, {"id": "learning-parser-combinators-with-rust-1.md", "text": "learning-parser-combinators-with-rust-1.md", "color": "#2E5EAA", "size": 5.5}, {"id": "--------.md", "text": "--------.md", "color": "#2E5EAA", "size": 5.5}, {"id": "learn-git-concepts-not-commands-3.md", "text": "learn-git-concepts-not-commands-3.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-economics-of-package-management-1.md", "text": "the-economics-of-package-management-1.md", "color": "#2E5EAA", "size": 6.0}, {"id": "sorting-algorithms-in-python.md", "text": "sorting-algorithms-in-python.md", "color": "#2E5EAA", "size": 6.0}, {"id": "flutter-layout-cheat-sheet.md", "text": "flutter-layout-cheat-sheet.md", "color": "#2E5EAA", "size": 5.5}, {"id": "unpacking-hoisting.md", "text": "unpacking-hoisting.md", "color": "#2E5EAA", "size": 6.0}, {"id": "the-economics-of-package-management-2.md", "text": "the-economics-of-package-management-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u8d75\u5c0f\u751f", "text": "\u8d75\u5c0f\u751f", "color": "#E00B6B", "size": 6.0}, {"id": "how-to-perform-object-detection-with-yolov3-in-keras.md", "text": "how-to-perform-object-detection-with-yolov3-in-keras.md", "color": "#2E5EAA", "size": 6.0}, {"id": "cc Jia", "text": "cc Jia", "color": "#E00B6B", "size": 5.5}, {"id": "extreme-rare-event-classification-using-autoencoders-in-keras.md", "text": "extreme-rare-event-classification-using-autoencoders-in-keras.md", "color": "#2E5EAA", "size": 6.0}, {"id": "why-were-switching-to-grpc.md", "text": "why-were-switching-to-grpc.md", "color": "#2E5EAA", "size": 5.5}, {"id": "android-data-binding-library-from-observable-fields-to-livedata-in-two-steps.md", "text": "android-data-binding-library-from-observable-fields-to-livedata-in-two-steps.md", "color": "#2E5EAA", "size": 6.0}, {"id": "\u5f90\u73a5", "text": "\u5f90\u73a5", "color": "#E00B6B", "size": 5.5}, {"id": "the-80-20-guide-to-json-stringify-in-javascript.md", "text": "the-80-20-guide-to-json-stringify-in-javascript.md", "color": "#2E5EAA", "size": 6.0}, {"id": "xilihuasi", "text": "xilihuasi", "color": "#E00B6B", "size": 5.5}, {"id": "Charlo", "text": "Charlo", "color": "#E00B6B", "size": 5.5}, {"id": "micro-design-systems-breaking-the-monolith.md", "text": "micro-design-systems-breaking-the-monolith.md", "color": "#2E5EAA", "size": 5.5}, {"id": "QiaoN", "text": "QiaoN", "color": "#E00B6B", "size": 5.5}, {"id": "visualising-machine-learning-datasets-with-googles-facets.md", "text": "visualising-machine-learning-datasets-with-googles-facets.md", "color": "#2E5EAA", "size": 5.5}, {"id": "iceytea", "text": "iceytea", "color": "#E00B6B", "size": 5.5}, {"id": "n_4-css-filters-for-adjusting-color.md", "text": "n_4-css-filters-for-adjusting-color.md", "color": "#2E5EAA", "size": 5.5}, {"id": "linear-algebra-basic-matrix-operations.md", "text": "linear-algebra-basic-matrix-operations.md", "color": "#2E5EAA", "size": 5.5}, {"id": "enabling-modern-js-on-npm.md", "text": "enabling-modern-js-on-npm.md", "color": "#2E5EAA", "size": 6.0}, {"id": "abusing-and-overusing-list-comprehensions-in-python.md", "text": "abusing-and-overusing-list-comprehensions-in-python.md", "color": "#2E5EAA", "size": 5.5}, {"id": "parallel-streaming-of-progressive-images.md", "text": "parallel-streaming-of-progressive-images.md", "color": "#2E5EAA", "size": 5.5}, {"id": "cyril", "text": "cyril", "color": "#E00B6B", "size": 5.5}, {"id": "typescript-3-0-the-unknown-type.md", "text": "typescript-3-0-the-unknown-type.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-state-of-fluid-web-typography.md", "text": "the-state-of-fluid-web-typography.md", "color": "#2E5EAA", "size": 5.5}, {"id": "design.md", "text": "design.md", "color": "#2E5EAA", "size": 5.5}, {"id": "dearpork", "text": "dearpork", "color": "#E00B6B", "size": 6.0}, {"id": "vertical-typesetting-revisited.md", "text": "vertical-typesetting-revisited.md", "color": "#2E5EAA", "size": 5.5}, {"id": "locale-changes-and-the-androidviewmodel-antipattern.md", "text": "locale-changes-and-the-androidviewmodel-antipattern.md", "color": "#2E5EAA", "size": 5.5}, {"id": "learning-parser-combinators-with-rust-2.md", "text": "learning-parser-combinators-with-rust-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Hao Li", "text": "Hao Li", "color": "#E00B6B", "size": 5.5}, {"id": "websockets-vs-long-polling.md", "text": "websockets-vs-long-polling.md", "color": "#2E5EAA", "size": 6.0}, {"id": "software-below-the-poverty-line.md", "text": "software-below-the-poverty-line.md", "color": "#2E5EAA", "size": 5.5}, {"id": "comparing-compilers-in-rust-haskell-c-and-python-2.md", "text": "comparing-compilers-in-rust-haskell-c-and-python-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "comparing-compilers-in-rust-haskell-c-and-python-1.md", "text": "comparing-compilers-in-rust-haskell-c-and-python-1.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Qiu Hu", "text": "Qiu Hu", "color": "#E00B6B", "size": 5.5}, {"id": "picking-apart-stackoverflow-what-bugs-developers-the-most.md", "text": "picking-apart-stackoverflow-what-bugs-developers-the-most.md", "color": "#2E5EAA", "size": 5.5}, {"id": "http2-causalprof.md", "text": "http2-causalprof.md", "color": "#2E5EAA", "size": 5.5}, {"id": "micro-frontends-1.md", "text": "micro-frontends-1.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how-can-a-designer-become-a-leader.md", "text": "how-can-a-designer-become-a-leader.md", "color": "#2E5EAA", "size": 6.0}, {"id": "animated-qr-data-transfer-with-gomobile-and-gopherjs.md", "text": "animated-qr-data-transfer-with-gomobile-and-gopherjs.md", "color": "#2E5EAA", "size": 5.5}, {"id": "flutter_go.md", "text": "flutter_go.md", "color": "#2E5EAA", "size": 5.5}, {"id": "understanding-higher-order-components-in-react.md", "text": "understanding-higher-order-components-in-react.md", "color": "#2E5EAA", "size": 6.0}, {"id": "micro-frontends-2.md", "text": "micro-frontends-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "classes-vs-data-structures.md", "text": "classes-vs-data-structures.md", "color": "#2E5EAA", "size": 6.0}, {"id": "micro-frontends-3.md", "text": "micro-frontends-3.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u751f\u7cf8", "text": "\u751f\u7cf8", "color": "#E00B6B", "size": 5.5}, {"id": "Haitao Liu", "text": "Haitao Liu", "color": "#E00B6B", "size": 6.0}, {"id": "micro-frontends-4.md", "text": "micro-frontends-4.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Jalan", "text": "Jalan", "color": "#E00B6B", "size": 5.5}, {"id": "qiuyuezhong", "text": "qiuyuezhong", "color": "#E00B6B", "size": 5.5}, {"id": "xcode-and-lldb-advanced-debugging-tutorial-part-2.md", "text": "xcode-and-lldb-advanced-debugging-tutorial-part-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Chenyang Shi", "text": "Chenyang Shi", "color": "#E00B6B", "size": 5.5}, {"id": "threads-in-rust.md", "text": "threads-in-rust.md", "color": "#2E5EAA", "size": 5.5}, {"id": "agile-agile-blah-blah.md", "text": "agile-agile-blah-blah.md", "color": "#2E5EAA", "size": 5.5}, {"id": "subscriptions-101-for-android-apps.md", "text": "subscriptions-101-for-android-apps.md", "color": "#2E5EAA", "size": 5.5}, {"id": "using-node-js-to-read-really-really-large-files-pt-1.md", "text": "using-node-js-to-read-really-really-large-files-pt-1.md", "color": "#2E5EAA", "size": 5.5}, {"id": "streams-for-the-win-a-performance-comparison-of-nodejs-methods-for-reading-large-datasets-pt-2.md", "text": "streams-for-the-win-a-performance-comparison-of-nodejs-methods-for-reading-large-datasets-pt-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "self-host-your-static-assets.md", "text": "self-host-your-static-assets.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Rickon", "text": "Rickon", "color": "#E00B6B", "size": 5.5}, {"id": "how-to-build-ios-mobile-group-chat-app-swift-5-pubnub.md", "text": "how-to-build-ios-mobile-group-chat-app-swift-5-pubnub.md", "color": "#2E5EAA", "size": 5.5}, {"id": "why-one-hot-encode-data-in-machine-learning.md", "text": "why-one-hot-encode-data-in-machine-learning.md", "color": "#2E5EAA", "size": 6.0}, {"id": "using-what-if-tool-to-investigate-machine-learning-models.md", "text": "using-what-if-tool-to-investigate-machine-learning-models.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-childrens-illustrated-guide-to-kubernetes.md", "text": "the-childrens-illustrated-guide-to-kubernetes.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Mirosalva", "text": "Mirosalva", "color": "#E00B6B", "size": 5.5}, {"id": "TiaossuP", "text": "TiaossuP", "color": "#E00B6B", "size": 5.5}, {"id": "others.md", "text": "others.md", "color": "#2E5EAA", "size": 5.5}, {"id": "building-a-dynamic-tree-diagram-with-svg-and-vue-js.md", "text": "building-a-dynamic-tree-diagram-with-svg-and-vue-js.md", "color": "#2E5EAA", "size": 5.5}, {"id": "integrals.md", "text": "integrals.md", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_kzbJzLcq")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_kzbJzLcq")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_kzbJzLcq")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#kzbJzLcq_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('kzbJzLcq');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('kzbJzLcq');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

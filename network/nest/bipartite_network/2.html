@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_yanVyugU {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_yanVyugU line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_yanVyugU circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="yanVyugU">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='yanVyugU_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"yanVyugU"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Kamil My\u015bliwiec", "target": "sum-grpc.spec.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kamil My\u015bliwiec", "target": "interceptors-consumer.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": ".gitignore", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "set-metadata.decorator.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Craig Whiteside", "target": "sum-rmq.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Craig Whiteside", "target": "rmq-broadcast.controller.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huadong zuo", "target": "readme_zh.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Craig Whiteside", "target": "rmq.controller.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "logger.service.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Craig Whiteside", "target": "constants.ts", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Kamil Mysliwiec", "target": "Readme.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "messages.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Craig Whiteside", "target": "microservice-configuration.interface.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Igor Savin", "target": "package-lock.json", "color": "#999999", "width": 1.8862943611198906, "weight": 0.8}, {"source": "Craig Whiteside", "target": "server-rmq.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Craig Whiteside", "target": "client-rmq.ts", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Igor Savin", "target": "router-explorer.spec.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "Kamil Mysliwiec", "target": "CONTRIBUTING.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Igor Savin", "target": "socket-server-provider.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Igor Savin", "target": "server-tcp.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Anton Repin", "target": "server-grpc.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Max Chen", "target": "docker-compose.yml", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Anton Repin", "target": "server-grpc.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Igor Savin", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Kamil My\u015bliwiec", "target": "package-lock.json", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Igor Savin", "target": "client-nats.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Igor Savin", "target": "client-mqtt.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "clients.module.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "client-rmq.spec.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kamil My\u015bliwiec", "target": "client-rmq.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Lukas", "target": "cats.service.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Lukas", "target": "cat.class.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Anton Repin", "target": "grpc.controller.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Anton Repin", "target": "math.proto", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "http.module.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "http-module.interface.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "application-ref-host.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "clients.module.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Anton Repin", "target": "sum-grpc.spec.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Igor Savin", "target": "client-rmq.spec.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Igor Savin", "target": "client-tcp.spec.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "date.scalar.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "constants.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Kamil My\u015bliwiec", "target": "nest-application-context.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Igor Savin", "target": "client-redis.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "app.module.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yoel Nunez", "target": "routes-resolver.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Yoel Nunez", "target": "routes-resolver.spec.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "provider.interface.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "scanner.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "request-mapping.decorator.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "routes-mapper.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "router-explorer.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "controller.decorator.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "module.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "module.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "Kamil My\u015bliwiec", "text": "Kamil My\u015bliwiec", "color": "#E00B6B", "size": 18.5}, {"id": "sum-grpc.spec.ts", "text": "sum-grpc.spec.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "interceptors-consumer.ts", "text": "interceptors-consumer.ts", "color": "#2E5EAA", "size": 5.5}, {"id": ".gitignore", "text": ".gitignore", "color": "#2E5EAA", "size": 5.5}, {"id": "set-metadata.decorator.ts", "text": "set-metadata.decorator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Craig Whiteside", "text": "Craig Whiteside", "color": "#E00B6B", "size": 8.5}, {"id": "sum-rmq.spec.ts", "text": "sum-rmq.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "rmq-broadcast.controller.ts", "text": "rmq-broadcast.controller.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "huadong zuo", "text": "huadong zuo", "color": "#E00B6B", "size": 5.5}, {"id": "readme_zh.md", "text": "readme_zh.md", "color": "#2E5EAA", "size": 5.5}, {"id": "rmq.controller.ts", "text": "rmq.controller.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "logger.service.ts", "text": "logger.service.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "constants.ts", "text": "constants.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "Kamil Mysliwiec", "text": "Kamil Mysliwiec", "color": "#E00B6B", "size": 6.0}, {"id": "Readme.md", "text": "Readme.md", "color": "#2E5EAA", "size": 5.5}, {"id": "messages.ts", "text": "messages.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "microservice-configuration.interface.ts", "text": "microservice-configuration.interface.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Igor Savin", "text": "Igor Savin", "color": "#E00B6B", "size": 10.0}, {"id": "package-lock.json", "text": "package-lock.json", "color": "#2E5EAA", "size": 6.0}, {"id": "server-rmq.ts", "text": "server-rmq.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 6.0}, {"id": "client-rmq.ts", "text": "client-rmq.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "router-explorer.spec.ts", "text": "router-explorer.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "CONTRIBUTING.md", "text": "CONTRIBUTING.md", "color": "#2E5EAA", "size": 5.5}, {"id": "socket-server-provider.spec.ts", "text": "socket-server-provider.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "server-tcp.spec.ts", "text": "server-tcp.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Anton Repin", "text": "Anton Repin", "color": "#E00B6B", "size": 7.5}, {"id": "server-grpc.ts", "text": "server-grpc.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Max Chen", "text": "Max Chen", "color": "#E00B6B", "size": 5.5}, {"id": "docker-compose.yml", "text": "docker-compose.yml", "color": "#2E5EAA", "size": 5.5}, {"id": "server-grpc.spec.ts", "text": "server-grpc.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "client-nats.spec.ts", "text": "client-nats.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "client-mqtt.spec.ts", "text": "client-mqtt.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "clients.module.spec.ts", "text": "clients.module.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "client-rmq.spec.ts", "text": "client-rmq.spec.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "Lukas", "text": "Lukas", "color": "#E00B6B", "size": 6.0}, {"id": "cats.service.ts", "text": "cats.service.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "cat.class.ts", "text": "cat.class.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "grpc.controller.ts", "text": "grpc.controller.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "math.proto", "text": "math.proto", "color": "#2E5EAA", "size": 5.5}, {"id": "http.module.ts", "text": "http.module.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "http-module.interface.ts", "text": "http-module.interface.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "application-ref-host.spec.ts", "text": "application-ref-host.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "clients.module.ts", "text": "clients.module.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "client-tcp.spec.ts", "text": "client-tcp.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "date.scalar.ts", "text": "date.scalar.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "nest-application-context.ts", "text": "nest-application-context.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "client-redis.spec.ts", "text": "client-redis.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "app.module.ts", "text": "app.module.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Yoel Nunez", "text": "Yoel Nunez", "color": "#E00B6B", "size": 6.0}, {"id": "routes-resolver.ts", "text": "routes-resolver.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "routes-resolver.spec.ts", "text": "routes-resolver.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "provider.interface.ts", "text": "provider.interface.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "scanner.ts", "text": "scanner.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "request-mapping.decorator.ts", "text": "request-mapping.decorator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "routes-mapper.ts", "text": "routes-mapper.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "router-explorer.ts", "text": "router-explorer.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "controller.decorator.ts", "text": "controller.decorator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "module.ts", "text": "module.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "module.spec.ts", "text": "module.spec.ts", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_yanVyugU")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_yanVyugU")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_yanVyugU")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#yanVyugU_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('yanVyugU');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('yanVyugU');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

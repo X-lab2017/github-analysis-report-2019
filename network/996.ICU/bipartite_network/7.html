@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_ozgkPrHj {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_ozgkPrHj line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_ozgkPrHj circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="ozgkPrHj">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='ozgkPrHj_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"ozgkPrHj"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "kwai996", "target": "kuaishou\u5ba3\u5e03996-20190619.mp3", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Alexander D Huang", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Alexander D Huang", "target": "README_CN.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "\u674e\u5bbd\u5bbd", "target": "README.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "OldUncleW", "target": "tcl1.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "OldUncleW", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "chixinzei", "target": "sbs-\u5927\u5c0f\u5468\u6539\u5355\u4f11.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "linj8290492", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "PaodingAI-wiki.png", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "chixinzei", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "NLP-CVAI", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zdy199706", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ArronHuang", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xiongke Wang", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Xiongke Wang", "target": "tcl2.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.07407407407407407}, {"source": "Alexxigang", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Emily Wang", "target": "README.md", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5714285714285714}, {"source": "FuckU996", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "README.md", "color": "#999999", "width": 3.3903717578961645, "weight": 0.45}, {"source": "\u795e\u697d\u5742 \u767d", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "\u795e\u697d\u5742 \u767d", "target": "\u4e34\u6c82\u6c82\u5ddd\u7535\u5b50\u548c\u7f51\u7edc\u7684\u8054\u7cfb1 (3).mp4", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u795e\u697d\u5742 \u767d", "target": "\u4e34\u6c82\u6c82\u5ddd\u7535\u5b50\u548c\u7f51\u7edc\u7684\u8054\u7cfb2.mp4", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u795e\u697d\u5742 \u767d", "target": "\u4e34\u6c82\u6c82\u5ddd\u7535\u5b50\u548c\u7f51\u7edc\u7684\u8054\u7cfb3.mp4", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u795e\u697d\u5742 \u767d", "target": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc,\u8bf7\u5047\u62632\u5929\u5de5\u8d44.jpg", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u795e\u697d\u5742 \u767d", "target": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u52a0\u73ed_\u95f4\u63a5\u8bc1\u636e.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u795e\u697d\u5742 \u767d", "target": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u52a0\u73ed_\u95f4\u63a5\u8bc1\u636e2.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u795e\u697d\u5742 \u767d", "target": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u5f3a\u5236\u52a0\u73ed.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u795e\u697d\u5742 \u767d", "target": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u8282\u5047\u65e5\u52a0\u73ed,\u8bf7\u5047\u9700\u8001\u677f\u6279\u51c6.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u795e\u697d\u5742 \u767d", "target": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u8282\u5047\u65e5\u5f3a\u5236\u52a0\u73ed\u65e0\u52a0\u73ed\u8d39.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "fr_FR.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "n_996icu", "target": "README_CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Emily Wang", "target": "fr_FR.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Emily Wang", "target": "PaodingAI-wiki.png", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Emily Wang", "target": "README_CN.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "n_996icu", "target": "tongsi3.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "hxqc1.jpg", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "ecy12.jpg", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "hxqc2.jpg", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "proposal_for_other_types_of_work.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "fjxxydkq.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "remotelist.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "data_analysis_icon.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "fi_FI.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "n_996icu", "target": "article_and_discussion.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "th_TH.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "n_996icu", "target": "pt_PT.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "n_996icu", "target": "SecurityPaper.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "ja_JP.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "n_996icu", "target": "ecy2.jpg", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "ko_KR.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "n_996icu", "target": "mgtv.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "news_EN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "chain33.jpg", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "lingzhi1.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "tongsi4.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "news.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "fjxxqmfj.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "zh-lzh-Hans.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "n_996icu", "target": "proposal_template.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "n_996icu", "target": "logo.svg", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "logo.png", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "n_996icu", "target": "gwbn.jpeg", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "hikvision_fj.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "tongsi1.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "fjxxydfj.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "LICENSE", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "n_996icu", "target": "ANTI-996 DAY.MD", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_996icu", "target": "tongsi2.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "fa_IR.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "el_GR.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "LICENSE_CN", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "fr_FR.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "kerbalwzy", "target": "fi_FI.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kerbalwzy", "target": "th_TH.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kerbalwzy", "target": "zh-Hant.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "pt_PT.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kerbalwzy", "target": "ru_RU.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "ja_JP.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kerbalwzy", "target": "ar_EG.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "instruction.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "LICENSE.996icu.en-US", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "ko_KR.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kerbalwzy", "target": "googosoft.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "en_US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "zh-lzh-Hans.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kerbalwzy", "target": "proposal_template.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kerbalwzy", "target": "logo.png", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kerbalwzy", "target": "ga.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "zh-Hant-HK.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "LICENSE", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kerbalwzy", "target": "zh-Hans.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "de_DE.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kerbalwzy", "target": "googosoft2.png", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "kwai996", "text": "kwai996", "color": "#E00B6B", "size": 5.5}, {"id": "kuaishou\u5ba3\u5e03996-20190619.mp3", "text": "kuaishou\u5ba3\u5e03996-20190619.mp3", "color": "#2E5EAA", "size": 5.5}, {"id": "Alexander D Huang", "text": "Alexander D Huang", "color": "#E00B6B", "size": 6.0}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 12.5}, {"id": "README_CN.md", "text": "README_CN.md", "color": "#2E5EAA", "size": 6.5}, {"id": "\u674e\u5bbd\u5bbd", "text": "\u674e\u5bbd\u5bbd", "color": "#E00B6B", "size": 5.5}, {"id": "OldUncleW", "text": "OldUncleW", "color": "#E00B6B", "size": 6.0}, {"id": "tcl1.png", "text": "tcl1.png", "color": "#2E5EAA", "size": 5.5}, {"id": "chixinzei", "text": "chixinzei", "color": "#E00B6B", "size": 6.0}, {"id": "sbs-\u5927\u5c0f\u5468\u6539\u5355\u4f11.png", "text": "sbs-\u5927\u5c0f\u5468\u6539\u5355\u4f11.png", "color": "#2E5EAA", "size": 5.5}, {"id": "linj8290492", "text": "linj8290492", "color": "#E00B6B", "size": 5.5}, {"id": "n_996icu", "text": "n_996icu", "color": "#E00B6B", "size": 24.0}, {"id": "PaodingAI-wiki.png", "text": "PaodingAI-wiki.png", "color": "#2E5EAA", "size": 6.0}, {"id": "NLP-CVAI", "text": "NLP-CVAI", "color": "#E00B6B", "size": 5.5}, {"id": "zdy199706", "text": "zdy199706", "color": "#E00B6B", "size": 5.5}, {"id": "ArronHuang", "text": "ArronHuang", "color": "#E00B6B", "size": 5.5}, {"id": "Xiongke Wang", "text": "Xiongke Wang", "color": "#E00B6B", "size": 6.0}, {"id": "tcl2.png", "text": "tcl2.png", "color": "#2E5EAA", "size": 5.5}, {"id": "kerbalwzy", "text": "kerbalwzy", "color": "#E00B6B", "size": 18.0}, {"id": "Alexxigang", "text": "Alexxigang", "color": "#E00B6B", "size": 5.5}, {"id": "Emily Wang", "text": "Emily Wang", "color": "#E00B6B", "size": 7.0}, {"id": "FuckU996", "text": "FuckU996", "color": "#E00B6B", "size": 5.5}, {"id": "\u795e\u697d\u5742 \u767d", "text": "\u795e\u697d\u5742 \u767d", "color": "#E00B6B", "size": 10.0}, {"id": "\u4e34\u6c82\u6c82\u5ddd\u7535\u5b50\u548c\u7f51\u7edc\u7684\u8054\u7cfb1 (3).mp4", "text": "\u4e34\u6c82\u6c82\u5ddd\u7535\u5b50\u548c\u7f51\u7edc\u7684\u8054\u7cfb1 (3).mp4", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e34\u6c82\u6c82\u5ddd\u7535\u5b50\u548c\u7f51\u7edc\u7684\u8054\u7cfb2.mp4", "text": "\u4e34\u6c82\u6c82\u5ddd\u7535\u5b50\u548c\u7f51\u7edc\u7684\u8054\u7cfb2.mp4", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e34\u6c82\u6c82\u5ddd\u7535\u5b50\u548c\u7f51\u7edc\u7684\u8054\u7cfb3.mp4", "text": "\u4e34\u6c82\u6c82\u5ddd\u7535\u5b50\u548c\u7f51\u7edc\u7684\u8054\u7cfb3.mp4", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc,\u8bf7\u5047\u62632\u5929\u5de5\u8d44.jpg", "text": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc,\u8bf7\u5047\u62632\u5929\u5de5\u8d44.jpg", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u52a0\u73ed_\u95f4\u63a5\u8bc1\u636e.png", "text": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u52a0\u73ed_\u95f4\u63a5\u8bc1\u636e.png", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u52a0\u73ed_\u95f4\u63a5\u8bc1\u636e2.png", "text": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u52a0\u73ed_\u95f4\u63a5\u8bc1\u636e2.png", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u5f3a\u5236\u52a0\u73ed.png", "text": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u5f3a\u5236\u52a0\u73ed.png", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u8282\u5047\u65e5\u52a0\u73ed,\u8bf7\u5047\u9700\u8001\u677f\u6279\u51c6.png", "text": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u8282\u5047\u65e5\u52a0\u73ed,\u8bf7\u5047\u9700\u8001\u677f\u6279\u51c6.png", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u8282\u5047\u65e5\u5f3a\u5236\u52a0\u73ed\u65e0\u52a0\u73ed\u8d39.png", "text": "\u4e34\u6c82\u6c82\u5ddd\u7f51\u7edc\u8282\u5047\u65e5\u5f3a\u5236\u52a0\u73ed\u65e0\u52a0\u73ed\u8d39.png", "color": "#2E5EAA", "size": 5.5}, {"id": "fr_FR.md", "text": "fr_FR.md", "color": "#2E5EAA", "size": 6.5}, {"id": "tongsi3.png", "text": "tongsi3.png", "color": "#2E5EAA", "size": 5.5}, {"id": "hxqc1.jpg", "text": "hxqc1.jpg", "color": "#2E5EAA", "size": 5.5}, {"id": "ecy12.jpg", "text": "ecy12.jpg", "color": "#2E5EAA", "size": 5.5}, {"id": "hxqc2.jpg", "text": "hxqc2.jpg", "color": "#2E5EAA", "size": 5.5}, {"id": "proposal_for_other_types_of_work.md", "text": "proposal_for_other_types_of_work.md", "color": "#2E5EAA", "size": 5.5}, {"id": "fjxxydkq.png", "text": "fjxxydkq.png", "color": "#2E5EAA", "size": 5.5}, {"id": "remotelist.md", "text": "remotelist.md", "color": "#2E5EAA", "size": 5.5}, {"id": "data_analysis_icon.png", "text": "data_analysis_icon.png", "color": "#2E5EAA", "size": 5.5}, {"id": "fi_FI.md", "text": "fi_FI.md", "color": "#2E5EAA", "size": 6.0}, {"id": "article_and_discussion.md", "text": "article_and_discussion.md", "color": "#2E5EAA", "size": 5.5}, {"id": "th_TH.md", "text": "th_TH.md", "color": "#2E5EAA", "size": 6.0}, {"id": "pt_PT.md", "text": "pt_PT.md", "color": "#2E5EAA", "size": 6.0}, {"id": "SecurityPaper.png", "text": "SecurityPaper.png", "color": "#2E5EAA", "size": 5.5}, {"id": "ja_JP.md", "text": "ja_JP.md", "color": "#2E5EAA", "size": 6.0}, {"id": "ecy2.jpg", "text": "ecy2.jpg", "color": "#2E5EAA", "size": 5.5}, {"id": "ko_KR.md", "text": "ko_KR.md", "color": "#2E5EAA", "size": 6.0}, {"id": "mgtv.png", "text": "mgtv.png", "color": "#2E5EAA", "size": 5.5}, {"id": "news_EN.md", "text": "news_EN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "chain33.jpg", "text": "chain33.jpg", "color": "#2E5EAA", "size": 5.5}, {"id": "lingzhi1.png", "text": "lingzhi1.png", "color": "#2E5EAA", "size": 5.5}, {"id": "tongsi4.png", "text": "tongsi4.png", "color": "#2E5EAA", "size": 5.5}, {"id": "news.md", "text": "news.md", "color": "#2E5EAA", "size": 5.5}, {"id": "fjxxqmfj.png", "text": "fjxxqmfj.png", "color": "#2E5EAA", "size": 5.5}, {"id": "zh-lzh-Hans.md", "text": "zh-lzh-Hans.md", "color": "#2E5EAA", "size": 6.0}, {"id": "proposal_template.md", "text": "proposal_template.md", "color": "#2E5EAA", "size": 6.0}, {"id": "logo.svg", "text": "logo.svg", "color": "#2E5EAA", "size": 5.5}, {"id": "logo.png", "text": "logo.png", "color": "#2E5EAA", "size": 6.0}, {"id": "gwbn.jpeg", "text": "gwbn.jpeg", "color": "#2E5EAA", "size": 5.5}, {"id": "hikvision_fj.png", "text": "hikvision_fj.png", "color": "#2E5EAA", "size": 5.5}, {"id": "tongsi1.png", "text": "tongsi1.png", "color": "#2E5EAA", "size": 5.5}, {"id": "fjxxydfj.png", "text": "fjxxydfj.png", "color": "#2E5EAA", "size": 5.5}, {"id": "LICENSE", "text": "LICENSE", "color": "#2E5EAA", "size": 6.0}, {"id": "ANTI-996 DAY.MD", "text": "ANTI-996 DAY.MD", "color": "#2E5EAA", "size": 5.5}, {"id": "tongsi2.png", "text": "tongsi2.png", "color": "#2E5EAA", "size": 5.5}, {"id": "fa_IR.md", "text": "fa_IR.md", "color": "#2E5EAA", "size": 5.5}, {"id": "el_GR.md", "text": "el_GR.md", "color": "#2E5EAA", "size": 5.5}, {"id": "LICENSE_CN", "text": "LICENSE_CN", "color": "#2E5EAA", "size": 5.5}, {"id": "zh-Hant.md", "text": "zh-Hant.md", "color": "#2E5EAA", "size": 5.5}, {"id": "ru_RU.md", "text": "ru_RU.md", "color": "#2E5EAA", "size": 5.5}, {"id": "ar_EG.md", "text": "ar_EG.md", "color": "#2E5EAA", "size": 5.5}, {"id": "instruction.md", "text": "instruction.md", "color": "#2E5EAA", "size": 5.5}, {"id": "LICENSE.996icu.en-US", "text": "LICENSE.996icu.en-US", "color": "#2E5EAA", "size": 5.5}, {"id": "googosoft.png", "text": "googosoft.png", "color": "#2E5EAA", "size": 5.5}, {"id": "en_US.md", "text": "en_US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "ga.md", "text": "ga.md", "color": "#2E5EAA", "size": 5.5}, {"id": "zh-Hant-HK.md", "text": "zh-Hant-HK.md", "color": "#2E5EAA", "size": 5.5}, {"id": "zh-Hans.md", "text": "zh-Hans.md", "color": "#2E5EAA", "size": 5.5}, {"id": "de_DE.md", "text": "de_DE.md", "color": "#2E5EAA", "size": 5.5}, {"id": "googosoft2.png", "text": "googosoft2.png", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_ozgkPrHj")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_ozgkPrHj")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_ozgkPrHj")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#ozgkPrHj_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('ozgkPrHj');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('ozgkPrHj');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

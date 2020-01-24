@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_LenDtQel {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_LenDtQel line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_LenDtQel circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="LenDtQel">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='LenDtQel_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"LenDtQel"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Jalan", "target": "the-childrens-illustrated-guide-to-kubernetes.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "promoting-install-mobile.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haitao Liu", "target": "xcode-and-lldb-advanced-debugging-tutorial-part-3.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sun", "target": "redefining-data-visualization-at-google.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Charlo", "target": "software-below-the-poverty-line.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Samuel Jie", "target": "flutter_go.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Samuel Jie", "target": "learning-parser-combinators-with-rust-3.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "four-ways-to-quantify-synchrony-between-time-series-data.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Hao Li", "target": "micro-frontends-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "kotlin-clean-architecture.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "the-css-mindset.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haitao Liu", "target": "xcode-and-lldb-advanced-debugging-tutorial-part-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "android-networking-in-2019-retrofit-with-kotlins-coroutines.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "swiftwebui.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "birdseye-go.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "sun", "target": "the-state-of-graphql-by-reddit.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "dearpork", "target": "micro-frontends-4.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "collection-cognitive-biases-how-to-use-1.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "collection-cognitive-biases-how-to-use-2.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "fountaincodes.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "twang1727", "target": "self-host-your-static-assets.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "xilihuasi", "target": "micro-frontends-3.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "collection-cognitive-biases-how-to-use-3.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "testing-react-apps-with-cypress.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jenniferyingni", "target": "the-state-of-fluid-web-typography.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e09\u6708\u6e90", "target": "redefining-data-visualization-at-google.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u5415\u665f", "target": "a-crash-course-in-assembly.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Sam", "target": "promoting-install-mobile.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5415\u665f", "target": "creating-and-working-with-webassembly-modules.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "css-architecture-for-multiple-websites.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "cc Jia", "target": "abusing-and-overusing-list-comprehensions-in-python.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "YueYong", "target": "building-a-dynamic-tree-diagram-with-svg-and-vue-js.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e09\u6708\u6e90", "target": "the-css-mindset.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "how-pagespeed-works.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "creating-a-multi-level-hierarchical-flyout-navigation-menu-using-only-html-and-css.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "xgboost-algorithm-long-may-she-reign.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "the-10-statistical-techniques-data-scientists-need-to-master.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Yuqi", "target": "animated-qr-data-transfer-with-gomobile-and-gopherjs.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Lucas biu", "target": "how-to-build-ios-mobile-group-chat-app-swift-5-pubnub.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "when-to-standardize-your-data.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "responsive-design-ground-rules.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "a-step-by-step-explanation-of-principal-component-analysis.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "javascript-knowledge-reading-source-code.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Charlo", "target": "agile-agile-blah-blah.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "n_16-devtools-tips-and-tricks-every-css-developer-need-to-know.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "frontend-vs-backend-which-one-is-right-for-you.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jarvis", "target": "collection-cognitive-biases-how-to-use-1.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u94b1\u4fca\u9896", "target": "the-economics-of-package-management-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Lu Liu", "target": "locale-changes-and-the-androidviewmodel-antipattern.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "n_101-tips-for-being-a-great-programmer-human.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Mirosalva", "target": "learn-git-concepts-not-commands-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "ios.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "LeviDing", "target": "backend.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "AI.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "front-end.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "LeviDing", "target": "android.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "product.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "design.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Pingren Nie", "target": "responsive-design-ground-rules.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "how-to-build-minesweeper-with-javascript.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "swiftwebui.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "JasonWu", "target": "kotlin-clean-architecture.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "operating-a-high-scale-distributed-system.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "how-javascript-works-event-loop-and-the-rise-of-async-programming-5-ways-to-better-coding-with.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "the-problem-with-web-components.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jerry-FD", "target": "how-pagespeed-works.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qiuyuezhong", "target": "android-emulator-project-marble-improvements.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Feximin", "target": "android-networking-in-2019-retrofit-with-kotlins-coroutines.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "absolute-truths-unlearned-as-junior-developer.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "why-ai-is-here-to-stay.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "YueYong", "target": "frontend-vs-backend-which-one-is-right-for-you.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "the-rise-of-the-meta-designer.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yzw7489757", "target": "creating-a-multi-level-hierarchical-flyout-navigation-menu-using-only-html-and-css.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u52a8\u529b\u5c0f\u8f66", "target": "testing-react-apps-with-cypress.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Lucas biu", "target": "using-node-js-to-read-really-really-large-files-pt-1.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "TiaossuP", "target": "the-state-of-graphql-by-reddit.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "fountaincodes.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jarvis", "target": "collection-cognitive-biases-how-to-use-2.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "how-data-sharding-works-in-a-distributed-sql-database.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "is-postmessage-slow.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "the-open-source-conundrum-how-do-we-keep-the-lights-on.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jack Tang", "target": "learn-enough-docker-to-be-useful-1.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jack Tang", "target": "birdseye-go.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "sun", "target": "typescript-impossible-states-irrepresentable.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "reverse-engineering-how-you-can-build-a-test-library.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "dearpork", "target": "n_16-devtools-tips-and-tricks-every-css-developer-need-to-know.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u94b1\u4fca\u9896", "target": "css-architecture-for-multiple-websites.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jack Tang", "target": "writing-a-compiler-in-rust.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "n_5-tips-for-using-showinstallprompt-in-your-instant-experience.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "when-a-rewrite-isnt-rebuilding-slack-on-the-desktop.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e09\u6708\u6e90", "target": "javascript-knowledge-reading-source-code.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "LeviDing", "target": "others.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "algebraic-effects-for-the-rest-of-us.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "i-built-tic-tac-toe-with-javascript.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Jessica", "target": "absolute-truths-unlearned-as-junior-developer.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u8d75\u5c0f\u751f", "target": "how-to-train-an-object-detection-model-with-keras.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "when-every-product-of-design-is-one-of-opinion.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "pika-web-a-future-without-webpack.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jack Tang", "target": "a-deep-dive-on-python-type-hints.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jack Tang", "target": "what-do-flutter-package-users-need-findings-from-q2-user-survey.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Nebulus", "target": "a-step-by-step-explanation-of-principal-component-analysis.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Nebulus", "target": "when-to-standardize-your-data.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "HearFishle", "target": "the-10-statistical-techniques-data-scientists-need-to-master.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LinGuang", "target": "is-postmessage-slow.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "integrals.md", "color": "#999999", "width": 3.1390573296152584, "weight": 1.0}], "nodes": [{"id": "Jalan", "text": "Jalan", "color": "#E00B6B", "size": 5.5}, {"id": "the-childrens-illustrated-guide-to-kubernetes.md", "text": "the-childrens-illustrated-guide-to-kubernetes.md", "color": "#2E5EAA", "size": 5.5}, {"id": "sun", "text": "sun", "color": "#E00B6B", "size": 17.0}, {"id": "promoting-install-mobile.md", "text": "promoting-install-mobile.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Haitao Liu", "text": "Haitao Liu", "color": "#E00B6B", "size": 6.0}, {"id": "xcode-and-lldb-advanced-debugging-tutorial-part-3.md", "text": "xcode-and-lldb-advanced-debugging-tutorial-part-3.md", "color": "#2E5EAA", "size": 5.5}, {"id": "redefining-data-visualization-at-google.md", "text": "redefining-data-visualization-at-google.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Charlo", "text": "Charlo", "color": "#E00B6B", "size": 6.0}, {"id": "software-below-the-poverty-line.md", "text": "software-below-the-poverty-line.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Samuel Jie", "text": "Samuel Jie", "color": "#E00B6B", "size": 6.0}, {"id": "flutter_go.md", "text": "flutter_go.md", "color": "#2E5EAA", "size": 5.5}, {"id": "learning-parser-combinators-with-rust-3.md", "text": "learning-parser-combinators-with-rust-3.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Yuqi", "text": "Yuqi", "color": "#E00B6B", "size": 7.0}, {"id": "four-ways-to-quantify-synchrony-between-time-series-data.md", "text": "four-ways-to-quantify-synchrony-between-time-series-data.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Hao Li", "text": "Hao Li", "color": "#E00B6B", "size": 5.5}, {"id": "micro-frontends-2.md", "text": "micro-frontends-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "LeviDing", "text": "LeviDing", "color": "#E00B6B", "size": 19.0}, {"id": "kotlin-clean-architecture.md", "text": "kotlin-clean-architecture.md", "color": "#2E5EAA", "size": 6.0}, {"id": "the-css-mindset.md", "text": "the-css-mindset.md", "color": "#2E5EAA", "size": 6.0}, {"id": "xcode-and-lldb-advanced-debugging-tutorial-part-2.md", "text": "xcode-and-lldb-advanced-debugging-tutorial-part-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "android-networking-in-2019-retrofit-with-kotlins-coroutines.md", "text": "android-networking-in-2019-retrofit-with-kotlins-coroutines.md", "color": "#2E5EAA", "size": 6.0}, {"id": "swiftwebui.md", "text": "swiftwebui.md", "color": "#2E5EAA", "size": 6.0}, {"id": "birdseye-go.md", "text": "birdseye-go.md", "color": "#2E5EAA", "size": 6.0}, {"id": "the-state-of-graphql-by-reddit.md", "text": "the-state-of-graphql-by-reddit.md", "color": "#2E5EAA", "size": 6.0}, {"id": "dearpork", "text": "dearpork", "color": "#E00B6B", "size": 6.0}, {"id": "micro-frontends-4.md", "text": "micro-frontends-4.md", "color": "#2E5EAA", "size": 5.5}, {"id": "collection-cognitive-biases-how-to-use-1.md", "text": "collection-cognitive-biases-how-to-use-1.md", "color": "#2E5EAA", "size": 6.0}, {"id": "collection-cognitive-biases-how-to-use-2.md", "text": "collection-cognitive-biases-how-to-use-2.md", "color": "#2E5EAA", "size": 6.0}, {"id": "fountaincodes.md", "text": "fountaincodes.md", "color": "#2E5EAA", "size": 6.0}, {"id": "twang1727", "text": "twang1727", "color": "#E00B6B", "size": 5.5}, {"id": "self-host-your-static-assets.md", "text": "self-host-your-static-assets.md", "color": "#2E5EAA", "size": 5.5}, {"id": "xilihuasi", "text": "xilihuasi", "color": "#E00B6B", "size": 5.5}, {"id": "micro-frontends-3.md", "text": "micro-frontends-3.md", "color": "#2E5EAA", "size": 5.5}, {"id": "collection-cognitive-biases-how-to-use-3.md", "text": "collection-cognitive-biases-how-to-use-3.md", "color": "#2E5EAA", "size": 5.5}, {"id": "testing-react-apps-with-cypress.md", "text": "testing-react-apps-with-cypress.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Jenniferyingni", "text": "Jenniferyingni", "color": "#E00B6B", "size": 5.5}, {"id": "the-state-of-fluid-web-typography.md", "text": "the-state-of-fluid-web-typography.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e09\u6708\u6e90", "text": "\u4e09\u6708\u6e90", "color": "#E00B6B", "size": 6.5}, {"id": "\u5415\u665f", "text": "\u5415\u665f", "color": "#E00B6B", "size": 6.0}, {"id": "a-crash-course-in-assembly.md", "text": "a-crash-course-in-assembly.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Sam", "text": "Sam", "color": "#E00B6B", "size": 5.5}, {"id": "creating-and-working-with-webassembly-modules.md", "text": "creating-and-working-with-webassembly-modules.md", "color": "#2E5EAA", "size": 5.5}, {"id": "css-architecture-for-multiple-websites.md", "text": "css-architecture-for-multiple-websites.md", "color": "#2E5EAA", "size": 6.0}, {"id": "cc Jia", "text": "cc Jia", "color": "#E00B6B", "size": 5.5}, {"id": "abusing-and-overusing-list-comprehensions-in-python.md", "text": "abusing-and-overusing-list-comprehensions-in-python.md", "color": "#2E5EAA", "size": 5.5}, {"id": "YueYong", "text": "YueYong", "color": "#E00B6B", "size": 6.0}, {"id": "building-a-dynamic-tree-diagram-with-svg-and-vue-js.md", "text": "building-a-dynamic-tree-diagram-with-svg-and-vue-js.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how-pagespeed-works.md", "text": "how-pagespeed-works.md", "color": "#2E5EAA", "size": 6.0}, {"id": "creating-a-multi-level-hierarchical-flyout-navigation-menu-using-only-html-and-css.md", "text": "creating-a-multi-level-hierarchical-flyout-navigation-menu-using-only-html-and-css.md", "color": "#2E5EAA", "size": 6.0}, {"id": "xgboost-algorithm-long-may-she-reign.md", "text": "xgboost-algorithm-long-may-she-reign.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-10-statistical-techniques-data-scientists-need-to-master.md", "text": "the-10-statistical-techniques-data-scientists-need-to-master.md", "color": "#2E5EAA", "size": 6.0}, {"id": "animated-qr-data-transfer-with-gomobile-and-gopherjs.md", "text": "animated-qr-data-transfer-with-gomobile-and-gopherjs.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Lucas biu", "text": "Lucas biu", "color": "#E00B6B", "size": 6.0}, {"id": "how-to-build-ios-mobile-group-chat-app-swift-5-pubnub.md", "text": "how-to-build-ios-mobile-group-chat-app-swift-5-pubnub.md", "color": "#2E5EAA", "size": 5.5}, {"id": "when-to-standardize-your-data.md", "text": "when-to-standardize-your-data.md", "color": "#2E5EAA", "size": 6.0}, {"id": "responsive-design-ground-rules.md", "text": "responsive-design-ground-rules.md", "color": "#2E5EAA", "size": 6.0}, {"id": "a-step-by-step-explanation-of-principal-component-analysis.md", "text": "a-step-by-step-explanation-of-principal-component-analysis.md", "color": "#2E5EAA", "size": 6.0}, {"id": "javascript-knowledge-reading-source-code.md", "text": "javascript-knowledge-reading-source-code.md", "color": "#2E5EAA", "size": 6.0}, {"id": "agile-agile-blah-blah.md", "text": "agile-agile-blah-blah.md", "color": "#2E5EAA", "size": 5.5}, {"id": "lsvih", "text": "lsvih", "color": "#E00B6B", "size": 5.5}, {"id": "n_16-devtools-tips-and-tricks-every-css-developer-need-to-know.md", "text": "n_16-devtools-tips-and-tricks-every-css-developer-need-to-know.md", "color": "#2E5EAA", "size": 6.0}, {"id": "frontend-vs-backend-which-one-is-right-for-you.md", "text": "frontend-vs-backend-which-one-is-right-for-you.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Jarvis", "text": "Jarvis", "color": "#E00B6B", "size": 6.0}, {"id": "\u94b1\u4fca\u9896", "text": "\u94b1\u4fca\u9896", "color": "#E00B6B", "size": 6.0}, {"id": "the-economics-of-package-management-2.md", "text": "the-economics-of-package-management-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Lu Liu", "text": "Lu Liu", "color": "#E00B6B", "size": 5.5}, {"id": "locale-changes-and-the-androidviewmodel-antipattern.md", "text": "locale-changes-and-the-androidviewmodel-antipattern.md", "color": "#2E5EAA", "size": 5.5}, {"id": "n_101-tips-for-being-a-great-programmer-human.md", "text": "n_101-tips-for-being-a-great-programmer-human.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Mirosalva", "text": "Mirosalva", "color": "#E00B6B", "size": 5.5}, {"id": "learn-git-concepts-not-commands-2.md", "text": "learn-git-concepts-not-commands-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "ios.md", "text": "ios.md", "color": "#2E5EAA", "size": 5.5}, {"id": "backend.md", "text": "backend.md", "color": "#2E5EAA", "size": 5.5}, {"id": "AI.md", "text": "AI.md", "color": "#2E5EAA", "size": 5.5}, {"id": "front-end.md", "text": "front-end.md", "color": "#2E5EAA", "size": 5.5}, {"id": "android.md", "text": "android.md", "color": "#2E5EAA", "size": 5.5}, {"id": "product.md", "text": "product.md", "color": "#2E5EAA", "size": 5.5}, {"id": "design.md", "text": "design.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Pingren Nie", "text": "Pingren Nie", "color": "#E00B6B", "size": 5.5}, {"id": "how-to-build-minesweeper-with-javascript.md", "text": "how-to-build-minesweeper-with-javascript.md", "color": "#2E5EAA", "size": 5.5}, {"id": "JasonWu", "text": "JasonWu", "color": "#E00B6B", "size": 5.5}, {"id": "operating-a-high-scale-distributed-system.md", "text": "operating-a-high-scale-distributed-system.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how-javascript-works-event-loop-and-the-rise-of-async-programming-5-ways-to-better-coding-with.md", "text": "how-javascript-works-event-loop-and-the-rise-of-async-programming-5-ways-to-better-coding-with.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-problem-with-web-components.md", "text": "the-problem-with-web-components.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Jerry-FD", "text": "Jerry-FD", "color": "#E00B6B", "size": 5.5}, {"id": "qiuyuezhong", "text": "qiuyuezhong", "color": "#E00B6B", "size": 5.5}, {"id": "android-emulator-project-marble-improvements.md", "text": "android-emulator-project-marble-improvements.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Feximin", "text": "Feximin", "color": "#E00B6B", "size": 5.5}, {"id": "absolute-truths-unlearned-as-junior-developer.md", "text": "absolute-truths-unlearned-as-junior-developer.md", "color": "#2E5EAA", "size": 6.0}, {"id": "why-ai-is-here-to-stay.md", "text": "why-ai-is-here-to-stay.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-rise-of-the-meta-designer.md", "text": "the-rise-of-the-meta-designer.md", "color": "#2E5EAA", "size": 5.5}, {"id": "yzw7489757", "text": "yzw7489757", "color": "#E00B6B", "size": 5.5}, {"id": "\u52a8\u529b\u5c0f\u8f66", "text": "\u52a8\u529b\u5c0f\u8f66", "color": "#E00B6B", "size": 5.5}, {"id": "using-node-js-to-read-really-really-large-files-pt-1.md", "text": "using-node-js-to-read-really-really-large-files-pt-1.md", "color": "#2E5EAA", "size": 5.5}, {"id": "TiaossuP", "text": "TiaossuP", "color": "#E00B6B", "size": 5.5}, {"id": "how-data-sharding-works-in-a-distributed-sql-database.md", "text": "how-data-sharding-works-in-a-distributed-sql-database.md", "color": "#2E5EAA", "size": 5.5}, {"id": "is-postmessage-slow.md", "text": "is-postmessage-slow.md", "color": "#2E5EAA", "size": 6.0}, {"id": "the-open-source-conundrum-how-do-we-keep-the-lights-on.md", "text": "the-open-source-conundrum-how-do-we-keep-the-lights-on.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Jack Tang", "text": "Jack Tang", "color": "#E00B6B", "size": 7.5}, {"id": "learn-enough-docker-to-be-useful-1.md", "text": "learn-enough-docker-to-be-useful-1.md", "color": "#2E5EAA", "size": 5.5}, {"id": "typescript-impossible-states-irrepresentable.md", "text": "typescript-impossible-states-irrepresentable.md", "color": "#2E5EAA", "size": 5.5}, {"id": "reverse-engineering-how-you-can-build-a-test-library.md", "text": "reverse-engineering-how-you-can-build-a-test-library.md", "color": "#2E5EAA", "size": 5.5}, {"id": "writing-a-compiler-in-rust.md", "text": "writing-a-compiler-in-rust.md", "color": "#2E5EAA", "size": 5.5}, {"id": "n_5-tips-for-using-showinstallprompt-in-your-instant-experience.md", "text": "n_5-tips-for-using-showinstallprompt-in-your-instant-experience.md", "color": "#2E5EAA", "size": 5.5}, {"id": "when-a-rewrite-isnt-rebuilding-slack-on-the-desktop.md", "text": "when-a-rewrite-isnt-rebuilding-slack-on-the-desktop.md", "color": "#2E5EAA", "size": 5.5}, {"id": "others.md", "text": "others.md", "color": "#2E5EAA", "size": 5.5}, {"id": "algebraic-effects-for-the-rest-of-us.md", "text": "algebraic-effects-for-the-rest-of-us.md", "color": "#2E5EAA", "size": 5.5}, {"id": "i-built-tic-tac-toe-with-javascript.md", "text": "i-built-tic-tac-toe-with-javascript.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Jessica", "text": "Jessica", "color": "#E00B6B", "size": 5.5}, {"id": "\u8d75\u5c0f\u751f", "text": "\u8d75\u5c0f\u751f", "color": "#E00B6B", "size": 5.5}, {"id": "how-to-train-an-object-detection-model-with-keras.md", "text": "how-to-train-an-object-detection-model-with-keras.md", "color": "#2E5EAA", "size": 5.5}, {"id": "when-every-product-of-design-is-one-of-opinion.md", "text": "when-every-product-of-design-is-one-of-opinion.md", "color": "#2E5EAA", "size": 5.5}, {"id": "pika-web-a-future-without-webpack.md", "text": "pika-web-a-future-without-webpack.md", "color": "#2E5EAA", "size": 5.5}, {"id": "a-deep-dive-on-python-type-hints.md", "text": "a-deep-dive-on-python-type-hints.md", "color": "#2E5EAA", "size": 5.5}, {"id": "what-do-flutter-package-users-need-findings-from-q2-user-survey.md", "text": "what-do-flutter-package-users-need-findings-from-q2-user-survey.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Nebulus", "text": "Nebulus", "color": "#E00B6B", "size": 6.0}, {"id": "HearFishle", "text": "HearFishle", "color": "#E00B6B", "size": 5.5}, {"id": "LinGuang", "text": "LinGuang", "color": "#E00B6B", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 5.5}, {"id": "integrals.md", "text": "integrals.md", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_LenDtQel")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_LenDtQel")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_LenDtQel")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#LenDtQel_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('LenDtQel');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('LenDtQel');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

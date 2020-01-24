@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_ivujgZCY {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_ivujgZCY line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_ivujgZCY circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="ivujgZCY">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='ivujgZCY_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"ivujgZCY"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "sun", "target": "whats-new-in-php-7-4-top-10-features-that-you-need-to-know.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "offline-graphql-queries-with-redux-offline-and-apollo.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u53f8\u5f92\u516c\u5b50", "target": "how-to-prioritize-your-teams-work.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "TiaossuP", "target": "react-svg-icon-components.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u94b1\u4fca\u9896", "target": "enough-to-decide.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "enough-to-decide.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jessica", "target": "the-concepts-of-graphql.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "expressive-code-for-state-machines-in-cpp.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Charlo", "target": "the-evolution-of-the-design-from-ux-towards-personal-experience.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Charlo", "target": "the-fallacy-of-easy.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "quzhen", "target": "why-coding-your-own-makes-you-a-better-developer.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "HytonightYX", "target": "nodejs-jwt-authentication-oauth.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "my-personal-git-tricks-cheatsheet.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Yuqi", "target": "dart-features-for-better-code-types-and-working-with-parameters.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "William Liu", "target": "real-world-dynamic-programming-seam-carving.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u53f8\u5f92\u516c\u5b50", "target": "whats-new-in-php-7-4-top-10-features-that-you-need-to-know.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "the-ripple-effect-expanding-our-icon-design-system.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pingren Nie", "target": "my-personal-git-tricks-cheatsheet.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Hao Li", "target": "how-we-ditched-redux-for-mobx.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jessica", "target": "understanding-recursion.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Feng Zhou", "target": "syslog-the-complete-system-administrator-guide.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "a-closer-look-at-the-provider-package.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "understanding-recursion.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Vito", "target": "offline-graphql-queries-with-redux-offline-and-apollo.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "an-introduction-to-raspberry-pi-4-gpio-and-controlling-it-with-node-js.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "json-parser-with-javascript.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "why-svelte-wont-kill-react.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "how_to_prep_your_github_for_job_seeking.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "how-to-write-video-chat-app-using-webrtc-and-nodejs.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zen", "target": "json-parser-with-javascript.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Weirdochr", "target": "mathematical-programming-a-key-habit-to-built-up-for-advancing-in-data-science.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zh1an", "target": "expressive-code-for-state-machines-in-cpp.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "how-to-build-a-blog-with-nest-js-mongodb-and-vue-js.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "use-web-workers-for-your-event-listeners.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "creating-website-sitemap.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "integrals.md", "color": "#999999", "width": 2.5794415416798357, "weight": 1.0}], "nodes": [{"id": "sun", "text": "sun", "color": "#E00B6B", "size": 11.0}, {"id": "whats-new-in-php-7-4-top-10-features-that-you-need-to-know.md", "text": "whats-new-in-php-7-4-top-10-features-that-you-need-to-know.md", "color": "#2E5EAA", "size": 6.0}, {"id": "offline-graphql-queries-with-redux-offline-and-apollo.md", "text": "offline-graphql-queries-with-redux-offline-and-apollo.md", "color": "#2E5EAA", "size": 6.0}, {"id": "\u53f8\u5f92\u516c\u5b50", "text": "\u53f8\u5f92\u516c\u5b50", "color": "#E00B6B", "size": 6.0}, {"id": "how-to-prioritize-your-teams-work.md", "text": "how-to-prioritize-your-teams-work.md", "color": "#2E5EAA", "size": 5.5}, {"id": "TiaossuP", "text": "TiaossuP", "color": "#E00B6B", "size": 5.5}, {"id": "react-svg-icon-components.md", "text": "react-svg-icon-components.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u94b1\u4fca\u9896", "text": "\u94b1\u4fca\u9896", "color": "#E00B6B", "size": 5.5}, {"id": "enough-to-decide.md", "text": "enough-to-decide.md", "color": "#2E5EAA", "size": 6.0}, {"id": "lsvih", "text": "lsvih", "color": "#E00B6B", "size": 7.0}, {"id": "Jessica", "text": "Jessica", "color": "#E00B6B", "size": 6.0}, {"id": "the-concepts-of-graphql.md", "text": "the-concepts-of-graphql.md", "color": "#2E5EAA", "size": 5.5}, {"id": "expressive-code-for-state-machines-in-cpp.md", "text": "expressive-code-for-state-machines-in-cpp.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Charlo", "text": "Charlo", "color": "#E00B6B", "size": 6.0}, {"id": "the-evolution-of-the-design-from-ux-towards-personal-experience.md", "text": "the-evolution-of-the-design-from-ux-towards-personal-experience.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-fallacy-of-easy.md", "text": "the-fallacy-of-easy.md", "color": "#2E5EAA", "size": 5.5}, {"id": "quzhen", "text": "quzhen", "color": "#E00B6B", "size": 5.5}, {"id": "why-coding-your-own-makes-you-a-better-developer.md", "text": "why-coding-your-own-makes-you-a-better-developer.md", "color": "#2E5EAA", "size": 5.5}, {"id": "HytonightYX", "text": "HytonightYX", "color": "#E00B6B", "size": 5.5}, {"id": "nodejs-jwt-authentication-oauth.md", "text": "nodejs-jwt-authentication-oauth.md", "color": "#2E5EAA", "size": 5.5}, {"id": "my-personal-git-tricks-cheatsheet.md", "text": "my-personal-git-tricks-cheatsheet.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Yuqi", "text": "Yuqi", "color": "#E00B6B", "size": 6.0}, {"id": "dart-features-for-better-code-types-and-working-with-parameters.md", "text": "dart-features-for-better-code-types-and-working-with-parameters.md", "color": "#2E5EAA", "size": 5.5}, {"id": "William Liu", "text": "William Liu", "color": "#E00B6B", "size": 5.5}, {"id": "real-world-dynamic-programming-seam-carving.md", "text": "real-world-dynamic-programming-seam-carving.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-ripple-effect-expanding-our-icon-design-system.md", "text": "the-ripple-effect-expanding-our-icon-design-system.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Pingren Nie", "text": "Pingren Nie", "color": "#E00B6B", "size": 5.5}, {"id": "Hao Li", "text": "Hao Li", "color": "#E00B6B", "size": 5.5}, {"id": "how-we-ditched-redux-for-mobx.md", "text": "how-we-ditched-redux-for-mobx.md", "color": "#2E5EAA", "size": 5.5}, {"id": "understanding-recursion.md", "text": "understanding-recursion.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Feng Zhou", "text": "Feng Zhou", "color": "#E00B6B", "size": 5.5}, {"id": "syslog-the-complete-system-administrator-guide.md", "text": "syslog-the-complete-system-administrator-guide.md", "color": "#2E5EAA", "size": 5.5}, {"id": "a-closer-look-at-the-provider-package.md", "text": "a-closer-look-at-the-provider-package.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Vito", "text": "Vito", "color": "#E00B6B", "size": 5.5}, {"id": "an-introduction-to-raspberry-pi-4-gpio-and-controlling-it-with-node-js.md", "text": "an-introduction-to-raspberry-pi-4-gpio-and-controlling-it-with-node-js.md", "color": "#2E5EAA", "size": 5.5}, {"id": "json-parser-with-javascript.md", "text": "json-parser-with-javascript.md", "color": "#2E5EAA", "size": 6.0}, {"id": "why-svelte-wont-kill-react.md", "text": "why-svelte-wont-kill-react.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how_to_prep_your_github_for_job_seeking.md", "text": "how_to_prep_your_github_for_job_seeking.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how-to-write-video-chat-app-using-webrtc-and-nodejs.md", "text": "how-to-write-video-chat-app-using-webrtc-and-nodejs.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Zen", "text": "Zen", "color": "#E00B6B", "size": 5.5}, {"id": "Weirdochr", "text": "Weirdochr", "color": "#E00B6B", "size": 5.5}, {"id": "mathematical-programming-a-key-habit-to-built-up-for-advancing-in-data-science.md", "text": "mathematical-programming-a-key-habit-to-built-up-for-advancing-in-data-science.md", "color": "#2E5EAA", "size": 5.5}, {"id": "zh1an", "text": "zh1an", "color": "#E00B6B", "size": 5.5}, {"id": "how-to-build-a-blog-with-nest-js-mongodb-and-vue-js.md", "text": "how-to-build-a-blog-with-nest-js-mongodb-and-vue-js.md", "color": "#2E5EAA", "size": 5.5}, {"id": "use-web-workers-for-your-event-listeners.md", "text": "use-web-workers-for-your-event-listeners.md", "color": "#2E5EAA", "size": 5.5}, {"id": "creating-website-sitemap.md", "text": "creating-website-sitemap.md", "color": "#2E5EAA", "size": 5.5}, {"id": "integrals.md", "text": "integrals.md", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_ivujgZCY")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_ivujgZCY")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_ivujgZCY")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#ivujgZCY_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('ivujgZCY');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('ivujgZCY');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

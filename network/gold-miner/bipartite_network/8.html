@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_iYJUBUzG {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_iYJUBUzG line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_iYJUBUzG circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="iYJUBUzG">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='iYJUBUzG_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"iYJUBUzG"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Nebulus", "target": "how-data-sharding-works-in-a-distributed-sql-database.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "xgboost-algorithm-long-may-she-reign.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u52a8\u529b\u5c0f\u8f66", "target": "the-problem-with-web-components.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u94b1\u4fca\u9896", "target": "the-rise-of-the-meta-designer.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "dearpork", "target": "reverse-engineering-how-you-can-build-a-test-library.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fxymine4ever", "target": "subscriptions-101-for-android-apps.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "a-little-reminder-that-pseudo-elements-are-children-kinda.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "flutter-state-management-setstate-bloc-valuenotifier-provider.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "http-security-headers-a-complete-guide.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "current-status-of-python-packaging.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "rage-against-the-codebase-programmers-and-negativity.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u94b1\u4fca\u9896", "target": "pika-web-a-future-without-webpack.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "YueYong", "target": "why-ai-is-here-to-stay.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u674e\u6c49\u7965", "target": "the-open-source-conundrum-how-do-we-keep-the-lights-on.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "modern-script-loading.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "how-does-the-development-mode-work.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "styling-modern-web-apps.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "dart-features-for-better-code-types-and-working-with-parameters.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "how-writing-simple-javascript-got-us-6200-github-stars-in-a-single-day.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "a-closer-look-at-the-provider-package.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Charlo", "target": "when-every-product-of-design-is-one-of-opinion.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "react-16-lifecycle-methods-how-and-when-to-use-them.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pingren Nie", "target": "operating-a-high-scale-distributed-system.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jarvis", "target": "collection-cognitive-biases-how-to-use-3.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jerry-FD", "target": "how-does-the-development-mode-work.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "the-many-ways-to-include-css-in-javascript-applications.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jessica", "target": "when-a-rewrite-isnt-rebuilding-slack-on-the-desktop.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u67ef\u5c0f\u57fa", "target": "i-built-tic-tac-toe-with-javascript.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "when-a-rewrite-isnt-rebuilding-slack-on-the-desktop.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Lucas biu", "target": "streams-for-the-win-a-performance-comparison-of-nodejs-methods-for-reading-large-datasets-pt-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Lu Liu", "target": "typescript-impossible-states-irrepresentable.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_40m41h42t", "target": "learning-parser-combinators-with-rust-4.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u94b1\u4fca\u9896", "target": "a-little-reminder-that-pseudo-elements-are-children-kinda.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lsvih", "target": "why-should-you-learn-go.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "hu7may", "target": "a-deep-dive-on-python-type-hints.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "how-to-train-an-object-detection-model-with-keras.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "killing-a-process-and-all-of-its-descendants.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jessica", "target": "http-security-headers-a-complete-guide.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "syslog-the-complete-system-administrator-guide.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "learn-enough-docker-to-be-useful-1.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Samuel Jie", "target": "writing-a-compiler-in-rust.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u94b1\u4fca\u9896", "target": "rage-against-the-codebase-programmers-and-negativity.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lsvih", "target": "lru-cache.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u6c5f\u4e0d\u77e5", "target": "a-deep-dive-on-python-type-hints.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Sam", "target": "learn-git-concepts-not-commands-3.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u6c5f\u4e0d\u77e5", "target": "killing-a-process-and-all-of-its-descendants.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zavier Tang", "target": "how-to-build-minesweeper-with-javascript.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "bottom-navigation-bar-using-provider-flutter.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "how-to-mock-services-using-mountebank-and-node-js.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "integrals.md", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "Nebulus", "text": "Nebulus", "color": "#E00B6B", "size": 5.5}, {"id": "how-data-sharding-works-in-a-distributed-sql-database.md", "text": "how-data-sharding-works-in-a-distributed-sql-database.md", "color": "#2E5EAA", "size": 5.5}, {"id": "lsvih", "text": "lsvih", "color": "#E00B6B", "size": 8.0}, {"id": "xgboost-algorithm-long-may-she-reign.md", "text": "xgboost-algorithm-long-may-she-reign.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u52a8\u529b\u5c0f\u8f66", "text": "\u52a8\u529b\u5c0f\u8f66", "color": "#E00B6B", "size": 5.5}, {"id": "the-problem-with-web-components.md", "text": "the-problem-with-web-components.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u94b1\u4fca\u9896", "text": "\u94b1\u4fca\u9896", "color": "#E00B6B", "size": 7.0}, {"id": "the-rise-of-the-meta-designer.md", "text": "the-rise-of-the-meta-designer.md", "color": "#2E5EAA", "size": 5.5}, {"id": "dearpork", "text": "dearpork", "color": "#E00B6B", "size": 5.5}, {"id": "reverse-engineering-how-you-can-build-a-test-library.md", "text": "reverse-engineering-how-you-can-build-a-test-library.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Fxymine4ever", "text": "Fxymine4ever", "color": "#E00B6B", "size": 5.5}, {"id": "subscriptions-101-for-android-apps.md", "text": "subscriptions-101-for-android-apps.md", "color": "#2E5EAA", "size": 5.5}, {"id": "sun", "text": "sun", "color": "#E00B6B", "size": 12.5}, {"id": "a-little-reminder-that-pseudo-elements-are-children-kinda.md", "text": "a-little-reminder-that-pseudo-elements-are-children-kinda.md", "color": "#2E5EAA", "size": 6.0}, {"id": "flutter-state-management-setstate-bloc-valuenotifier-provider.md", "text": "flutter-state-management-setstate-bloc-valuenotifier-provider.md", "color": "#2E5EAA", "size": 5.5}, {"id": "http-security-headers-a-complete-guide.md", "text": "http-security-headers-a-complete-guide.md", "color": "#2E5EAA", "size": 6.0}, {"id": "current-status-of-python-packaging.md", "text": "current-status-of-python-packaging.md", "color": "#2E5EAA", "size": 5.5}, {"id": "rage-against-the-codebase-programmers-and-negativity.md", "text": "rage-against-the-codebase-programmers-and-negativity.md", "color": "#2E5EAA", "size": 6.0}, {"id": "pika-web-a-future-without-webpack.md", "text": "pika-web-a-future-without-webpack.md", "color": "#2E5EAA", "size": 5.5}, {"id": "YueYong", "text": "YueYong", "color": "#E00B6B", "size": 5.5}, {"id": "why-ai-is-here-to-stay.md", "text": "why-ai-is-here-to-stay.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u674e\u6c49\u7965", "text": "\u674e\u6c49\u7965", "color": "#E00B6B", "size": 5.5}, {"id": "the-open-source-conundrum-how-do-we-keep-the-lights-on.md", "text": "the-open-source-conundrum-how-do-we-keep-the-lights-on.md", "color": "#2E5EAA", "size": 5.5}, {"id": "modern-script-loading.md", "text": "modern-script-loading.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how-does-the-development-mode-work.md", "text": "how-does-the-development-mode-work.md", "color": "#2E5EAA", "size": 6.0}, {"id": "styling-modern-web-apps.md", "text": "styling-modern-web-apps.md", "color": "#2E5EAA", "size": 5.5}, {"id": "dart-features-for-better-code-types-and-working-with-parameters.md", "text": "dart-features-for-better-code-types-and-working-with-parameters.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how-writing-simple-javascript-got-us-6200-github-stars-in-a-single-day.md", "text": "how-writing-simple-javascript-got-us-6200-github-stars-in-a-single-day.md", "color": "#2E5EAA", "size": 5.5}, {"id": "a-closer-look-at-the-provider-package.md", "text": "a-closer-look-at-the-provider-package.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Charlo", "text": "Charlo", "color": "#E00B6B", "size": 5.5}, {"id": "when-every-product-of-design-is-one-of-opinion.md", "text": "when-every-product-of-design-is-one-of-opinion.md", "color": "#2E5EAA", "size": 5.5}, {"id": "react-16-lifecycle-methods-how-and-when-to-use-them.md", "text": "react-16-lifecycle-methods-how-and-when-to-use-them.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Pingren Nie", "text": "Pingren Nie", "color": "#E00B6B", "size": 5.5}, {"id": "operating-a-high-scale-distributed-system.md", "text": "operating-a-high-scale-distributed-system.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Jarvis", "text": "Jarvis", "color": "#E00B6B", "size": 5.5}, {"id": "collection-cognitive-biases-how-to-use-3.md", "text": "collection-cognitive-biases-how-to-use-3.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Jerry-FD", "text": "Jerry-FD", "color": "#E00B6B", "size": 5.5}, {"id": "the-many-ways-to-include-css-in-javascript-applications.md", "text": "the-many-ways-to-include-css-in-javascript-applications.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Jessica", "text": "Jessica", "color": "#E00B6B", "size": 6.0}, {"id": "when-a-rewrite-isnt-rebuilding-slack-on-the-desktop.md", "text": "when-a-rewrite-isnt-rebuilding-slack-on-the-desktop.md", "color": "#2E5EAA", "size": 6.0}, {"id": "\u67ef\u5c0f\u57fa", "text": "\u67ef\u5c0f\u57fa", "color": "#E00B6B", "size": 5.5}, {"id": "i-built-tic-tac-toe-with-javascript.md", "text": "i-built-tic-tac-toe-with-javascript.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Lucas biu", "text": "Lucas biu", "color": "#E00B6B", "size": 5.5}, {"id": "streams-for-the-win-a-performance-comparison-of-nodejs-methods-for-reading-large-datasets-pt-2.md", "text": "streams-for-the-win-a-performance-comparison-of-nodejs-methods-for-reading-large-datasets-pt-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Lu Liu", "text": "Lu Liu", "color": "#E00B6B", "size": 5.5}, {"id": "typescript-impossible-states-irrepresentable.md", "text": "typescript-impossible-states-irrepresentable.md", "color": "#2E5EAA", "size": 5.5}, {"id": "n_40m41h42t", "text": "n_40m41h42t", "color": "#E00B6B", "size": 5.5}, {"id": "learning-parser-combinators-with-rust-4.md", "text": "learning-parser-combinators-with-rust-4.md", "color": "#2E5EAA", "size": 5.5}, {"id": "why-should-you-learn-go.md", "text": "why-should-you-learn-go.md", "color": "#2E5EAA", "size": 5.5}, {"id": "hu7may", "text": "hu7may", "color": "#E00B6B", "size": 5.5}, {"id": "a-deep-dive-on-python-type-hints.md", "text": "a-deep-dive-on-python-type-hints.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Yuqi", "text": "Yuqi", "color": "#E00B6B", "size": 6.0}, {"id": "how-to-train-an-object-detection-model-with-keras.md", "text": "how-to-train-an-object-detection-model-with-keras.md", "color": "#2E5EAA", "size": 5.5}, {"id": "killing-a-process-and-all-of-its-descendants.md", "text": "killing-a-process-and-all-of-its-descendants.md", "color": "#2E5EAA", "size": 6.0}, {"id": "syslog-the-complete-system-administrator-guide.md", "text": "syslog-the-complete-system-administrator-guide.md", "color": "#2E5EAA", "size": 5.5}, {"id": "learn-enough-docker-to-be-useful-1.md", "text": "learn-enough-docker-to-be-useful-1.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Samuel Jie", "text": "Samuel Jie", "color": "#E00B6B", "size": 5.5}, {"id": "writing-a-compiler-in-rust.md", "text": "writing-a-compiler-in-rust.md", "color": "#2E5EAA", "size": 5.5}, {"id": "lru-cache.md", "text": "lru-cache.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u6c5f\u4e0d\u77e5", "text": "\u6c5f\u4e0d\u77e5", "color": "#E00B6B", "size": 6.0}, {"id": "Sam", "text": "Sam", "color": "#E00B6B", "size": 5.5}, {"id": "learn-git-concepts-not-commands-3.md", "text": "learn-git-concepts-not-commands-3.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Zavier Tang", "text": "Zavier Tang", "color": "#E00B6B", "size": 5.5}, {"id": "how-to-build-minesweeper-with-javascript.md", "text": "how-to-build-minesweeper-with-javascript.md", "color": "#2E5EAA", "size": 5.5}, {"id": "bottom-navigation-bar-using-provider-flutter.md", "text": "bottom-navigation-bar-using-provider-flutter.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how-to-mock-services-using-mountebank-and-node-js.md", "text": "how-to-mock-services-using-mountebank-and-node-js.md", "color": "#2E5EAA", "size": 5.5}, {"id": "LeviDing", "text": "LeviDing", "color": "#E00B6B", "size": 5.5}, {"id": "integrals.md", "text": "integrals.md", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_iYJUBUzG")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_iYJUBUzG")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_iYJUBUzG")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#iYJUBUzG_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('iYJUBUzG');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('iYJUBUzG');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

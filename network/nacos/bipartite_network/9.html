@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_zTTSZPxl {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_zTTSZPxl line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_zTTSZPxl circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="zTTSZPxl">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='zTTSZPxl_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"zTTSZPxl"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "LoadChange", "target": "request.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LoadChange", "target": "main.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "fox", "target": "TcpSuperSenseProcessor.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "fox", "target": "HealthCheckProcessorDelegate.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "fox", "target": "HttpHealthCheckProcessor.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "fox", "target": "MysqlHealthCheckProcessor.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "fox", "target": "application.properties", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "fox", "target": "NoneHealthCheckProcessor.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "universefeeler", "target": "OperatorController.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "universefeeler", "target": "ServiceManager.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "universefeeler", "target": "NamingProxy.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "ConfigController.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "Fury Zhu", "target": "PersistService.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "rushsky518", "target": "shutdown.sh", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pbting", "target": "Constants.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "pbting", "target": "RunningConfig.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "pbting", "target": "DataSyncer.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "pbting", "target": "zh-CN.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "pbting", "target": "ServiceList.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "pbting", "target": "ServiceController.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "pbting", "target": "CatalogController.java", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "pbting", "target": "ServiceManager.java", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "nkorange", "target": "pom.xml", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "nkorange", "target": "AbstractHealthChecker.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "pbting", "target": "startup.cmd", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "pbting", "target": "TcpSuperSenseProcessor.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "pbting", "target": "HealthCheckProcessorDelegate.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "pbting", "target": "AbstractHealthChecker.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "pbting", "target": "HttpHealthCheckProcessor.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "pbting", "target": "ConfigController.java", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "pbting", "target": "NoneHealthCheckProcessor.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "pbting", "target": "MysqlHealthCheckProcessor.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "pbting", "target": "PersistService.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "pbting", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "wangchenjun", "target": "InstanceController.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wangchenjun", "target": "Instance.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "universefeeler", "target": "Service.java", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "universefeeler", "target": "CatalogController.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "universefeeler", "target": "ServiceView.java", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "universefeeler", "target": "en-US.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "universefeeler", "target": "zh-CN.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "universefeeler", "target": "ServiceList.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "AbstractSharedListener.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "ApplicationInfo.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "AggrWhitelist.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "MD5.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "xianlaioy", "target": "GroupKey.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "LocalDataSourceServiceImpl.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "RegexParser.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "TimeUtils.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "TimeoutUtils.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "UrlAnalysisUtils.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "RandomUtils.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xianlaioy", "target": "SystemUtils.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "universefeeler", "target": "ClientBeatProcessor.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "chuntaojun", "target": "DiskCache.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "chuntaojun", "target": "ConfigController.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "chuntaojun", "target": "DumpService.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wangchenjun", "target": "DiskCache.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Beldon", "target": "OperatorController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "ServiceManager.java", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "nkorange", "target": "ServerListManager.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "SwitchDomain.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "SwitchEntry.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "SwitchManager.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "bruce", "target": "application.properties", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "xxc", "target": "application.properties", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fury Zhu", "target": "TimeUtils.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "SystemUtils.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "Fury Zhu", "target": "AggrWhitelist.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "UrlAnalysisUtils.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "RandomUtils.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "RegexParser.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "GroupKey.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "MD5.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "TimeoutUtils.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "LocalDataSourceServiceImpl.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "ApplicationInfo.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "AbstractSharedListener.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "Instance.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "InstanceController.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "DistroConsistencyServiceImpl.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fury Zhu", "target": "DistroController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fury Zhu", "target": "DataStore.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fury Zhu", "target": "RunningConfig.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Fury Zhu", "target": "startup.cmd", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Fury Zhu", "target": "DataSyncer.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "Constants.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Fury Zhu", "target": "Instances.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fury Zhu", "target": "ServiceManager.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "Fury Zhu", "target": "application.properties", "color": "#999999", "width": 1.5986122886681098, "weight": 0.5}, {"source": "Fury Zhu", "target": "NamingProxy.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "TcpSuperSenseProcessor.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "HealthCheckProcessorDelegate.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "AbstractHealthChecker.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "ServiceController.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "HttpHealthCheckProcessor.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "BeatReactor.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Fury Zhu", "target": "shutdown.sh", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "NoneHealthCheckProcessor.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "MysqlHealthCheckProcessor.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "pom.xml", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "Fury Zhu", "target": "zh-CN.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Fury Zhu", "target": "ServiceList.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Fury Zhu", "target": "CatalogController.java", "color": "#999999", "width": 0.5, "weight": 0.2}], "nodes": [{"id": "LoadChange", "text": "LoadChange", "color": "#E00B6B", "size": 6.0}, {"id": "request.js", "text": "request.js", "color": "#2E5EAA", "size": 5.5}, {"id": "main.js", "text": "main.js", "color": "#2E5EAA", "size": 5.5}, {"id": "fox", "text": "fox", "color": "#E00B6B", "size": 8.0}, {"id": "TcpSuperSenseProcessor.java", "text": "TcpSuperSenseProcessor.java", "color": "#2E5EAA", "size": 6.5}, {"id": "HealthCheckProcessorDelegate.java", "text": "HealthCheckProcessorDelegate.java", "color": "#2E5EAA", "size": 6.5}, {"id": "HttpHealthCheckProcessor.java", "text": "HttpHealthCheckProcessor.java", "color": "#2E5EAA", "size": 6.5}, {"id": "MysqlHealthCheckProcessor.java", "text": "MysqlHealthCheckProcessor.java", "color": "#2E5EAA", "size": 6.5}, {"id": "application.properties", "text": "application.properties", "color": "#2E5EAA", "size": 7.0}, {"id": "NoneHealthCheckProcessor.java", "text": "NoneHealthCheckProcessor.java", "color": "#2E5EAA", "size": 6.5}, {"id": "universefeeler", "text": "universefeeler", "color": "#E00B6B", "size": 10.0}, {"id": "OperatorController.java", "text": "OperatorController.java", "color": "#2E5EAA", "size": 6.0}, {"id": "ServiceManager.java", "text": "ServiceManager.java", "color": "#2E5EAA", "size": 7.0}, {"id": "NamingProxy.java", "text": "NamingProxy.java", "color": "#2E5EAA", "size": 6.0}, {"id": "Fury Zhu", "text": "Fury Zhu", "color": "#E00B6B", "size": 25.0}, {"id": "ConfigController.java", "text": "ConfigController.java", "color": "#2E5EAA", "size": 6.5}, {"id": "PersistService.java", "text": "PersistService.java", "color": "#2E5EAA", "size": 6.0}, {"id": "rushsky518", "text": "rushsky518", "color": "#E00B6B", "size": 5.5}, {"id": "shutdown.sh", "text": "shutdown.sh", "color": "#2E5EAA", "size": 6.0}, {"id": "pbting", "text": "pbting", "color": "#E00B6B", "size": 14.0}, {"id": "Constants.java", "text": "Constants.java", "color": "#2E5EAA", "size": 6.0}, {"id": "RunningConfig.java", "text": "RunningConfig.java", "color": "#2E5EAA", "size": 6.0}, {"id": "DataSyncer.java", "text": "DataSyncer.java", "color": "#2E5EAA", "size": 6.0}, {"id": "zh-CN.js", "text": "zh-CN.js", "color": "#2E5EAA", "size": 6.5}, {"id": "ServiceList.js", "text": "ServiceList.js", "color": "#2E5EAA", "size": 6.5}, {"id": "ServiceController.java", "text": "ServiceController.java", "color": "#2E5EAA", "size": 6.0}, {"id": "CatalogController.java", "text": "CatalogController.java", "color": "#2E5EAA", "size": 6.5}, {"id": "nkorange", "text": "nkorange", "color": "#E00B6B", "size": 8.5}, {"id": "pom.xml", "text": "pom.xml", "color": "#2E5EAA", "size": 6.5}, {"id": "AbstractHealthChecker.java", "text": "AbstractHealthChecker.java", "color": "#2E5EAA", "size": 6.5}, {"id": "startup.cmd", "text": "startup.cmd", "color": "#2E5EAA", "size": 6.0}, {"id": "wangchenjun", "text": "wangchenjun", "color": "#E00B6B", "size": 6.5}, {"id": "InstanceController.java", "text": "InstanceController.java", "color": "#2E5EAA", "size": 6.0}, {"id": "Instance.java", "text": "Instance.java", "color": "#2E5EAA", "size": 6.0}, {"id": "Service.java", "text": "Service.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ServiceView.java", "text": "ServiceView.java", "color": "#2E5EAA", "size": 5.5}, {"id": "en-US.js", "text": "en-US.js", "color": "#2E5EAA", "size": 5.5}, {"id": "xianlaioy", "text": "xianlaioy", "color": "#E00B6B", "size": 11.0}, {"id": "AbstractSharedListener.java", "text": "AbstractSharedListener.java", "color": "#2E5EAA", "size": 6.0}, {"id": "ApplicationInfo.java", "text": "ApplicationInfo.java", "color": "#2E5EAA", "size": 6.0}, {"id": "AggrWhitelist.java", "text": "AggrWhitelist.java", "color": "#2E5EAA", "size": 6.0}, {"id": "MD5.java", "text": "MD5.java", "color": "#2E5EAA", "size": 6.0}, {"id": "GroupKey.java", "text": "GroupKey.java", "color": "#2E5EAA", "size": 6.0}, {"id": "LocalDataSourceServiceImpl.java", "text": "LocalDataSourceServiceImpl.java", "color": "#2E5EAA", "size": 6.0}, {"id": "RegexParser.java", "text": "RegexParser.java", "color": "#2E5EAA", "size": 6.0}, {"id": "TimeUtils.java", "text": "TimeUtils.java", "color": "#2E5EAA", "size": 6.0}, {"id": "TimeoutUtils.java", "text": "TimeoutUtils.java", "color": "#2E5EAA", "size": 6.0}, {"id": "UrlAnalysisUtils.java", "text": "UrlAnalysisUtils.java", "color": "#2E5EAA", "size": 6.0}, {"id": "RandomUtils.java", "text": "RandomUtils.java", "color": "#2E5EAA", "size": 6.0}, {"id": "SystemUtils.java", "text": "SystemUtils.java", "color": "#2E5EAA", "size": 6.0}, {"id": "ClientBeatProcessor.java", "text": "ClientBeatProcessor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "chuntaojun", "text": "chuntaojun", "color": "#E00B6B", "size": 6.5}, {"id": "DiskCache.java", "text": "DiskCache.java", "color": "#2E5EAA", "size": 6.0}, {"id": "DumpService.java", "text": "DumpService.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Beldon", "text": "Beldon", "color": "#E00B6B", "size": 5.5}, {"id": "ServerListManager.java", "text": "ServerListManager.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SwitchDomain.java", "text": "SwitchDomain.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SwitchEntry.java", "text": "SwitchEntry.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SwitchManager.java", "text": "SwitchManager.java", "color": "#2E5EAA", "size": 5.5}, {"id": "bruce", "text": "bruce", "color": "#E00B6B", "size": 5.5}, {"id": "xxc", "text": "xxc", "color": "#E00B6B", "size": 5.5}, {"id": "DistroConsistencyServiceImpl.java", "text": "DistroConsistencyServiceImpl.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DistroController.java", "text": "DistroController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DataStore.java", "text": "DataStore.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Instances.java", "text": "Instances.java", "color": "#2E5EAA", "size": 5.5}, {"id": "BeatReactor.java", "text": "BeatReactor.java", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_zTTSZPxl")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_zTTSZPxl")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_zTTSZPxl")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#zTTSZPxl_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('zTTSZPxl');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('zTTSZPxl');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

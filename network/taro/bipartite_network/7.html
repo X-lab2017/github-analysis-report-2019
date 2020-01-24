@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_kwhTrimY {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_kwhTrimY line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_kwhTrimY circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="kwhTrimY">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='kwhTrimY_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"kwhTrimY"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "onelong", "target": "memo.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Xiaoli", "target": "index.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.125}, {"source": "Isaac Young", "target": "utils.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "manifest.default.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "ZeroToOne", "target": "MovableView.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jay Fong", "target": "Form.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sqlwwx", "target": "taro-build", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "index.js", "color": "#999999", "width": 1.5986122886681098, "weight": 0.13043478260869565}, {"source": "luckyadam", "target": "create-component.js", "color": "#999999", "width": 2.4459101490553135, "weight": 0.7777777777777778}, {"source": "yuche", "target": "class.ts", "color": "#999999", "width": 2.8978952727983707, "weight": 1.0}, {"source": "yuche", "target": "wxml.ts", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "luckyadam", "target": "index.ux", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5}, {"source": "Pines-Cheng", "target": "index.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.06896551724137931}, {"source": "Younntone", "target": "event.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "script.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "FrankFan", "target": "project-config.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "YuanQuan", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "luckyadam", "target": "index.ts", "color": "#999999", "width": 2.8978952727983707, "weight": 0.3793103448275862}, {"source": "Garfield Lee", "target": "manifest.default.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "chenjiajian", "target": "chain.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "WaterMan", "target": "router.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jinjinjin0731", "target": "index.ux", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "yuche", "target": "utils.ts", "color": "#999999", "width": 1.8862943611198906, "weight": 0.8}, {"source": "Garfield Lee", "target": "best-practice.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Garfield Lee", "target": "quick-app.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chenjiajian", "target": "index.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.1111111111111111}, {"source": "yuche", "target": "render.ts", "color": "#999999", "width": 3.4444389791664403, "weight": 0.9047619047619048}, {"source": "\u6731\u51cc\u9704", "target": "toast.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u6731\u51cc\u9704", "target": "getWrappedScreen.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "luckyadam", "target": "shallow-equal.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Jim,czj", "target": "chooseImage.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "options.ts", "color": "#999999", "width": 2.1094379124341005, "weight": 0.8333333333333334}, {"source": "SunnyQjm", "target": "index.ux", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "index.js", "color": "#999999", "width": 3.0649493574615367, "weight": 0.5652173913043478}, {"source": "yuche", "target": "index.ts", "color": "#999999", "width": 2.1094379124341005, "weight": 0.1724137931034483}, {"source": "luckyadam", "target": "prepublish.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "render-props.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "luckyadam", "target": "CHANGELOG.md", "color": "#999999", "width": 2.4459101490553135, "weight": 1.0}, {"source": "chenjiajian", "target": "index.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 0.16666666666666666}, {"source": "Xiaoli", "target": "index.ts", "color": "#999999", "width": 1.8862943611198906, "weight": 0.25}, {"source": "tourze", "target": "getWrappedScreen.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "this-props-function.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Cloud", "target": "constants.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xiaoli", "target": "route.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "luckyadam", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.07692307692307693}, {"source": "YuanQuan", "target": "create-component.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Yu Che", "target": "context.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chenjiajian", "target": "template.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "zhuxianguo", "target": "index.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "memo.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Tom Huang", "target": "inject.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "init.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "jsx.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "manolo", "target": "lifecycle.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zsir", "target": "config-detail.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "native-api.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "yuche", "target": ".travis.yml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Manjiz", "target": "index.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Pines-Cheng", "target": "getWrappedScreen.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "eteplus", "target": "render-props.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Manjiz", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "js-newbee", "target": "react-native.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xiaoli", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.07692307692307693}, {"source": "yuche", "target": "create-html-element.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "luckyadam", "target": "create-html-element.ts", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "tigerHee", "target": "swiper.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jason", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Rahim", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "adapter.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Garfield Lee", "target": "index.d.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "Felix", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chenjiajian", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "\u674e\u6587\u5bcc", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "dependabot-preview[bot]", "target": "yarn.lock", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "luckyadam", "target": "build.conf.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "fileParseLoader.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "sidebars.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "record.ts", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "luckyadam", "target": "constants.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "jinjinjin0731", "target": "index.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "jinjinjin0731", "target": "camera.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "video.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "yuche", "target": "functional.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u6731\u51cc\u9704", "target": "PropsType.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u6731\u51cc\u9704", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Pines-Cheng", "target": "package.json", "color": "#999999", "width": 1.5986122886681098, "weight": 0.23076923076923078}, {"source": "Pines-Cheng", "target": "initRouter.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "luckyadam", "target": "component.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "chenjiajian", "target": "creator.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "chenjiajian", "target": "project.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "yuche", "target": "render-props.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "chenjiajian", "target": "taro-create", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "showModal.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "honlyhuang", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "honlyhuang", "target": "siteConfig.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "huangli47", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "huangli47", "target": "siteConfig.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kan Chen", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kan Chen", "target": "abilityXMLValidator.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Symphony", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "GETTING-STARTED.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Pines-Cheng", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "JinJinJin", "target": "index.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "JinJinJin", "target": "index.ux", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yuche", "target": "jsx.ts", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "Xiaoli", "target": "astConvert.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "unofficial", "target": "template.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "unofficial", "target": "render.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Garfield Lee", "target": "request.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "native-apis.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "Manjiz", "target": "yarn.lock", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "luckyadam", "target": "global.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "audio.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "onelong", "target": "constants.ts", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "onelong", "target": "global.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "onelong", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Pines-Cheng", "target": "chooseImage.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Pines-Cheng", "target": "showActionSheet.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chenjiajian", "target": "create-component.js", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "luckyadam", "target": "helper.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "honlyHuang", "target": "GETTING-STARTED.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "honlyHuang", "target": "debug.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "honlyHuang", "target": "en.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "TabBarIcon.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Pines-Cheng", "target": "TaroProvider.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "luckyadam", "target": "render.ts", "color": "#999999", "width": 0.5, "weight": 0.047619047619047616}, {"source": "Pines", "target": "getWrappedScreen.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "Pines", "target": "index.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "Pines-Cheng", "target": "map.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "luckyadam", "target": "util.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "home.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Pines-Cheng", "target": "screen.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "Xiaoli", "target": "jest.config.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xiaoli", "target": "router-test.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xiaoli", "target": "router.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Xiaoli", "target": "tsconfig.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "class-method-renamer.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "gulpfile.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xiaoli", "target": "rollup.config.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xiaoli", "target": "index.cjs.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "utils.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chenjiajian", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.07692307692307693}, {"source": "chenjiajian", "target": "fetchTemplate.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines", "target": "options.ts", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Pines", "target": "toast.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Pines-Cheng", "target": "yarn.lock", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "dependabot-preview[bot]", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Pines-Cheng", "target": "file-system.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "hash.ts", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "onelong", "text": "onelong", "color": "#E00B6B", "size": 7.0}, {"id": "memo.js", "text": "memo.js", "color": "#2E5EAA", "size": 6.0}, {"id": "Xiaoli", "text": "Xiaoli", "color": "#E00B6B", "size": 10.5}, {"id": "index.js", "text": "index.js", "color": "#2E5EAA", "size": 8.0}, {"id": "Isaac Young", "text": "Isaac Young", "color": "#E00B6B", "size": 5.5}, {"id": "utils.ts", "text": "utils.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "luckyadam", "text": "luckyadam", "color": "#E00B6B", "size": 16.5}, {"id": "manifest.default.json", "text": "manifest.default.json", "color": "#2E5EAA", "size": 6.0}, {"id": "ZeroToOne", "text": "ZeroToOne", "color": "#E00B6B", "size": 5.5}, {"id": "MovableView.d.ts", "text": "MovableView.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Jay Fong", "text": "Jay Fong", "color": "#E00B6B", "size": 5.5}, {"id": "Form.d.ts", "text": "Form.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "sqlwwx", "text": "sqlwwx", "color": "#E00B6B", "size": 5.5}, {"id": "taro-build", "text": "taro-build", "color": "#2E5EAA", "size": 5.5}, {"id": "create-component.js", "text": "create-component.js", "color": "#2E5EAA", "size": 6.5}, {"id": "yuche", "text": "yuche", "color": "#E00B6B", "size": 14.0}, {"id": "class.ts", "text": "class.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "wxml.ts", "text": "wxml.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "index.ux", "text": "index.ux", "color": "#2E5EAA", "size": 7.0}, {"id": "Pines-Cheng", "text": "Pines-Cheng", "color": "#E00B6B", "size": 16.5}, {"id": "index.ts", "text": "index.ts", "color": "#2E5EAA", "size": 9.0}, {"id": "Younntone", "text": "Younntone", "color": "#E00B6B", "size": 5.5}, {"id": "event.md", "text": "event.md", "color": "#2E5EAA", "size": 5.5}, {"id": "script.ts", "text": "script.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "FrankFan", "text": "FrankFan", "color": "#E00B6B", "size": 5.5}, {"id": "project-config.md", "text": "project-config.md", "color": "#2E5EAA", "size": 5.5}, {"id": "YuanQuan", "text": "YuanQuan", "color": "#E00B6B", "size": 6.0}, {"id": "Garfield Lee", "text": "Garfield Lee", "color": "#E00B6B", "size": 7.5}, {"id": "chenjiajian", "text": "chenjiajian", "color": "#E00B6B", "size": 10.5}, {"id": "chain.js", "text": "chain.js", "color": "#2E5EAA", "size": 5.5}, {"id": "WaterMan", "text": "WaterMan", "color": "#E00B6B", "size": 5.5}, {"id": "router.tsx", "text": "router.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "jinjinjin0731", "text": "jinjinjin0731", "color": "#E00B6B", "size": 6.5}, {"id": "best-practice.md", "text": "best-practice.md", "color": "#2E5EAA", "size": 5.5}, {"id": "quick-app.md", "text": "quick-app.md", "color": "#2E5EAA", "size": 5.5}, {"id": "render.ts", "text": "render.ts", "color": "#2E5EAA", "size": 6.5}, {"id": "\u6731\u51cc\u9704", "text": "\u6731\u51cc\u9704", "color": "#E00B6B", "size": 7.0}, {"id": "toast.js", "text": "toast.js", "color": "#2E5EAA", "size": 6.0}, {"id": "getWrappedScreen.js", "text": "getWrappedScreen.js", "color": "#2E5EAA", "size": 7.0}, {"id": "shallow-equal.js", "text": "shallow-equal.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Jim,czj", "text": "Jim,czj", "color": "#E00B6B", "size": 5.5}, {"id": "chooseImage.js", "text": "chooseImage.js", "color": "#2E5EAA", "size": 6.0}, {"id": "options.ts", "text": "options.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "SunnyQjm", "text": "SunnyQjm", "color": "#E00B6B", "size": 5.5}, {"id": "prepublish.js", "text": "prepublish.js", "color": "#2E5EAA", "size": 5.5}, {"id": "render-props.md", "text": "render-props.md", "color": "#2E5EAA", "size": 5.5}, {"id": "CHANGELOG.md", "text": "CHANGELOG.md", "color": "#2E5EAA", "size": 5.5}, {"id": "tourze", "text": "tourze", "color": "#E00B6B", "size": 5.5}, {"id": "this-props-function.js", "text": "this-props-function.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Cloud", "text": "Cloud", "color": "#E00B6B", "size": 5.5}, {"id": "constants.ts", "text": "constants.ts", "color": "#2E5EAA", "size": 6.5}, {"id": "route.tsx", "text": "route.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 10.0}, {"id": "Yu Che", "text": "Yu Che", "color": "#E00B6B", "size": 5.5}, {"id": "context.md", "text": "context.md", "color": "#2E5EAA", "size": 5.5}, {"id": "template.md", "text": "template.md", "color": "#2E5EAA", "size": 5.5}, {"id": "zhuxianguo", "text": "zhuxianguo", "color": "#E00B6B", "size": 5.5}, {"id": "Tom Huang", "text": "Tom Huang", "color": "#E00B6B", "size": 5.5}, {"id": "inject.js", "text": "inject.js", "color": "#2E5EAA", "size": 5.5}, {"id": "init.ts", "text": "init.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "jsx.js", "text": "jsx.js", "color": "#2E5EAA", "size": 5.5}, {"id": "manolo", "text": "manolo", "color": "#E00B6B", "size": 5.5}, {"id": "lifecycle.js", "text": "lifecycle.js", "color": "#2E5EAA", "size": 5.5}, {"id": "zsir", "text": "zsir", "color": "#E00B6B", "size": 5.5}, {"id": "config-detail.md", "text": "config-detail.md", "color": "#2E5EAA", "size": 5.5}, {"id": "native-api.js", "text": "native-api.js", "color": "#2E5EAA", "size": 5.5}, {"id": ".travis.yml", "text": ".travis.yml", "color": "#2E5EAA", "size": 5.5}, {"id": "Manjiz", "text": "Manjiz", "color": "#E00B6B", "size": 6.5}, {"id": "index.tsx", "text": "index.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "eteplus", "text": "eteplus", "color": "#E00B6B", "size": 5.5}, {"id": "render-props.js", "text": "render-props.js", "color": "#2E5EAA", "size": 6.0}, {"id": "js-newbee", "text": "js-newbee", "color": "#E00B6B", "size": 5.5}, {"id": "react-native.md", "text": "react-native.md", "color": "#2E5EAA", "size": 5.5}, {"id": "create-html-element.ts", "text": "create-html-element.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "tigerHee", "text": "tigerHee", "color": "#E00B6B", "size": 5.5}, {"id": "swiper.md", "text": "swiper.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Jason", "text": "Jason", "color": "#E00B6B", "size": 5.5}, {"id": "index.d.ts", "text": "index.d.ts", "color": "#2E5EAA", "size": 8.5}, {"id": "Rahim", "text": "Rahim", "color": "#E00B6B", "size": 5.5}, {"id": "adapter.ts", "text": "adapter.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Felix", "text": "Felix", "color": "#E00B6B", "size": 5.5}, {"id": "\u674e\u6587\u5bcc", "text": "\u674e\u6587\u5bcc", "color": "#E00B6B", "size": 5.5}, {"id": "dependabot-preview[bot]", "text": "dependabot-preview[bot]", "color": "#E00B6B", "size": 6.0}, {"id": "yarn.lock", "text": "yarn.lock", "color": "#2E5EAA", "size": 6.5}, {"id": "build.conf.ts", "text": "build.conf.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "fileParseLoader.ts", "text": "fileParseLoader.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "sidebars.json", "text": "sidebars.json", "color": "#2E5EAA", "size": 5.5}, {"id": "record.ts", "text": "record.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "camera.md", "text": "camera.md", "color": "#2E5EAA", "size": 5.5}, {"id": "video.ts", "text": "video.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "functional.ts", "text": "functional.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "PropsType.tsx", "text": "PropsType.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "initRouter.js", "text": "initRouter.js", "color": "#2E5EAA", "size": 5.5}, {"id": "component.js", "text": "component.js", "color": "#2E5EAA", "size": 5.5}, {"id": "creator.ts", "text": "creator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "project.ts", "text": "project.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "taro-create", "text": "taro-create", "color": "#2E5EAA", "size": 5.5}, {"id": "showModal.js", "text": "showModal.js", "color": "#2E5EAA", "size": 5.5}, {"id": "honlyhuang", "text": "honlyhuang", "color": "#E00B6B", "size": 6.0}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 6.0}, {"id": "siteConfig.js", "text": "siteConfig.js", "color": "#2E5EAA", "size": 6.0}, {"id": "huangli47", "text": "huangli47", "color": "#E00B6B", "size": 6.0}, {"id": "Kan Chen", "text": "Kan Chen", "color": "#E00B6B", "size": 6.0}, {"id": "abilityXMLValidator.ts", "text": "abilityXMLValidator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Symphony", "text": "Symphony", "color": "#E00B6B", "size": 5.5}, {"id": "GETTING-STARTED.md", "text": "GETTING-STARTED.md", "color": "#2E5EAA", "size": 6.0}, {"id": "JinJinJin", "text": "JinJinJin", "color": "#E00B6B", "size": 6.0}, {"id": "jsx.ts", "text": "jsx.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "astConvert.ts", "text": "astConvert.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "unofficial", "text": "unofficial", "color": "#E00B6B", "size": 6.0}, {"id": "template.spec.ts", "text": "template.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "request.md", "text": "request.md", "color": "#2E5EAA", "size": 5.5}, {"id": "native-apis.js", "text": "native-apis.js", "color": "#2E5EAA", "size": 5.5}, {"id": "global.js", "text": "global.js", "color": "#2E5EAA", "size": 5.5}, {"id": "audio.ts", "text": "audio.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "global.d.ts", "text": "global.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "showActionSheet.js", "text": "showActionSheet.js", "color": "#2E5EAA", "size": 5.5}, {"id": "helper.ts", "text": "helper.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "honlyHuang", "text": "honlyHuang", "color": "#E00B6B", "size": 6.5}, {"id": "debug.md", "text": "debug.md", "color": "#2E5EAA", "size": 5.5}, {"id": "en.json", "text": "en.json", "color": "#2E5EAA", "size": 5.5}, {"id": "TabBarIcon.js", "text": "TabBarIcon.js", "color": "#2E5EAA", "size": 5.5}, {"id": "TaroProvider.js", "text": "TaroProvider.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Pines", "text": "Pines", "color": "#E00B6B", "size": 7.0}, {"id": "map.ts", "text": "map.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "util.js", "text": "util.js", "color": "#2E5EAA", "size": 5.5}, {"id": "home.js", "text": "home.js", "color": "#2E5EAA", "size": 5.5}, {"id": "screen.ts", "text": "screen.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "jest.config.js", "text": "jest.config.js", "color": "#2E5EAA", "size": 5.5}, {"id": "router-test.tsx", "text": "router-test.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "tsconfig.json", "text": "tsconfig.json", "color": "#2E5EAA", "size": 5.5}, {"id": "class-method-renamer.ts", "text": "class-method-renamer.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "gulpfile.js", "text": "gulpfile.js", "color": "#2E5EAA", "size": 5.5}, {"id": "rollup.config.js", "text": "rollup.config.js", "color": "#2E5EAA", "size": 5.5}, {"id": "index.cjs.js", "text": "index.cjs.js", "color": "#2E5EAA", "size": 5.5}, {"id": "utils.js", "text": "utils.js", "color": "#2E5EAA", "size": 5.5}, {"id": "fetchTemplate.ts", "text": "fetchTemplate.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "file-system.ts", "text": "file-system.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "hash.ts", "text": "hash.ts", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_kwhTrimY")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_kwhTrimY")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_kwhTrimY")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#kwhTrimY_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('kwhTrimY');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('kwhTrimY');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

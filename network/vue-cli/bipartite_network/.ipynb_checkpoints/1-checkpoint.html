@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_UpsqAtJV {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_UpsqAtJV line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_UpsqAtJV circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="UpsqAtJV">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='UpsqAtJV_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"UpsqAtJV"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "n_9aoyang", "target": "creating-a-project.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "jestPlugin.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "index.js", "color": "#999999", "width": 2.5794415416798357, "weight": 0.7272727272727273}, {"source": "Haoqun Jiang", "target": "options.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "Ryota", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "favicon.png", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "genChangelog.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "release.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "Service.spec.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "syncDeps.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "package.json", "color": "#999999", "width": 2.8978952727983707, "weight": 0.7857142857142857}, {"source": "Haoqun Jiang", "target": "CHANGELOG.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Adam Jimenez", "target": "en.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Thorsten L\u00fcnborg", "target": "build.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Thorsten L\u00fcnborg", "target": "app.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u91d1\u632f\u7956", "target": "css.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "lerna.json", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Romoo", "target": "build-targets.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "bit-wide.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "formatStats.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Evan You", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Evan You", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Stefane Fermigier", "target": "prototyping.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Alexander Sokolov", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Alexander Sokolov", "target": "browser-compatibility.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Alexander Sokolov", "target": "css.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Alexander Sokolov", "target": "deployment.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "J\u00e9r\u00f4me Pott", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "KuangPF", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "KuangPF", "target": "Service.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "eslintGenerator.spec.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Haoqun Jiang", "target": "Service.js", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "Andreas Weber", "target": "tslint.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "YuantongKang", "target": "deployment.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "eslintPlugin.spec.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "lint.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "Hamed Baatour", "target": "projects.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Hamed Baatour", "target": "folders.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Walter Tommasi", "target": "folders.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "terserOptions.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Jon Stephenson", "target": "cli-service.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "Haoqun Jiang", "target": "deployment.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "html-and-static-assets.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "mode-and-env.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "webpack.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "serve.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "app.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "base.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "resolveClientEnv.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "validateWebpackConfig.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "CorsPlugin.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "en.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "config.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "WilsonLiu95", "target": "PluginAPI.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "babel-preset.spec.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "PluginAPI.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Haoqun Jiang", "target": "setup.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "houfeng", "target": "demo-lib-js.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "houfeng", "target": "demo-lib.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "houfeng", "target": "resolveLibConfig.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "request.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Ben Potter", "target": "cli-service.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "ProjectOptions.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "James George", "target": "vue.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "config.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Natalia Tepluhina", "target": "generator-template.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "prompts-example.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "ui-browse-local-plugin.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "ui-config-start.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "ui-configuration-default.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "ui-configuration.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "ui-greet-task.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "ui-plugin-refresh.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "ui-project-manager.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "ui-prompts.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "ui-select-plugin.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "generator-api.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "plugin-api.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Natalia Tepluhina", "target": "plugin-dev.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Armano", "target": "eslintGenerator.spec.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Armano", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Armano", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Armano", "target": "invoke.spec.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "shouldUseTaobao.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "JK", "target": "transpileDependencies.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "JK", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "JK", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Haoqun Jiang", "target": "vue.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u674e\u73af\u5180", "target": "tslint.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "yarn.lock", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "css.spec.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "generator.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "serve.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "App.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "HelloWorld.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "css.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Haoqun Jiang", "target": "cssPreprocessors.spec.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "cssPreprocessors.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "inferRootOptions.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Haoqun Jiang", "target": "tslint.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Haoqun Jiang", "target": "folders.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Haoqun Jiang", "target": "invoke.spec.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "cli-service.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Haoqun Jiang", "target": "plugin-dev.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "projects.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "css.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "resolveLibConfig.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoqun Jiang", "target": "prototyping.md", "color": "#999999", "width": 0.5, "weight": 0.5}], "nodes": [{"id": "n_9aoyang", "text": "n_9aoyang", "color": "#E00B6B", "size": 5.5}, {"id": "creating-a-project.md", "text": "creating-a-project.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Haoqun Jiang", "text": "Haoqun Jiang", "color": "#E00B6B", "size": 34.0}, {"id": "jestPlugin.spec.js", "text": "jestPlugin.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "index.js", "text": "index.js", "color": "#2E5EAA", "size": 7.0}, {"id": "options.js", "text": "options.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Ryota", "text": "Ryota", "color": "#E00B6B", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 7.0}, {"id": "favicon.png", "text": "favicon.png", "color": "#2E5EAA", "size": 5.5}, {"id": "genChangelog.js", "text": "genChangelog.js", "color": "#2E5EAA", "size": 5.5}, {"id": "release.js", "text": "release.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Service.spec.js", "text": "Service.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "syncDeps.js", "text": "syncDeps.js", "color": "#2E5EAA", "size": 5.5}, {"id": "CHANGELOG.md", "text": "CHANGELOG.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Adam Jimenez", "text": "Adam Jimenez", "color": "#E00B6B", "size": 5.5}, {"id": "en.json", "text": "en.json", "color": "#2E5EAA", "size": 6.0}, {"id": "Thorsten L\u00fcnborg", "text": "Thorsten L\u00fcnborg", "color": "#E00B6B", "size": 6.0}, {"id": "build.spec.js", "text": "build.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "app.js", "text": "app.js", "color": "#2E5EAA", "size": 6.0}, {"id": "\u91d1\u632f\u7956", "text": "\u91d1\u632f\u7956", "color": "#E00B6B", "size": 5.5}, {"id": "css.js", "text": "css.js", "color": "#2E5EAA", "size": 6.0}, {"id": "lerna.json", "text": "lerna.json", "color": "#2E5EAA", "size": 5.5}, {"id": "Romoo", "text": "Romoo", "color": "#E00B6B", "size": 5.5}, {"id": "build-targets.md", "text": "build-targets.md", "color": "#2E5EAA", "size": 5.5}, {"id": "bit-wide.png", "text": "bit-wide.png", "color": "#2E5EAA", "size": 5.5}, {"id": "formatStats.js", "text": "formatStats.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Evan You", "text": "Evan You", "color": "#E00B6B", "size": 6.0}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 7.5}, {"id": "Stefane Fermigier", "text": "Stefane Fermigier", "color": "#E00B6B", "size": 5.5}, {"id": "prototyping.md", "text": "prototyping.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Alexander Sokolov", "text": "Alexander Sokolov", "color": "#E00B6B", "size": 7.0}, {"id": "browser-compatibility.md", "text": "browser-compatibility.md", "color": "#2E5EAA", "size": 5.5}, {"id": "css.md", "text": "css.md", "color": "#2E5EAA", "size": 6.0}, {"id": "deployment.md", "text": "deployment.md", "color": "#2E5EAA", "size": 6.5}, {"id": "J\u00e9r\u00f4me Pott", "text": "J\u00e9r\u00f4me Pott", "color": "#E00B6B", "size": 5.5}, {"id": "KuangPF", "text": "KuangPF", "color": "#E00B6B", "size": 6.0}, {"id": "Service.js", "text": "Service.js", "color": "#2E5EAA", "size": 6.0}, {"id": "eslintGenerator.spec.js", "text": "eslintGenerator.spec.js", "color": "#2E5EAA", "size": 6.0}, {"id": "Andreas Weber", "text": "Andreas Weber", "color": "#E00B6B", "size": 5.5}, {"id": "tslint.js", "text": "tslint.js", "color": "#2E5EAA", "size": 6.5}, {"id": "YuantongKang", "text": "YuantongKang", "color": "#E00B6B", "size": 5.5}, {"id": "eslintPlugin.spec.js", "text": "eslintPlugin.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "lint.js", "text": "lint.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Hamed Baatour", "text": "Hamed Baatour", "color": "#E00B6B", "size": 6.0}, {"id": "projects.js", "text": "projects.js", "color": "#2E5EAA", "size": 6.0}, {"id": "folders.js", "text": "folders.js", "color": "#2E5EAA", "size": 6.5}, {"id": "Walter Tommasi", "text": "Walter Tommasi", "color": "#E00B6B", "size": 5.5}, {"id": "terserOptions.js", "text": "terserOptions.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Jon Stephenson", "text": "Jon Stephenson", "color": "#E00B6B", "size": 5.5}, {"id": "cli-service.md", "text": "cli-service.md", "color": "#2E5EAA", "size": 6.5}, {"id": "html-and-static-assets.md", "text": "html-and-static-assets.md", "color": "#2E5EAA", "size": 5.5}, {"id": "mode-and-env.md", "text": "mode-and-env.md", "color": "#2E5EAA", "size": 5.5}, {"id": "webpack.md", "text": "webpack.md", "color": "#2E5EAA", "size": 5.5}, {"id": "serve.js", "text": "serve.js", "color": "#2E5EAA", "size": 5.5}, {"id": "base.js", "text": "base.js", "color": "#2E5EAA", "size": 5.5}, {"id": "resolveClientEnv.js", "text": "resolveClientEnv.js", "color": "#2E5EAA", "size": 5.5}, {"id": "validateWebpackConfig.js", "text": "validateWebpackConfig.js", "color": "#2E5EAA", "size": 5.5}, {"id": "CorsPlugin.js", "text": "CorsPlugin.js", "color": "#2E5EAA", "size": 5.5}, {"id": "config.js", "text": "config.js", "color": "#2E5EAA", "size": 6.0}, {"id": "WilsonLiu95", "text": "WilsonLiu95", "color": "#E00B6B", "size": 5.5}, {"id": "PluginAPI.js", "text": "PluginAPI.js", "color": "#2E5EAA", "size": 6.0}, {"id": "babel-preset.spec.js", "text": "babel-preset.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "setup.js", "text": "setup.js", "color": "#2E5EAA", "size": 5.5}, {"id": "houfeng", "text": "houfeng", "color": "#E00B6B", "size": 6.5}, {"id": "demo-lib-js.html", "text": "demo-lib-js.html", "color": "#2E5EAA", "size": 5.5}, {"id": "demo-lib.html", "text": "demo-lib.html", "color": "#2E5EAA", "size": 5.5}, {"id": "resolveLibConfig.js", "text": "resolveLibConfig.js", "color": "#2E5EAA", "size": 6.0}, {"id": "request.js", "text": "request.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Ben Potter", "text": "Ben Potter", "color": "#E00B6B", "size": 5.5}, {"id": "ProjectOptions.d.ts", "text": "ProjectOptions.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "index.d.ts", "text": "index.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "James George", "text": "James George", "color": "#E00B6B", "size": 5.5}, {"id": "vue.js", "text": "vue.js", "color": "#2E5EAA", "size": 6.0}, {"id": "Natalia Tepluhina", "text": "Natalia Tepluhina", "color": "#E00B6B", "size": 12.5}, {"id": "generator-template.png", "text": "generator-template.png", "color": "#2E5EAA", "size": 5.5}, {"id": "prompts-example.png", "text": "prompts-example.png", "color": "#2E5EAA", "size": 5.5}, {"id": "ui-browse-local-plugin.png", "text": "ui-browse-local-plugin.png", "color": "#2E5EAA", "size": 5.5}, {"id": "ui-config-start.png", "text": "ui-config-start.png", "color": "#2E5EAA", "size": 5.5}, {"id": "ui-configuration-default.png", "text": "ui-configuration-default.png", "color": "#2E5EAA", "size": 5.5}, {"id": "ui-configuration.png", "text": "ui-configuration.png", "color": "#2E5EAA", "size": 5.5}, {"id": "ui-greet-task.png", "text": "ui-greet-task.png", "color": "#2E5EAA", "size": 5.5}, {"id": "ui-plugin-refresh.png", "text": "ui-plugin-refresh.png", "color": "#2E5EAA", "size": 5.5}, {"id": "ui-project-manager.png", "text": "ui-project-manager.png", "color": "#2E5EAA", "size": 5.5}, {"id": "ui-prompts.png", "text": "ui-prompts.png", "color": "#2E5EAA", "size": 5.5}, {"id": "ui-select-plugin.png", "text": "ui-select-plugin.png", "color": "#2E5EAA", "size": 5.5}, {"id": "generator-api.md", "text": "generator-api.md", "color": "#2E5EAA", "size": 5.5}, {"id": "plugin-api.md", "text": "plugin-api.md", "color": "#2E5EAA", "size": 5.5}, {"id": "plugin-dev.md", "text": "plugin-dev.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Armano", "text": "Armano", "color": "#E00B6B", "size": 7.0}, {"id": "invoke.spec.js", "text": "invoke.spec.js", "color": "#2E5EAA", "size": 6.0}, {"id": "shouldUseTaobao.js", "text": "shouldUseTaobao.js", "color": "#2E5EAA", "size": 5.5}, {"id": "JK", "text": "JK", "color": "#E00B6B", "size": 6.5}, {"id": "transpileDependencies.spec.js", "text": "transpileDependencies.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "\u674e\u73af\u5180", "text": "\u674e\u73af\u5180", "color": "#E00B6B", "size": 5.5}, {"id": "yarn.lock", "text": "yarn.lock", "color": "#2E5EAA", "size": 5.5}, {"id": "css.spec.js", "text": "css.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "generator.spec.js", "text": "generator.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "serve.spec.js", "text": "serve.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "App.vue", "text": "App.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "HelloWorld.vue", "text": "HelloWorld.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "cssPreprocessors.spec.js", "text": "cssPreprocessors.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "cssPreprocessors.js", "text": "cssPreprocessors.js", "color": "#2E5EAA", "size": 5.5}, {"id": "inferRootOptions.js", "text": "inferRootOptions.js", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_UpsqAtJV")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_UpsqAtJV")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_UpsqAtJV")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#UpsqAtJV_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('UpsqAtJV');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('UpsqAtJV');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

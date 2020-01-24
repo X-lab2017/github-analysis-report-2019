@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_uRuvvHKW {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_uRuvvHKW line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_uRuvvHKW circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="uRuvvHKW">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='uRuvvHKW_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"uRuvvHKW"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "\u4e0d\u5f97\u4e0d\u9519", "target": "avatar.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "spengjie", "target": "tree.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haoran Yu", "target": "drawer.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "n_0xflotus", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jiewei Qian", "target": "time-picker.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kerwin Ch", "target": "date-range.vue", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Gonzalo Nandez", "target": "es.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Bryan Matthews", "target": "time-spinner.vue", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "hetech", "target": "webpack.demo.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "hetech", "target": "table.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "msidolphin", "target": "select.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "hetech", "target": "table-column.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "MASONGZHI", "target": "main.vue", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "MASONGZHI", "target": "calendar.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Geass", "target": "main.vue", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Geass", "target": "message-box.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "hetech", "target": "current.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "hetech", "target": "watcher.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "hetech", "target": "table-layout.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Cr", "target": "table-body.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Cr", "target": "table.spec.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Gonzalo Nandez", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Gonzalo Nandez", "target": "CHANGELOG.es.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Gonzalo Nandez", "target": "CHANGELOG.fr-FR.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "select.vue", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "main.vue", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "wurong", "target": "time-picker.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wurong", "target": "checkbox.vue", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wurong", "target": "input-number.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "select.spec.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wurong", "target": "deploy-ci.sh", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "tab-nav.vue", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "dialog.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "versions.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "deploy-faas.sh", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "tree.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "version.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "table.spec.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wurong", "target": "current.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wurong", "target": "radio-group.vue", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wurong", "target": "watcher.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wurong", "target": "yarn.lock", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "\u4e0d\u5f97\u4e0d\u9519", "text": "\u4e0d\u5f97\u4e0d\u9519", "color": "#E00B6B", "size": 5.5}, {"id": "avatar.scss", "text": "avatar.scss", "color": "#2E5EAA", "size": 5.5}, {"id": "spengjie", "text": "spengjie", "color": "#E00B6B", "size": 5.5}, {"id": "tree.scss", "text": "tree.scss", "color": "#2E5EAA", "size": 5.5}, {"id": "Haoran Yu", "text": "Haoran Yu", "color": "#E00B6B", "size": 5.5}, {"id": "drawer.md", "text": "drawer.md", "color": "#2E5EAA", "size": 5.5}, {"id": "n_0xflotus", "text": "n_0xflotus", "color": "#E00B6B", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Jiewei Qian", "text": "Jiewei Qian", "color": "#E00B6B", "size": 5.5}, {"id": "time-picker.md", "text": "time-picker.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Kerwin Ch", "text": "Kerwin Ch", "color": "#E00B6B", "size": 5.5}, {"id": "date-range.vue", "text": "date-range.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "Gonzalo Nandez", "text": "Gonzalo Nandez", "color": "#E00B6B", "size": 7.0}, {"id": "es.js", "text": "es.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Bryan Matthews", "text": "Bryan Matthews", "color": "#E00B6B", "size": 5.5}, {"id": "time-spinner.vue", "text": "time-spinner.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "hetech", "text": "hetech", "color": "#E00B6B", "size": 8.0}, {"id": "webpack.demo.js", "text": "webpack.demo.js", "color": "#2E5EAA", "size": 5.5}, {"id": "table.scss", "text": "table.scss", "color": "#2E5EAA", "size": 5.5}, {"id": "msidolphin", "text": "msidolphin", "color": "#E00B6B", "size": 5.5}, {"id": "select.spec.js", "text": "select.spec.js", "color": "#2E5EAA", "size": 6.0}, {"id": "table-column.js", "text": "table-column.js", "color": "#2E5EAA", "size": 5.5}, {"id": "MASONGZHI", "text": "MASONGZHI", "color": "#E00B6B", "size": 6.0}, {"id": "main.vue", "text": "main.vue", "color": "#2E5EAA", "size": 6.5}, {"id": "calendar.scss", "text": "calendar.scss", "color": "#2E5EAA", "size": 5.5}, {"id": "Geass", "text": "Geass", "color": "#E00B6B", "size": 6.0}, {"id": "message-box.scss", "text": "message-box.scss", "color": "#2E5EAA", "size": 5.5}, {"id": "current.js", "text": "current.js", "color": "#2E5EAA", "size": 6.0}, {"id": "watcher.js", "text": "watcher.js", "color": "#2E5EAA", "size": 6.0}, {"id": "table-layout.js", "text": "table-layout.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Cr", "text": "Cr", "color": "#E00B6B", "size": 6.0}, {"id": "table-body.js", "text": "table-body.js", "color": "#2E5EAA", "size": 5.5}, {"id": "table.spec.js", "text": "table.spec.js", "color": "#2E5EAA", "size": 6.0}, {"id": "CHANGELOG.en-US.md", "text": "CHANGELOG.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "CHANGELOG.es.md", "text": "CHANGELOG.es.md", "color": "#2E5EAA", "size": 5.5}, {"id": "CHANGELOG.fr-FR.md", "text": "CHANGELOG.fr-FR.md", "color": "#2E5EAA", "size": 5.5}, {"id": "wurong", "text": "wurong", "color": "#E00B6B", "size": 15.5}, {"id": "select.vue", "text": "select.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "checkbox.vue", "text": "checkbox.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "input-number.md", "text": "input-number.md", "color": "#2E5EAA", "size": 5.5}, {"id": "deploy-ci.sh", "text": "deploy-ci.sh", "color": "#2E5EAA", "size": 5.5}, {"id": "tab-nav.vue", "text": "tab-nav.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "index.js", "text": "index.js", "color": "#2E5EAA", "size": 5.5}, {"id": "dialog.scss", "text": "dialog.scss", "color": "#2E5EAA", "size": 5.5}, {"id": "versions.json", "text": "versions.json", "color": "#2E5EAA", "size": 5.5}, {"id": "deploy-faas.sh", "text": "deploy-faas.sh", "color": "#2E5EAA", "size": 5.5}, {"id": "tree.js", "text": "tree.js", "color": "#2E5EAA", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 5.5}, {"id": "version.js", "text": "version.js", "color": "#2E5EAA", "size": 5.5}, {"id": "radio-group.vue", "text": "radio-group.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "yarn.lock", "text": "yarn.lock", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_uRuvvHKW")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_uRuvvHKW")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_uRuvvHKW")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#uRuvvHKW_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('uRuvvHKW');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('uRuvvHKW');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_qLjXGnMI {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_qLjXGnMI line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_qLjXGnMI circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="qLjXGnMI">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='qLjXGnMI_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"qLjXGnMI"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Mario", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Renovate Bot", "target": "package.json", "color": "#999999", "width": 4.30666248977032, "weight": 0.5844155844155844}, {"source": "Chris Sidell", "target": "http.exception.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "csidell-earny", "target": "http.exception.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "package.json", "color": "#999999", "width": 2.5794415416798357, "weight": 0.26666666666666666}, {"source": "Jean-Baptiste Pionnier", "target": "module.decorator.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Duclot William", "target": "index.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil Mysliwiec", "target": "Readme.md", "color": "#999999", "width": 2.1094379124341005, "weight": 0.8333333333333334}, {"source": "Kamil My\u015bliwiec", "target": "tsconfig.build.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "sum-redis.spec.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "John Biundo", "target": "CONTRIBUTING.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "weekens", "target": "nest-application.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Renovate Bot", "target": "docker-compose.yml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Livio", "target": "sum-mqtt.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil Mysliwiec", "target": "app.controller.spec.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kamil My\u015bliwiec", "target": "handler-metadata-storage.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "middleware-module.ts", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Renovate Bot", "target": "package-lock.json", "color": "#999999", "width": 3.9339872044851463, "weight": 0.62}, {"source": "Kamil My\u015bliwiec", "target": "cats.service.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "cat.class.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "package-lock.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.06666666666666667}, {"source": "Kamil Mysliwiec", "target": "package.json", "color": "#999999", "width": 3.591042453358316, "weight": 0.46808510638297873}, {"source": "Kamil My\u015bliwiec", "target": "nest-application-context.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "nest-microservice.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "on-app-shutdown.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "disconnected.controller.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "injector.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "injector.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Chris Sidell", "target": "rpc-exception.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Chris Sidell", "target": "rpc-exception.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Chris Sidell", "target": "ws-exception.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Chris Sidell", "target": "ws-exception.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Chris Sidell", "target": "http.exception.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Livio", "target": "Readme.md", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Livio", "target": "readme_zh.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Sammy Teillet", "target": "any-files.interceptor.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Sammy Teillet", "target": "any-files.interceptor.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Livio", "target": "gulpfile.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Livio", "target": "package.json", "color": "#999999", "width": 1.5986122886681098, "weight": 0.3}, {"source": "Kamil Mysliwiec", "target": "nest-application.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kamil Mysliwiec", "target": "CONTRIBUTING.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Livio Brunner", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil Mysliwiec", "target": "package-lock.json", "color": "#999999", "width": 3.272588722239781, "weight": 0.3404255319148936}, {"source": "Livio", "target": "tsconfig.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "transform-pattern.utils.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "transform-pattern.utils.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "client-proxy.spec.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "client-rmq.spec.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "vivi", "target": "nest-module.interface.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "vivi", "target": "module.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "vivi", "target": "middleware-module.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Konrad Linkowski", "target": "app.controller.spec.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Konrad Linkowski", "target": "app.service.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Konrad Linkowski", "target": "auth.service.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Livio", "target": "package-lock.json", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "Kamil My\u015bliwiec", "target": "parse-uuid.pipe.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "Mario", "text": "Mario", "color": "#E00B6B", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 8.0}, {"id": "Renovate Bot", "text": "Renovate Bot", "color": "#E00B6B", "size": 6.5}, {"id": "Chris Sidell", "text": "Chris Sidell", "color": "#E00B6B", "size": 8.0}, {"id": "http.exception.ts", "text": "http.exception.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "csidell-earny", "text": "csidell-earny", "color": "#E00B6B", "size": 5.5}, {"id": "Kamil My\u015bliwiec", "text": "Kamil My\u015bliwiec", "color": "#E00B6B", "size": 14.5}, {"id": "Jean-Baptiste Pionnier", "text": "Jean-Baptiste Pionnier", "color": "#E00B6B", "size": 5.5}, {"id": "module.decorator.ts", "text": "module.decorator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Duclot William", "text": "Duclot William", "color": "#E00B6B", "size": 5.5}, {"id": "index.ts", "text": "index.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Kamil Mysliwiec", "text": "Kamil Mysliwiec", "color": "#E00B6B", "size": 8.0}, {"id": "Readme.md", "text": "Readme.md", "color": "#2E5EAA", "size": 6.0}, {"id": "tsconfig.build.json", "text": "tsconfig.build.json", "color": "#2E5EAA", "size": 5.5}, {"id": "sum-redis.spec.ts", "text": "sum-redis.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "John Biundo", "text": "John Biundo", "color": "#E00B6B", "size": 5.5}, {"id": "CONTRIBUTING.md", "text": "CONTRIBUTING.md", "color": "#2E5EAA", "size": 6.0}, {"id": "weekens", "text": "weekens", "color": "#E00B6B", "size": 5.5}, {"id": "nest-application.ts", "text": "nest-application.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "docker-compose.yml", "text": "docker-compose.yml", "color": "#2E5EAA", "size": 5.5}, {"id": "Livio", "text": "Livio", "color": "#E00B6B", "size": 8.5}, {"id": "sum-mqtt.spec.ts", "text": "sum-mqtt.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "app.controller.spec.ts", "text": "app.controller.spec.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "handler-metadata-storage.ts", "text": "handler-metadata-storage.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "middleware-module.ts", "text": "middleware-module.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "package-lock.json", "text": "package-lock.json", "color": "#2E5EAA", "size": 7.0}, {"id": "cats.service.ts", "text": "cats.service.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "cat.class.ts", "text": "cat.class.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "nest-application-context.ts", "text": "nest-application-context.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "nest-microservice.ts", "text": "nest-microservice.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "on-app-shutdown.spec.ts", "text": "on-app-shutdown.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "disconnected.controller.ts", "text": "disconnected.controller.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "injector.ts", "text": "injector.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "injector.spec.ts", "text": "injector.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "rpc-exception.ts", "text": "rpc-exception.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "rpc-exception.spec.ts", "text": "rpc-exception.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "ws-exception.ts", "text": "ws-exception.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "ws-exception.spec.ts", "text": "ws-exception.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "http.exception.spec.ts", "text": "http.exception.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "readme_zh.md", "text": "readme_zh.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Sammy Teillet", "text": "Sammy Teillet", "color": "#E00B6B", "size": 6.0}, {"id": "any-files.interceptor.ts", "text": "any-files.interceptor.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "any-files.interceptor.spec.ts", "text": "any-files.interceptor.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "gulpfile.js", "text": "gulpfile.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Livio Brunner", "text": "Livio Brunner", "color": "#E00B6B", "size": 5.5}, {"id": "tsconfig.json", "text": "tsconfig.json", "color": "#2E5EAA", "size": 5.5}, {"id": "transform-pattern.utils.spec.ts", "text": "transform-pattern.utils.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "transform-pattern.utils.ts", "text": "transform-pattern.utils.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "client-proxy.spec.ts", "text": "client-proxy.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "client-rmq.spec.ts", "text": "client-rmq.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "vivi", "text": "vivi", "color": "#E00B6B", "size": 6.5}, {"id": "nest-module.interface.ts", "text": "nest-module.interface.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "module.ts", "text": "module.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Konrad Linkowski", "text": "Konrad Linkowski", "color": "#E00B6B", "size": 6.5}, {"id": "app.service.spec.ts", "text": "app.service.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "auth.service.spec.ts", "text": "auth.service.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "parse-uuid.pipe.spec.ts", "text": "parse-uuid.pipe.spec.ts", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_qLjXGnMI")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_qLjXGnMI")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_qLjXGnMI")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#qLjXGnMI_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('qLjXGnMI');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('qLjXGnMI');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

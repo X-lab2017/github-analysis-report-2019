@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_DklxgaKq {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_DklxgaKq line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_DklxgaKq circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="DklxgaKq">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='DklxgaKq_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"DklxgaKq"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "withthewind", "target": "CONTRIBUTING.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "HttpSimpleClient.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "hykjtt", "target": "JwtTokenUtils.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shenggangshu", "target": "index.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "codeimport", "target": "SubscribeManager.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "codeimport", "target": "PushService.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "codeimport", "target": "SubscribeManagerTest.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "nkorange", "target": "IoUtils.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shenggangshu", "target": "CollectionUtils.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "shenggangshu", "target": "PersistService.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "shenggangshu", "target": "GroupCapacityPersistService.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "shenggangshu", "target": "PaginationHelper.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "nkorange", "target": "UtilAndComs.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "InstanceController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "AutoDeregisterInstance_ITCase.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "ClientBeat_ITCase.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "codeimport", "target": "PushServiceTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qq213539", "target": "NewNameSpace.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "qq213539", "target": "en-US.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "qq213539", "target": "zh-CN.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "qq213539", "target": "PersistService.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.42857142857142855}, {"source": "qq213539", "target": "NamespaceController.java", "color": "#999999", "width": 2.291759469228055, "weight": 0.75}, {"source": "zhenxianyimeng", "target": "ConfigurationManagement.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "qq213539", "target": "ConfigController.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "qq213539", "target": "SameNamespaceCloneConfigBean.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qq213539", "target": "ResultCodeEnum.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "SecurityProxy.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qq213539", "target": "main.css", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "qq213539", "target": "ConfigurationManagement.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.25}, {"source": "qq213539", "target": "main.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "\u90aa\u5f71oO", "target": "NamespaceController.java", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "\u90aa\u5f71oO", "target": "main.css", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "\u90aa\u5f71oO", "target": "ConfigurationManagement.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.25}, {"source": "\u90aa\u5f71oO", "target": "main.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "\u90aa\u5f71oO", "target": "PersistService.java", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "nkorange", "target": "RaftCore.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Peter Zhu", "target": "NamespaceController.java", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Peter Zhu", "target": "main.css", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Peter Zhu", "target": "ConfigurationManagement.js", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Peter Zhu", "target": "main.js", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Peter Zhu", "target": "PersistService.java", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "WG-Roy", "target": "ConfigurationManagement.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "application.properties", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qq213539", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Peter Zhu", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "nkorange", "target": "RoleInfo.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "RolePersistService.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "UserController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "NacosRoleServiceImpl.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LoadChange", "target": "ConfigurationManagement.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "LoadChange", "target": "main.css", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "LoadChange", "target": "main.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zhenxianyimeng", "target": "main.css", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zhenxianyimeng", "target": "main.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "nkorange", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "ConfigResourceParser.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "ConfigController.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "nkorange", "target": "ActionTypes.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "AuthFilter.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "Secured.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "ApiController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "CatalogController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "ClusterController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "HealthController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "DistroFilter.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "NamingResourceParser.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shenggangshu", "target": "AddressServerGeneratorManager.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shenggangshu", "target": "Instance.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shenggangshu", "target": "HistoryController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shenggangshu", "target": "BasicDataSourceServiceImpl.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shenggangshu", "target": "ServerListService.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shenggangshu", "target": "MD5.java", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "withthewind", "text": "withthewind", "color": "#E00B6B", "size": 5.5}, {"id": "CONTRIBUTING.md", "text": "CONTRIBUTING.md", "color": "#2E5EAA", "size": 5.5}, {"id": "nkorange", "text": "nkorange", "color": "#E00B6B", "size": 17.5}, {"id": "HttpSimpleClient.java", "text": "HttpSimpleClient.java", "color": "#2E5EAA", "size": 5.5}, {"id": "hykjtt", "text": "hykjtt", "color": "#E00B6B", "size": 5.5}, {"id": "JwtTokenUtils.java", "text": "JwtTokenUtils.java", "color": "#2E5EAA", "size": 5.5}, {"id": "shenggangshu", "text": "shenggangshu", "color": "#E00B6B", "size": 10.5}, {"id": "index.scss", "text": "index.scss", "color": "#2E5EAA", "size": 5.5}, {"id": "codeimport", "text": "codeimport", "color": "#E00B6B", "size": 7.0}, {"id": "SubscribeManager.java", "text": "SubscribeManager.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PushService.java", "text": "PushService.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SubscribeManagerTest.java", "text": "SubscribeManagerTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "IoUtils.java", "text": "IoUtils.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CollectionUtils.java", "text": "CollectionUtils.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PersistService.java", "text": "PersistService.java", "color": "#2E5EAA", "size": 7.0}, {"id": "GroupCapacityPersistService.java", "text": "GroupCapacityPersistService.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PaginationHelper.java", "text": "PaginationHelper.java", "color": "#2E5EAA", "size": 5.5}, {"id": "UtilAndComs.java", "text": "UtilAndComs.java", "color": "#2E5EAA", "size": 5.5}, {"id": "InstanceController.java", "text": "InstanceController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AutoDeregisterInstance_ITCase.java", "text": "AutoDeregisterInstance_ITCase.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ClientBeat_ITCase.java", "text": "ClientBeat_ITCase.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PushServiceTest.java", "text": "PushServiceTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "qq213539", "text": "qq213539", "color": "#E00B6B", "size": 11.0}, {"id": "NewNameSpace.js", "text": "NewNameSpace.js", "color": "#2E5EAA", "size": 5.5}, {"id": "en-US.js", "text": "en-US.js", "color": "#2E5EAA", "size": 5.5}, {"id": "zh-CN.js", "text": "zh-CN.js", "color": "#2E5EAA", "size": 5.5}, {"id": "NamespaceController.java", "text": "NamespaceController.java", "color": "#2E5EAA", "size": 6.5}, {"id": "zhenxianyimeng", "text": "zhenxianyimeng", "color": "#E00B6B", "size": 6.5}, {"id": "ConfigurationManagement.js", "text": "ConfigurationManagement.js", "color": "#2E5EAA", "size": 8.0}, {"id": "ConfigController.java", "text": "ConfigController.java", "color": "#2E5EAA", "size": 6.0}, {"id": "SameNamespaceCloneConfigBean.java", "text": "SameNamespaceCloneConfigBean.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ResultCodeEnum.java", "text": "ResultCodeEnum.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SecurityProxy.java", "text": "SecurityProxy.java", "color": "#2E5EAA", "size": 5.5}, {"id": "main.css", "text": "main.css", "color": "#2E5EAA", "size": 7.5}, {"id": "main.js", "text": "main.js", "color": "#2E5EAA", "size": 7.5}, {"id": "\u90aa\u5f71oO", "text": "\u90aa\u5f71oO", "color": "#E00B6B", "size": 7.5}, {"id": "RaftCore.java", "text": "RaftCore.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Peter Zhu", "text": "Peter Zhu", "color": "#E00B6B", "size": 8.0}, {"id": "WG-Roy", "text": "WG-Roy", "color": "#E00B6B", "size": 5.5}, {"id": "application.properties", "text": "application.properties", "color": "#2E5EAA", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 6.0}, {"id": "RoleInfo.java", "text": "RoleInfo.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RolePersistService.java", "text": "RolePersistService.java", "color": "#2E5EAA", "size": 5.5}, {"id": "UserController.java", "text": "UserController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NacosRoleServiceImpl.java", "text": "NacosRoleServiceImpl.java", "color": "#2E5EAA", "size": 5.5}, {"id": "LoadChange", "text": "LoadChange", "color": "#E00B6B", "size": 6.5}, {"id": "pom.xml", "text": "pom.xml", "color": "#2E5EAA", "size": 5.5}, {"id": "ConfigResourceParser.java", "text": "ConfigResourceParser.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ActionTypes.java", "text": "ActionTypes.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AuthFilter.java", "text": "AuthFilter.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Secured.java", "text": "Secured.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ApiController.java", "text": "ApiController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CatalogController.java", "text": "CatalogController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ClusterController.java", "text": "ClusterController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "HealthController.java", "text": "HealthController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DistroFilter.java", "text": "DistroFilter.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NamingResourceParser.java", "text": "NamingResourceParser.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AddressServerGeneratorManager.java", "text": "AddressServerGeneratorManager.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Instance.java", "text": "Instance.java", "color": "#2E5EAA", "size": 5.5}, {"id": "HistoryController.java", "text": "HistoryController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "BasicDataSourceServiceImpl.java", "text": "BasicDataSourceServiceImpl.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ServerListService.java", "text": "ServerListService.java", "color": "#2E5EAA", "size": 5.5}, {"id": "MD5.java", "text": "MD5.java", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_DklxgaKq")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_DklxgaKq")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_DklxgaKq")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#DklxgaKq_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('DklxgaKq');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('DklxgaKq');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

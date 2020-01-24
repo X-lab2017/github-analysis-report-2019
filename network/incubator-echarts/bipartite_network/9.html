@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_dwGpIqhb {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_dwGpIqhb line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_dwGpIqhb circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="dwGpIqhb">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='dwGpIqhb_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"dwGpIqhb"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "pissang", "target": ".eslintrc.yaml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pissang", "target": "blacklist.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "pissang", "target": "compareScreenshot.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "pissang", "target": "main.js", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "pissang", "target": "cli.js", "color": "#999999", "width": 2.4459101490553135, "weight": 1.0}, {"source": "pissang", "target": "client.css", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "pissang", "target": "index.html", "color": "#999999", "width": 2.8978952727983707, "weight": 1.0}, {"source": "pissang", "target": "client.js", "color": "#999999", "width": 2.4459101490553135, "weight": 1.0}, {"source": "pissang", "target": "server.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "pissang", "target": "store.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "pissang", "target": "util.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pissang", "target": "Timeline.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "pissang", "target": "recorder.css", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pissang", "target": "recorder.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "pissang", "target": "shim.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pissang", "target": "scatter-gps.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "DataView.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ovilia", "target": "graphic.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "deqingli", "target": "TreeView.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "package-lock.json", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "pissang", "target": "package-lock.json", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "pissang", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sushuang", "target": "GeoModel.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "pissang", "target": "__meta__.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "pissang", "target": "axes.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "deqingli", "target": "__meta__.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "deqingli", "target": "stackBar-dataZoom.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yi Shen", "target": "CONTRIBUTING.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sushuang", "target": "mktest-tpl.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "mktest.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pissang", "target": "config.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pissang", "target": "LargeSymbolDraw.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pissang", "target": "ScatterView.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pissang", "target": "Polar.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pissang", "target": "clip.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "alex2wong", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yi Shen", "target": "createClipPathFromCoordSys.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yufeng04", "target": "legend-borderColor.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pissang", "target": "BarView.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Ovilia", "target": "MapDraw.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ovilia", "target": "bar2.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "SHUANG SU", "target": "GeoModel.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "pissang", "target": "barGrid.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "SHUANG SU", "target": "legend.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "SHUANG SU", "target": "package-lock.json", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}], "nodes": [{"id": "pissang", "text": "pissang", "color": "#E00B6B", "size": 18.5}, {"id": ".eslintrc.yaml", "text": ".eslintrc.yaml", "color": "#2E5EAA", "size": 5.5}, {"id": "blacklist.js", "text": "blacklist.js", "color": "#2E5EAA", "size": 5.5}, {"id": "compareScreenshot.js", "text": "compareScreenshot.js", "color": "#2E5EAA", "size": 5.5}, {"id": "main.js", "text": "main.js", "color": "#2E5EAA", "size": 5.5}, {"id": "cli.js", "text": "cli.js", "color": "#2E5EAA", "size": 5.5}, {"id": "client.css", "text": "client.css", "color": "#2E5EAA", "size": 5.5}, {"id": "index.html", "text": "index.html", "color": "#2E5EAA", "size": 5.5}, {"id": "client.js", "text": "client.js", "color": "#2E5EAA", "size": 5.5}, {"id": "server.js", "text": "server.js", "color": "#2E5EAA", "size": 5.5}, {"id": "store.js", "text": "store.js", "color": "#2E5EAA", "size": 5.5}, {"id": "util.js", "text": "util.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Timeline.js", "text": "Timeline.js", "color": "#2E5EAA", "size": 5.5}, {"id": "recorder.css", "text": "recorder.css", "color": "#2E5EAA", "size": 5.5}, {"id": "recorder.js", "text": "recorder.js", "color": "#2E5EAA", "size": 5.5}, {"id": "shim.js", "text": "shim.js", "color": "#2E5EAA", "size": 5.5}, {"id": "scatter-gps.html", "text": "scatter-gps.html", "color": "#2E5EAA", "size": 5.5}, {"id": "sushuang", "text": "sushuang", "color": "#E00B6B", "size": 8.0}, {"id": "DataView.js", "text": "DataView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Ovilia", "text": "Ovilia", "color": "#E00B6B", "size": 6.5}, {"id": "graphic.js", "text": "graphic.js", "color": "#2E5EAA", "size": 5.5}, {"id": "deqingli", "text": "deqingli", "color": "#E00B6B", "size": 6.5}, {"id": "TreeView.js", "text": "TreeView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "package-lock.json", "text": "package-lock.json", "color": "#2E5EAA", "size": 6.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 6.0}, {"id": "GeoModel.js", "text": "GeoModel.js", "color": "#2E5EAA", "size": 6.0}, {"id": "__meta__.json", "text": "__meta__.json", "color": "#2E5EAA", "size": 6.0}, {"id": "axes.json", "text": "axes.json", "color": "#2E5EAA", "size": 5.5}, {"id": "stackBar-dataZoom.json", "text": "stackBar-dataZoom.json", "color": "#2E5EAA", "size": 5.5}, {"id": "Yi Shen", "text": "Yi Shen", "color": "#E00B6B", "size": 6.0}, {"id": "CONTRIBUTING.md", "text": "CONTRIBUTING.md", "color": "#2E5EAA", "size": 5.5}, {"id": "mktest-tpl.html", "text": "mktest-tpl.html", "color": "#2E5EAA", "size": 5.5}, {"id": "mktest.js", "text": "mktest.js", "color": "#2E5EAA", "size": 5.5}, {"id": "config.js", "text": "config.js", "color": "#2E5EAA", "size": 5.5}, {"id": "LargeSymbolDraw.js", "text": "LargeSymbolDraw.js", "color": "#2E5EAA", "size": 5.5}, {"id": "ScatterView.js", "text": "ScatterView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Polar.js", "text": "Polar.js", "color": "#2E5EAA", "size": 5.5}, {"id": "clip.html", "text": "clip.html", "color": "#2E5EAA", "size": 5.5}, {"id": "alex2wong", "text": "alex2wong", "color": "#E00B6B", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 5.5}, {"id": "createClipPathFromCoordSys.js", "text": "createClipPathFromCoordSys.js", "color": "#2E5EAA", "size": 5.5}, {"id": "yufeng04", "text": "yufeng04", "color": "#E00B6B", "size": 5.5}, {"id": "legend-borderColor.html", "text": "legend-borderColor.html", "color": "#2E5EAA", "size": 5.5}, {"id": "BarView.js", "text": "BarView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "MapDraw.js", "text": "MapDraw.js", "color": "#2E5EAA", "size": 5.5}, {"id": "bar2.html", "text": "bar2.html", "color": "#2E5EAA", "size": 5.5}, {"id": "SHUANG SU", "text": "SHUANG SU", "color": "#E00B6B", "size": 6.5}, {"id": "barGrid.js", "text": "barGrid.js", "color": "#2E5EAA", "size": 5.5}, {"id": "legend.html", "text": "legend.html", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_dwGpIqhb")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_dwGpIqhb")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_dwGpIqhb")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#dwGpIqhb_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('dwGpIqhb');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('dwGpIqhb');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

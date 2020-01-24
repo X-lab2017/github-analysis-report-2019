@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_jsHFEwCF {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_jsHFEwCF line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_jsHFEwCF circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="jsHFEwCF">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='jsHFEwCF_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"jsHFEwCF"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "\u9648\u5e05", "target": "azure-pipelines.yml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Lyndon001", "target": "work-with-us.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "README-zh_CN.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zombieJ", "target": "AnchorLink.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zeroslope", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "zoom.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "RunningCoderLee", "target": "Form.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "afc163", "target": "package.json", "color": "#999999", "width": 1.8862943611198906, "weight": 0.3333333333333333}, {"source": "Amumu", "target": "index.less", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "ycjcl868", "target": "CHANGELOG.zh-CN.md", "color": "#999999", "width": 2.4459101490553135, "weight": 0.7}, {"source": "ycjcl868", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 2.1094379124341005, "weight": 0.45454545454545453}, {"source": "maks", "target": "getting-started.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Josue Peralta", "target": "getting-started.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "dependabot[bot]", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.08333333333333333}, {"source": "Gabe Medrash", "target": "MenuItem.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zy410419243", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2}, {"source": "zy410419243", "target": "alignment.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "README-zh_CN.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u4f55\u4e50", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zombieJ", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.16666666666666666}, {"source": "wanli", "target": "Checkbox.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zy410419243", "target": "demo.test.js.snap", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "zlljqn", "target": "drag-sorting.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Subroto", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ztplz", "target": "Countdown.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "mraiguo", "target": "mode.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "+v", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "custom-icon.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Michelle Zhang", "target": "data-entry.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LT246-VINHNPH\\vinhnph", "target": "interface.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "afc163", "target": "index.less", "color": "#999999", "width": 2.291759469228055, "weight": 0.35294117647058826}, {"source": "Rick Zhou", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Gabe Medrash", "target": "SubMenu.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ztplz", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "afc163", "target": "index.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2222222222222222}, {"source": "afc163", "target": "index.zh-CN.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.42857142857142855}, {"source": "\u6768\u5c0f\u4e8ber", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Wei Zhu", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Nathan Schneider", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wei Zhu", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "ilanus", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombiej", "target": "mixin.less", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "zy410419243", "target": "DirectoryTree.tsx", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "zombiej", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.125}, {"source": "Mounish Sai", "target": "introduce.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ztplz", "target": "group.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "afc163", "target": "AUTHORS.txt", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombiej", "target": "CHANGELOG.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2}, {"source": "Kevinaskin", "target": "fields.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "orzorzorzorz", "target": "DirectoryTree.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "liuchuzhang", "target": "edit-cell.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ztplz", "target": "ActionButton.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jason Yin", "target": "tooltip.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Aobo Yang", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombiej", "target": "search-input.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Micha\u0142 Jurkowski", "target": "default.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "edit-row.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.09090909090909091}, {"source": "zombiej", "target": "index.jsx", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "dropdown.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "customized-form-controls.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombiej", "target": "faq.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "zombiej", "target": "package.json", "color": "#999999", "width": 1.5986122886681098, "weight": 0.25}, {"source": "zombieJ", "target": "index.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2222222222222222}, {"source": "ztplz", "target": "demo.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "\u504f\u53f3", "target": "Number.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "index.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "\u504f\u53f3", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "afc163", "target": "home.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "responsive.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zy410419243", "target": "icon.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zy410419243", "target": "icon.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "thilo-behnke", "target": "Input.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "thilo-behnke", "target": "index.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "thilo-behnke", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Sven Efftinge", "target": ".gitpod.yml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Sven Efftinge", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Sven Efftinge", "target": "bisheng.config.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "imhele", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "imhele", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u4f55\u4e50", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "\u4f55\u4e50", "target": "progress.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Bolun Zhang", "target": "motion.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "Collapse.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "CollapsePanel.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "index.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "afc163", "target": "index.test.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "afc163", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Wei Zhu", "target": "interface.tsx", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "tangjinzhou", "target": "introduce.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "tangjinzhou", "target": "introduce.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "tangjinzhou", "target": "Footer.jsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wei Zhu", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Wei Zhu", "target": "CHANGELOG.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Ilan", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Ilan", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jason Chen", "target": "Grid.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jason Chen", "target": "Meta.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "undefined", "target": "faq.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "undefined", "target": "faq.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zombiej", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.09090909090909091}, {"source": "zombieJ", "target": "Input.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zombieJ", "target": "presuffix.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "index.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "zombieJ", "target": "index.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "zombiej", "target": "faq.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "afc163", "target": "FormItem.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "DatePicker.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "fields.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zombieJ", "target": "RangePicker.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "RangePicker.test.js.snap", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "\u9648\u5e05", "text": "\u9648\u5e05", "color": "#E00B6B", "size": 5.5}, {"id": "azure-pipelines.yml", "text": "azure-pipelines.yml", "color": "#2E5EAA", "size": 5.5}, {"id": "Lyndon001", "text": "Lyndon001", "color": "#E00B6B", "size": 5.5}, {"id": "work-with-us.zh-CN.md", "text": "work-with-us.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u504f\u53f3", "text": "\u504f\u53f3", "color": "#E00B6B", "size": 7.5}, {"id": "README-zh_CN.md", "text": "README-zh_CN.md", "color": "#2E5EAA", "size": 6.0}, {"id": "zombieJ", "text": "zombieJ", "color": "#E00B6B", "size": 13.0}, {"id": "AnchorLink.tsx", "text": "AnchorLink.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "zeroslope", "text": "zeroslope", "color": "#E00B6B", "size": 5.5}, {"id": "index.zh-CN.md", "text": "index.zh-CN.md", "color": "#2E5EAA", "size": 7.0}, {"id": "zoom.less", "text": "zoom.less", "color": "#2E5EAA", "size": 5.5}, {"id": "RunningCoderLee", "text": "RunningCoderLee", "color": "#E00B6B", "size": 5.5}, {"id": "Form.tsx", "text": "Form.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "afc163", "text": "afc163", "color": "#E00B6B", "size": 12.0}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 8.0}, {"id": "Amumu", "text": "Amumu", "color": "#E00B6B", "size": 5.5}, {"id": "index.less", "text": "index.less", "color": "#2E5EAA", "size": 8.5}, {"id": "ycjcl868", "text": "ycjcl868", "color": "#E00B6B", "size": 7.0}, {"id": "CHANGELOG.zh-CN.md", "text": "CHANGELOG.zh-CN.md", "color": "#2E5EAA", "size": 6.5}, {"id": "CHANGELOG.en-US.md", "text": "CHANGELOG.en-US.md", "color": "#2E5EAA", "size": 8.0}, {"id": "maks", "text": "maks", "color": "#E00B6B", "size": 5.5}, {"id": "getting-started.en-US.md", "text": "getting-started.en-US.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Josue Peralta", "text": "Josue Peralta", "color": "#E00B6B", "size": 5.5}, {"id": "dependabot[bot]", "text": "dependabot[bot]", "color": "#E00B6B", "size": 5.5}, {"id": "Gabe Medrash", "text": "Gabe Medrash", "color": "#E00B6B", "size": 6.0}, {"id": "MenuItem.tsx", "text": "MenuItem.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "zy410419243", "text": "zy410419243", "color": "#E00B6B", "size": 8.0}, {"id": "alignment.en-US.md", "text": "alignment.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4f55\u4e50", "text": "\u4f55\u4e50", "color": "#E00B6B", "size": 6.5}, {"id": "index.tsx", "text": "index.tsx", "color": "#2E5EAA", "size": 8.5}, {"id": "wanli", "text": "wanli", "color": "#E00B6B", "size": 5.5}, {"id": "Checkbox.tsx", "text": "Checkbox.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "demo.test.js.snap", "text": "demo.test.js.snap", "color": "#2E5EAA", "size": 6.0}, {"id": "zlljqn", "text": "zlljqn", "color": "#E00B6B", "size": 5.5}, {"id": "drag-sorting.md", "text": "drag-sorting.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Subroto", "text": "Subroto", "color": "#E00B6B", "size": 5.5}, {"id": "ztplz", "text": "ztplz", "color": "#E00B6B", "size": 7.5}, {"id": "Countdown.tsx", "text": "Countdown.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "mraiguo", "text": "mraiguo", "color": "#E00B6B", "size": 5.5}, {"id": "mode.md", "text": "mode.md", "color": "#2E5EAA", "size": 5.5}, {"id": "+v", "text": "+v", "color": "#E00B6B", "size": 5.5}, {"id": "custom-icon.less", "text": "custom-icon.less", "color": "#2E5EAA", "size": 5.5}, {"id": "Michelle Zhang", "text": "Michelle Zhang", "color": "#E00B6B", "size": 5.5}, {"id": "data-entry.en-US.md", "text": "data-entry.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "LT246-VINHNPH\\vinhnph", "text": "LT246-VINHNPH\\vinhnph", "color": "#E00B6B", "size": 5.5}, {"id": "interface.tsx", "text": "interface.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "Rick Zhou", "text": "Rick Zhou", "color": "#E00B6B", "size": 5.5}, {"id": "SubMenu.tsx", "text": "SubMenu.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "\u6768\u5c0f\u4e8ber", "text": "\u6768\u5c0f\u4e8ber", "color": "#E00B6B", "size": 5.5}, {"id": "Wei Zhu", "text": "Wei Zhu", "color": "#E00B6B", "size": 7.5}, {"id": "index.test.js", "text": "index.test.js", "color": "#2E5EAA", "size": 7.5}, {"id": "Nathan Schneider", "text": "Nathan Schneider", "color": "#E00B6B", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 6.5}, {"id": "ilanus", "text": "ilanus", "color": "#E00B6B", "size": 5.5}, {"id": "zombiej", "text": "zombiej", "color": "#E00B6B", "size": 9.5}, {"id": "mixin.less", "text": "mixin.less", "color": "#2E5EAA", "size": 5.5}, {"id": "DirectoryTree.tsx", "text": "DirectoryTree.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "Mounish Sai", "text": "Mounish Sai", "color": "#E00B6B", "size": 5.5}, {"id": "introduce.en-US.md", "text": "introduce.en-US.md", "color": "#2E5EAA", "size": 6.0}, {"id": "group.md", "text": "group.md", "color": "#2E5EAA", "size": 5.5}, {"id": "AUTHORS.txt", "text": "AUTHORS.txt", "color": "#2E5EAA", "size": 5.5}, {"id": "Kevinaskin", "text": "Kevinaskin", "color": "#E00B6B", "size": 5.5}, {"id": "fields.ts", "text": "fields.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "orzorzorzorz", "text": "orzorzorzorz", "color": "#E00B6B", "size": 5.5}, {"id": "liuchuzhang", "text": "liuchuzhang", "color": "#E00B6B", "size": 5.5}, {"id": "edit-cell.md", "text": "edit-cell.md", "color": "#2E5EAA", "size": 5.5}, {"id": "ActionButton.tsx", "text": "ActionButton.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Jason Yin", "text": "Jason Yin", "color": "#E00B6B", "size": 5.5}, {"id": "tooltip.md", "text": "tooltip.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Aobo Yang", "text": "Aobo Yang", "color": "#E00B6B", "size": 5.5}, {"id": "search-input.less", "text": "search-input.less", "color": "#2E5EAA", "size": 5.5}, {"id": "Micha\u0142 Jurkowski", "text": "Micha\u0142 Jurkowski", "color": "#E00B6B", "size": 5.5}, {"id": "default.less", "text": "default.less", "color": "#2E5EAA", "size": 5.5}, {"id": "edit-row.md", "text": "edit-row.md", "color": "#2E5EAA", "size": 5.5}, {"id": "index.jsx", "text": "index.jsx", "color": "#2E5EAA", "size": 5.5}, {"id": "dropdown.tsx", "text": "dropdown.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "customized-form-controls.md", "text": "customized-form-controls.md", "color": "#2E5EAA", "size": 5.5}, {"id": "faq.en-US.md", "text": "faq.en-US.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Number.tsx", "text": "Number.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "index.test.js.snap", "text": "index.test.js.snap", "color": "#2E5EAA", "size": 6.5}, {"id": "home.less", "text": "home.less", "color": "#2E5EAA", "size": 5.5}, {"id": "responsive.less", "text": "responsive.less", "color": "#2E5EAA", "size": 5.5}, {"id": "icon.en-US.md", "text": "icon.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "icon.zh-CN.md", "text": "icon.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "thilo-behnke", "text": "thilo-behnke", "color": "#E00B6B", "size": 6.5}, {"id": "Input.tsx", "text": "Input.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "Sven Efftinge", "text": "Sven Efftinge", "color": "#E00B6B", "size": 6.5}, {"id": ".gitpod.yml", "text": ".gitpod.yml", "color": "#2E5EAA", "size": 5.5}, {"id": "bisheng.config.js", "text": "bisheng.config.js", "color": "#2E5EAA", "size": 5.5}, {"id": "imhele", "text": "imhele", "color": "#E00B6B", "size": 6.0}, {"id": "index.en-US.md", "text": "index.en-US.md", "color": "#2E5EAA", "size": 6.5}, {"id": "progress.tsx", "text": "progress.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Bolun Zhang", "text": "Bolun Zhang", "color": "#E00B6B", "size": 5.5}, {"id": "motion.en-US.md", "text": "motion.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Collapse.tsx", "text": "Collapse.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "CollapsePanel.tsx", "text": "CollapsePanel.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "tangjinzhou", "text": "tangjinzhou", "color": "#E00B6B", "size": 6.5}, {"id": "introduce.zh-CN.md", "text": "introduce.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Footer.jsx", "text": "Footer.jsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Ilan", "text": "Ilan", "color": "#E00B6B", "size": 6.0}, {"id": "Jason Chen", "text": "Jason Chen", "color": "#E00B6B", "size": 6.0}, {"id": "Grid.tsx", "text": "Grid.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Meta.tsx", "text": "Meta.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "undefined", "text": "undefined", "color": "#E00B6B", "size": 6.0}, {"id": "faq.zh-CN.md", "text": "faq.zh-CN.md", "color": "#2E5EAA", "size": 6.0}, {"id": "presuffix.md", "text": "presuffix.md", "color": "#2E5EAA", "size": 5.5}, {"id": "FormItem.tsx", "text": "FormItem.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "DatePicker.test.js", "text": "DatePicker.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "RangePicker.test.js", "text": "RangePicker.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "RangePicker.test.js.snap", "text": "RangePicker.test.js.snap", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_jsHFEwCF")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_jsHFEwCF")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_jsHFEwCF")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#jsHFEwCF_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('jsHFEwCF');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('jsHFEwCF');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

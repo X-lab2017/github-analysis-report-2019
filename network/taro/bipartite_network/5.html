@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_HDdjwWqm {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_HDdjwWqm line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_HDdjwWqm circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="HDdjwWqm">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='HDdjwWqm_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"HDdjwWqm"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "luckyadam", "target": "taro-info", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "index.js", "color": "#999999", "width": 2.291759469228055, "weight": 0.2608695652173913}, {"source": "n_378978764", "target": "functional-component.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chenjiajian", "target": "native-apis.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Pines-Cheng", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.0625}, {"source": "yuche", "target": "hooks.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "Pines-Cheng", "target": "toast.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "yuche", "target": "hooks.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "littly", "target": "GETTING-STARTED.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "package.json", "color": "#999999", "width": 2.291759469228055, "weight": 0.375}, {"source": "quinlanzhong", "target": "toast.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "taro-init", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "class.ts", "color": "#999999", "width": 2.5794415416798357, "weight": 1.0}, {"source": "Yu Che", "target": "functional-component.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "TaroProvider.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "chenjiajian", "target": "optimized-practice.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "transformJS.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "yuche", "target": "functional.ts", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "yuche", "target": "README.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "yuche", "target": "index.ts", "color": "#999999", "width": 2.6972245773362196, "weight": 0.36}, {"source": "chenjiajian", "target": "lifecycle.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "littly", "target": "index.ts", "color": "#999999", "width": 2.802585092994046, "weight": 0.4}, {"source": "jinjinjin0731", "target": "index.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Pines-Cheng", "target": "tutorial.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "getWrappedScreen.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "router.tsx", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "\u4e09\u6842", "target": "hooks.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "CHANGELOG.md", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "Pines-Cheng", "target": "rn.ts", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "yuche", "target": "render.ts", "color": "#999999", "width": 2.9849066497880004, "weight": 0.9230769230769231}, {"source": "luckyadam", "target": "index.ts", "color": "#999999", "width": 2.1094379124341005, "weight": 0.2}, {"source": "ZhangJian-3ti", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "index.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.08695652173913043}, {"source": "luckyadam", "target": "configSchema.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Vace", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yanguoyu", "target": "chooseImage.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "yuche", "target": "class-naming.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "nameT", "target": "removeStorage.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Amu", "target": "common.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "constants.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yangxiaodong", "target": "transformJS.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "tiger", "target": "form.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "index.js", "color": "#999999", "width": 1.5986122886681098, "weight": 0.13043478260869565}, {"source": "KuangPengfei", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "index.d.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.14285714285714285}, {"source": "yuche", "target": "utils.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "tiger", "target": "scroll-view.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chenjiajian", "target": "connect.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "PULL_REQUEST_TEMPLATE.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "tiger", "target": "button.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chenjiajian", "target": "create-component.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "icodytan", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "styleProcess.ts", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "SunnyQjm", "target": "index.js", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "Garfield Lee", "target": "PULL_REQUEST_TEMPLATE.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "so-diao", "target": "checkbox.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Colder Xihk", "target": "OfficialAccount.d.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "JinJinJin", "target": "native-api.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Linchengyi", "target": "props.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "honlyHuang", "target": "Footer.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "template.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u6731\u51cc\u9704", "target": "RefreshProvider.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "liwei", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Garfield Lee", "target": "index.d.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "kerwin", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "SunnyQjm", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "momokara", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huishiyi", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "liuwei", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "base.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "options.ts", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "yuche", "target": "best-practice.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "yuche", "target": "event.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Manjiz", "target": ".eslintignore", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Manjiz", "target": "index.tsx", "color": "#999999", "width": 2.6972245773362196, "weight": 0.9}, {"source": "Pines-Cheng", "target": "component.js", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "yuche", "target": "functional-component.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "luckyadam", "target": "lerna.json", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "luckyadam", "target": "package.json", "color": "#999999", "width": 1.5986122886681098, "weight": 0.1875}, {"source": "littly", "target": "logHelper.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "package.json", "color": "#999999", "width": 1.8862943611198906, "weight": 0.25}, {"source": "littly", "target": "siteConfig.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Pines-Cheng", "target": "native-api.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Pines-Cheng", "target": "StyleSheetValidation.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "types.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Manjiz", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.125}, {"source": "yuche", "target": "this-props-function.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "yuche", "target": "spec-for-taro.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "index.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.08695652173913043}, {"source": "Pines-Cheng", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yuche", "target": "component.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "yuche", "target": "lifecycle.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "littly", "target": "webpack.prod.config.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "Footer.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yuche", "target": "siteConfig.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "luckyadam", "target": "helper.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Pines-Cheng", "target": "index.ts", "color": "#999999", "width": 0.5, "weight": 0.04}, {"source": "yuche", "target": "create-component.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yuche", "target": "jsx.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Colder Xihk", "target": "native-apis.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Colder Xihk", "target": "index.d.ts", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "luckyadam", "target": "quick-app.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "en.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "sidebars.json", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "yuche", "target": "sidebars.json", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "Manjiz", "target": "EXSwiper.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Manjiz", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 0.043478260869565216}, {"source": "Manjiz", "target": "tsconfig.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "RefreshProvider.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Manjiz", "target": "EXInput.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "littly", "target": "index-test.ts.snap", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "littly", "target": "index-test.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "littly", "target": "createWrappedComponent.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "route.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "actionSheet.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "modal.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "toast.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Manjiz", "target": "App.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "Manjiz", "target": "EXRichText.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "yuche", "target": "constant.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "luckyadam", "target": "plugin.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "luckyadam", "target": "build.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "yarn.lock", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "luckyadam", "target": "yarn.lock", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "yuche", "target": "no-spread-in-props.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "before-dev-remind.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chenjiajian", "target": "util.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "littly", "target": "taro-doctor", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "configValidator.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "eslintValidator.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "packageValidator.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "recommandValidator.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Manjiz", "target": "EXImage.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Manjiz", "target": "EXButton.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Manjiz", "target": "EXIcon.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u7f57\u6770", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "\u7f57\u6770", "target": "style.styl", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u7f57\u6770", "target": "test.styl", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u7f57\u6770", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yuche", "target": "context.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "dev.conf.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "prod.conf.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "littly", "target": "chain.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "tokenTypes.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "index.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pines-Cheng", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "Manjiz", "target": ".gitignore", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Manjiz", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Manjiz", "target": "yarn.lock", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Pines", "target": "checkbox.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Pines", "target": "OfficialAccount.d.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "JinJinJin", "target": "render.ts", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "JinJinJin", "target": "PULL_REQUEST_TEMPLATE.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "guxingke201", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "guxingke201", "target": "class-naming.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "guxingke201", "target": "custom-component-children.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "guxingke201", "target": "props-reserve-keyword.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "guxingke201", "target": "constant.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "guxingke201", "target": "utils.ts", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Manjiz", "target": "gulpfile.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Manjiz", "target": "PropsType.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Manjiz", "target": "index3.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "create-context.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "native-apis.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "yuche", "target": "util.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "yuche", "target": "create-html-element.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yuche", "target": "env.ts", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "luckyadam", "text": "luckyadam", "color": "#E00B6B", "size": 13.5}, {"id": "taro-info", "text": "taro-info", "color": "#2E5EAA", "size": 5.5}, {"id": "yuche", "text": "yuche", "color": "#E00B6B", "size": 23.0}, {"id": "index.js", "text": "index.js", "color": "#2E5EAA", "size": 10.5}, {"id": "n_378978764", "text": "n_378978764", "color": "#E00B6B", "size": 5.5}, {"id": "functional-component.md", "text": "functional-component.md", "color": "#2E5EAA", "size": 6.5}, {"id": "chenjiajian", "text": "chenjiajian", "color": "#E00B6B", "size": 8.0}, {"id": "native-apis.js", "text": "native-apis.js", "color": "#2E5EAA", "size": 6.5}, {"id": "Pines-Cheng", "text": "Pines-Cheng", "color": "#E00B6B", "size": 15.0}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 7.5}, {"id": "hooks.md", "text": "hooks.md", "color": "#2E5EAA", "size": 6.0}, {"id": "toast.js", "text": "toast.js", "color": "#2E5EAA", "size": 6.5}, {"id": "hooks.js", "text": "hooks.js", "color": "#2E5EAA", "size": 5.5}, {"id": "littly", "text": "littly", "color": "#E00B6B", "size": 16.5}, {"id": "GETTING-STARTED.md", "text": "GETTING-STARTED.md", "color": "#2E5EAA", "size": 5.5}, {"id": "quinlanzhong", "text": "quinlanzhong", "color": "#E00B6B", "size": 5.5}, {"id": "taro-init", "text": "taro-init", "color": "#2E5EAA", "size": 5.5}, {"id": "class.ts", "text": "class.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Yu Che", "text": "Yu Che", "color": "#E00B6B", "size": 5.5}, {"id": "TaroProvider.js", "text": "TaroProvider.js", "color": "#2E5EAA", "size": 5.5}, {"id": "optimized-practice.md", "text": "optimized-practice.md", "color": "#2E5EAA", "size": 5.5}, {"id": "transformJS.ts", "text": "transformJS.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "functional.ts", "text": "functional.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 6.0}, {"id": "index.ts", "text": "index.ts", "color": "#2E5EAA", "size": 7.0}, {"id": "lifecycle.js", "text": "lifecycle.js", "color": "#2E5EAA", "size": 6.0}, {"id": "jinjinjin0731", "text": "jinjinjin0731", "color": "#E00B6B", "size": 5.5}, {"id": "tutorial.md", "text": "tutorial.md", "color": "#2E5EAA", "size": 5.5}, {"id": "getWrappedScreen.js", "text": "getWrappedScreen.js", "color": "#2E5EAA", "size": 5.5}, {"id": "router.tsx", "text": "router.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e09\u6842", "text": "\u4e09\u6842", "color": "#E00B6B", "size": 5.5}, {"id": "CHANGELOG.md", "text": "CHANGELOG.md", "color": "#2E5EAA", "size": 5.5}, {"id": "rn.ts", "text": "rn.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "render.ts", "text": "render.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "ZhangJian-3ti", "text": "ZhangJian-3ti", "color": "#E00B6B", "size": 5.5}, {"id": "configSchema.ts", "text": "configSchema.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Vace", "text": "Vace", "color": "#E00B6B", "size": 5.5}, {"id": "index.d.ts", "text": "index.d.ts", "color": "#2E5EAA", "size": 10.5}, {"id": "yanguoyu", "text": "yanguoyu", "color": "#E00B6B", "size": 5.5}, {"id": "chooseImage.js", "text": "chooseImage.js", "color": "#2E5EAA", "size": 5.5}, {"id": "class-naming.js", "text": "class-naming.js", "color": "#2E5EAA", "size": 6.0}, {"id": "nameT", "text": "nameT", "color": "#E00B6B", "size": 5.5}, {"id": "removeStorage.md", "text": "removeStorage.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Amu", "text": "Amu", "color": "#E00B6B", "size": 5.5}, {"id": "common.d.ts", "text": "common.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "constants.ts", "text": "constants.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "yangxiaodong", "text": "yangxiaodong", "color": "#E00B6B", "size": 5.5}, {"id": "tiger", "text": "tiger", "color": "#E00B6B", "size": 6.5}, {"id": "form.md", "text": "form.md", "color": "#2E5EAA", "size": 5.5}, {"id": "KuangPengfei", "text": "KuangPengfei", "color": "#E00B6B", "size": 5.5}, {"id": "utils.ts", "text": "utils.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "scroll-view.md", "text": "scroll-view.md", "color": "#2E5EAA", "size": 5.5}, {"id": "connect.js", "text": "connect.js", "color": "#2E5EAA", "size": 5.5}, {"id": "PULL_REQUEST_TEMPLATE.md", "text": "PULL_REQUEST_TEMPLATE.md", "color": "#2E5EAA", "size": 6.5}, {"id": "button.md", "text": "button.md", "color": "#2E5EAA", "size": 5.5}, {"id": "create-component.js", "text": "create-component.js", "color": "#2E5EAA", "size": 6.0}, {"id": "icodytan", "text": "icodytan", "color": "#E00B6B", "size": 5.5}, {"id": "styleProcess.ts", "text": "styleProcess.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "SunnyQjm", "text": "SunnyQjm", "color": "#E00B6B", "size": 6.0}, {"id": "Garfield Lee", "text": "Garfield Lee", "color": "#E00B6B", "size": 6.0}, {"id": "so-diao", "text": "so-diao", "color": "#E00B6B", "size": 5.5}, {"id": "checkbox.md", "text": "checkbox.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Colder Xihk", "text": "Colder Xihk", "color": "#E00B6B", "size": 6.5}, {"id": "OfficialAccount.d.ts", "text": "OfficialAccount.d.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "JinJinJin", "text": "JinJinJin", "color": "#E00B6B", "size": 6.5}, {"id": "native-api.js", "text": "native-api.js", "color": "#2E5EAA", "size": 6.0}, {"id": "Linchengyi", "text": "Linchengyi", "color": "#E00B6B", "size": 5.5}, {"id": "props.md", "text": "props.md", "color": "#2E5EAA", "size": 5.5}, {"id": "honlyHuang", "text": "honlyHuang", "color": "#E00B6B", "size": 5.5}, {"id": "Footer.js", "text": "Footer.js", "color": "#2E5EAA", "size": 6.0}, {"id": "template.ts", "text": "template.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "\u6731\u51cc\u9704", "text": "\u6731\u51cc\u9704", "color": "#E00B6B", "size": 5.5}, {"id": "RefreshProvider.js", "text": "RefreshProvider.js", "color": "#2E5EAA", "size": 6.0}, {"id": "liwei", "text": "liwei", "color": "#E00B6B", "size": 5.5}, {"id": "kerwin", "text": "kerwin", "color": "#E00B6B", "size": 5.5}, {"id": "momokara", "text": "momokara", "color": "#E00B6B", "size": 5.5}, {"id": "huishiyi", "text": "huishiyi", "color": "#E00B6B", "size": 5.5}, {"id": "liuwei", "text": "liuwei", "color": "#E00B6B", "size": 5.5}, {"id": "base.spec.ts", "text": "base.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "options.ts", "text": "options.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "best-practice.md", "text": "best-practice.md", "color": "#2E5EAA", "size": 5.5}, {"id": "event.md", "text": "event.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Manjiz", "text": "Manjiz", "color": "#E00B6B", "size": 14.0}, {"id": ".eslintignore", "text": ".eslintignore", "color": "#2E5EAA", "size": 5.5}, {"id": "index.tsx", "text": "index.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "component.js", "text": "component.js", "color": "#2E5EAA", "size": 6.0}, {"id": "lerna.json", "text": "lerna.json", "color": "#2E5EAA", "size": 5.5}, {"id": "logHelper.ts", "text": "logHelper.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "siteConfig.js", "text": "siteConfig.js", "color": "#2E5EAA", "size": 6.0}, {"id": "StyleSheetValidation.ts", "text": "StyleSheetValidation.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "types.ts", "text": "types.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "this-props-function.js", "text": "this-props-function.js", "color": "#2E5EAA", "size": 5.5}, {"id": "spec-for-taro.md", "text": "spec-for-taro.md", "color": "#2E5EAA", "size": 5.5}, {"id": "index.test.js", "text": "index.test.js", "color": "#2E5EAA", "size": 6.0}, {"id": "webpack.prod.config.js", "text": "webpack.prod.config.js", "color": "#2E5EAA", "size": 5.5}, {"id": "helper.ts", "text": "helper.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "jsx.ts", "text": "jsx.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "quick-app.md", "text": "quick-app.md", "color": "#2E5EAA", "size": 5.5}, {"id": "en.json", "text": "en.json", "color": "#2E5EAA", "size": 5.5}, {"id": "sidebars.json", "text": "sidebars.json", "color": "#2E5EAA", "size": 6.0}, {"id": "EXSwiper.js", "text": "EXSwiper.js", "color": "#2E5EAA", "size": 5.5}, {"id": "tsconfig.json", "text": "tsconfig.json", "color": "#2E5EAA", "size": 5.5}, {"id": "EXInput.js", "text": "EXInput.js", "color": "#2E5EAA", "size": 5.5}, {"id": "index-test.ts.snap", "text": "index-test.ts.snap", "color": "#2E5EAA", "size": 5.5}, {"id": "index-test.ts", "text": "index-test.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "createWrappedComponent.tsx", "text": "createWrappedComponent.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "route.tsx", "text": "route.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "actionSheet.js", "text": "actionSheet.js", "color": "#2E5EAA", "size": 5.5}, {"id": "modal.js", "text": "modal.js", "color": "#2E5EAA", "size": 5.5}, {"id": "App.js", "text": "App.js", "color": "#2E5EAA", "size": 5.5}, {"id": "EXRichText.js", "text": "EXRichText.js", "color": "#2E5EAA", "size": 5.5}, {"id": "constant.ts", "text": "constant.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "plugin.ts", "text": "plugin.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "build.ts", "text": "build.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "yarn.lock", "text": "yarn.lock", "color": "#2E5EAA", "size": 6.5}, {"id": "no-spread-in-props.js", "text": "no-spread-in-props.js", "color": "#2E5EAA", "size": 5.5}, {"id": "before-dev-remind.md", "text": "before-dev-remind.md", "color": "#2E5EAA", "size": 5.5}, {"id": "util.js", "text": "util.js", "color": "#2E5EAA", "size": 6.0}, {"id": "taro-doctor", "text": "taro-doctor", "color": "#2E5EAA", "size": 5.5}, {"id": "configValidator.ts", "text": "configValidator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "eslintValidator.ts", "text": "eslintValidator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "packageValidator.ts", "text": "packageValidator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "recommandValidator.ts", "text": "recommandValidator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "EXImage.js", "text": "EXImage.js", "color": "#2E5EAA", "size": 5.5}, {"id": "EXButton.js", "text": "EXButton.js", "color": "#2E5EAA", "size": 5.5}, {"id": "EXIcon.js", "text": "EXIcon.js", "color": "#2E5EAA", "size": 5.5}, {"id": "\u7f57\u6770", "text": "\u7f57\u6770", "color": "#E00B6B", "size": 7.0}, {"id": "style.styl", "text": "style.styl", "color": "#2E5EAA", "size": 5.5}, {"id": "test.styl", "text": "test.styl", "color": "#2E5EAA", "size": 5.5}, {"id": "context.md", "text": "context.md", "color": "#2E5EAA", "size": 5.5}, {"id": "dev.conf.ts", "text": "dev.conf.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "prod.conf.ts", "text": "prod.conf.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "chain.ts", "text": "chain.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "tokenTypes.js", "text": "tokenTypes.js", "color": "#2E5EAA", "size": 5.5}, {"id": "index.spec.js", "text": "index.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": ".gitignore", "text": ".gitignore", "color": "#2E5EAA", "size": 5.5}, {"id": "Pines", "text": "Pines", "color": "#E00B6B", "size": 6.0}, {"id": "guxingke201", "text": "guxingke201", "color": "#E00B6B", "size": 8.0}, {"id": "custom-component-children.js", "text": "custom-component-children.js", "color": "#2E5EAA", "size": 5.5}, {"id": "props-reserve-keyword.js", "text": "props-reserve-keyword.js", "color": "#2E5EAA", "size": 5.5}, {"id": "gulpfile.js", "text": "gulpfile.js", "color": "#2E5EAA", "size": 5.5}, {"id": "PropsType.tsx", "text": "PropsType.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "index3.js", "text": "index3.js", "color": "#2E5EAA", "size": 5.5}, {"id": "create-context.js", "text": "create-context.js", "color": "#2E5EAA", "size": 5.5}, {"id": "create-html-element.ts", "text": "create-html-element.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "env.ts", "text": "env.ts", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_HDdjwWqm")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_HDdjwWqm")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_HDdjwWqm")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#HDdjwWqm_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('HDdjwWqm');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('HDdjwWqm');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_qXOMEprl {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_qXOMEprl line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_qXOMEprl circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="qXOMEprl">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='qXOMEprl_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"qXOMEprl"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "billfeller", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "depfu[bot]", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "typings.d.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "package.json", "color": "#999999", "width": 3.495732273553991, "weight": 0.5128205128205128}, {"source": "\u4f55\u4e50", "target": "antd-pro-merge-less.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4f55\u4e50", "target": "baseLayout.e2e.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "global.less", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "\u9648\u5e05", "target": "setting.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "config.ts", "color": "#999999", "width": 2.4459101490553135, "weight": 0.875}, {"source": "\u4fe1\u946b-King", "target": "config.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": ".eslintrc.js", "color": "#999999", "width": 1.8862943611198906, "weight": 0.6666666666666666}, {"source": "zombieJ", "target": "BasicLayout.tsx", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "\u504f\u53f3", "target": "Dockerfile.dev", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u504f\u53f3", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "zombieJ", "target": "package.json", "color": "#999999", "width": 1.8862943611198906, "weight": 0.23529411764705882}, {"source": "\u9648\u5e05", "target": "README.ja-JP.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "README.md", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5714285714285714}, {"source": "\u9648\u5e05", "target": "README.ru-RU.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "\u9648\u5e05", "target": "README.tr-TR.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "\u9648\u5e05", "target": "README.zh-CN.md", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5714285714285714}, {"source": "\u9648\u5e05", "target": "index.tsx", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "hz", "target": "package.json", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "defaultSettings.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "CheckPermissions.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "BasicLayout.tsx", "color": "#999999", "width": 2.1094379124341005, "weight": 0.8333333333333334}, {"source": "Lo\u00efc PIREZ", "target": "README.fr-FR.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Lo\u00efc PIREZ", "target": "README.ja-JP.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Lo\u00efc PIREZ", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Lo\u00efc PIREZ", "target": "README.ru-RU.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Lo\u00efc PIREZ", "target": "README.tr-TR.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Lo\u00efc PIREZ", "target": "README.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "\u9648\u5e05", "target": "utils.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u671f\u8d24", "target": "package.json", "color": "#999999", "width": 1.8862943611198906, "weight": 0.19047619047619047}, {"source": "\u671f\u8d24", "target": "defaultSettings.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "utils.test.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "AuthorizedRoute.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "PromiseRender.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "renderAuthorize.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "UserLayout.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "connect.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "Authorized.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "tsconfig.json", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "zombieJ", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "zombieJ", "target": "README.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "\u9648\u5e05", "target": "index.js", "color": "#999999", "width": 1.8862943611198906, "weight": 0.8}, {"source": "\u9648\u5e05", "target": "Welcome.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "lonwern", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "README.fr-FR.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lijiehua", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "AvatarDropdown.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "NoticeIconView.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "RightContent.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "global.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "login.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "user.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "plugin.config.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "baseLayout.e2e.js", "color": "#999999", "width": 1.5986122886681098, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "en-US.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "menu.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "pt-BR.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "zh-CN.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "zh-TW.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "utils.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zombieJ", "target": "service-worker.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zombieJ", "target": ".gitignore", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zombieJ", "target": "jest-puppeteer.config.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zombieJ", "target": "document.ejs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zombieJ", "target": "topMenu.e2e.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zombieJ", "target": "baseLayout.e2e.js", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "zombieJ", "target": "tsconfig.json", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "zombieJ", "target": "global.less", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "zombieJ", "target": ".eslintrc.js", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "\u9648\u5e05", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "service-worker.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "jest-puppeteer.config.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "document.ejs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "topMenu.e2e.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "Dockerfile.dev", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u9648\u5e05", "target": "docker-compose.yml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u671f\u8d24", "target": ".gitignore", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u671f\u8d24", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "\u671f\u8d24", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "\u671f\u8d24", "target": "README.ja-JP.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "\u671f\u8d24", "target": "service-worker.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "\u671f\u8d24", "target": "jest-puppeteer.config.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "\u671f\u8d24", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "\u671f\u8d24", "target": "README.tr-TR.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "\u671f\u8d24", "target": "document.ejs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "\u671f\u8d24", "target": "topMenu.e2e.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "\u671f\u8d24", "target": "baseLayout.e2e.js", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "\u671f\u8d24", "target": "tsconfig.json", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "\u671f\u8d24", "target": "global.less", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "\u671f\u8d24", "target": "README.ru-RU.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "\u671f\u8d24", "target": "README.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "\u671f\u8d24", "target": ".eslintrc.js", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}], "nodes": [{"id": "billfeller", "text": "billfeller", "color": "#E00B6B", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 10.0}, {"id": "depfu[bot]", "text": "depfu[bot]", "color": "#E00B6B", "size": 5.5}, {"id": "\u9648\u5e05", "text": "\u9648\u5e05", "color": "#E00B6B", "size": 29.0}, {"id": "typings.d.ts", "text": "typings.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4f55\u4e50", "text": "\u4f55\u4e50", "color": "#E00B6B", "size": 6.0}, {"id": "antd-pro-merge-less.js", "text": "antd-pro-merge-less.js", "color": "#2E5EAA", "size": 5.5}, {"id": "baseLayout.e2e.js", "text": "baseLayout.e2e.js", "color": "#2E5EAA", "size": 7.0}, {"id": "global.less", "text": "global.less", "color": "#2E5EAA", "size": 6.5}, {"id": "setting.ts", "text": "setting.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "config.ts", "text": "config.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "\u4fe1\u946b-King", "text": "\u4fe1\u946b-King", "color": "#E00B6B", "size": 5.5}, {"id": ".eslintrc.js", "text": ".eslintrc.js", "color": "#2E5EAA", "size": 6.5}, {"id": "zombieJ", "text": "zombieJ", "color": "#E00B6B", "size": 12.0}, {"id": "BasicLayout.tsx", "text": "BasicLayout.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "\u504f\u53f3", "text": "\u504f\u53f3", "color": "#E00B6B", "size": 6.0}, {"id": "Dockerfile.dev", "text": "Dockerfile.dev", "color": "#2E5EAA", "size": 6.0}, {"id": "README.ja-JP.md", "text": "README.ja-JP.md", "color": "#2E5EAA", "size": 6.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 7.0}, {"id": "README.ru-RU.md", "text": "README.ru-RU.md", "color": "#2E5EAA", "size": 6.5}, {"id": "README.tr-TR.md", "text": "README.tr-TR.md", "color": "#2E5EAA", "size": 6.5}, {"id": "README.zh-CN.md", "text": "README.zh-CN.md", "color": "#2E5EAA", "size": 7.0}, {"id": "index.tsx", "text": "index.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "hz", "text": "hz", "color": "#E00B6B", "size": 5.5}, {"id": "defaultSettings.ts", "text": "defaultSettings.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "CheckPermissions.tsx", "text": "CheckPermissions.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Lo\u00efc PIREZ", "text": "Lo\u00efc PIREZ", "color": "#E00B6B", "size": 8.0}, {"id": "README.fr-FR.md", "text": "README.fr-FR.md", "color": "#2E5EAA", "size": 6.0}, {"id": "utils.less", "text": "utils.less", "color": "#2E5EAA", "size": 5.5}, {"id": "\u671f\u8d24", "text": "\u671f\u8d24", "color": "#E00B6B", "size": 14.0}, {"id": "utils.test.ts", "text": "utils.test.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "AuthorizedRoute.tsx", "text": "AuthorizedRoute.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "PromiseRender.tsx", "text": "PromiseRender.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "renderAuthorize.ts", "text": "renderAuthorize.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "UserLayout.tsx", "text": "UserLayout.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "connect.d.ts", "text": "connect.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Authorized.tsx", "text": "Authorized.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "tsconfig.json", "text": "tsconfig.json", "color": "#2E5EAA", "size": 6.5}, {"id": "index.js", "text": "index.js", "color": "#2E5EAA", "size": 6.0}, {"id": "Welcome.tsx", "text": "Welcome.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "lonwern", "text": "lonwern", "color": "#E00B6B", "size": 5.5}, {"id": "afc163", "text": "afc163", "color": "#E00B6B", "size": 5.5}, {"id": "lijiehua", "text": "lijiehua", "color": "#E00B6B", "size": 5.5}, {"id": "AvatarDropdown.tsx", "text": "AvatarDropdown.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "NoticeIconView.tsx", "text": "NoticeIconView.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "RightContent.tsx", "text": "RightContent.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "global.ts", "text": "global.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "login.ts", "text": "login.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "user.ts", "text": "user.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "plugin.config.ts", "text": "plugin.config.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "en-US.ts", "text": "en-US.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "menu.ts", "text": "menu.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "pt-BR.ts", "text": "pt-BR.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "zh-CN.ts", "text": "zh-CN.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "zh-TW.ts", "text": "zh-TW.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "utils.ts", "text": "utils.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "index.less", "text": "index.less", "color": "#2E5EAA", "size": 6.5}, {"id": "service-worker.js", "text": "service-worker.js", "color": "#2E5EAA", "size": 6.5}, {"id": ".gitignore", "text": ".gitignore", "color": "#2E5EAA", "size": 6.0}, {"id": "jest-puppeteer.config.js", "text": "jest-puppeteer.config.js", "color": "#2E5EAA", "size": 6.5}, {"id": "document.ejs", "text": "document.ejs", "color": "#2E5EAA", "size": 6.5}, {"id": "topMenu.e2e.js", "text": "topMenu.e2e.js", "color": "#2E5EAA", "size": 6.5}, {"id": "docker-compose.yml", "text": "docker-compose.yml", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_qXOMEprl")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_qXOMEprl")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_qXOMEprl")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#qXOMEprl_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('qXOMEprl');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('qXOMEprl');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

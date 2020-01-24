@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_JvcdJqTm {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_JvcdJqTm line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_JvcdJqTm circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="JvcdJqTm">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='JvcdJqTm_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"JvcdJqTm"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "mimimi", "target": ".gitignore", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "liuchuzhang", "target": "autocomplete.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "iamkun", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "ziyoung", "target": "package.json", "color": "#999999", "width": 1.5986122886681098, "weight": 0.42857142857142855}, {"source": "Jiewei Qian", "target": "main.vue", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Jaume Sala", "target": "ca.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jenni", "target": "fi.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Pan", "target": "checkbox.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Sean", "target": "date-table.vue", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ohhoney1", "target": "radio.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi", "target": "webpack.conf.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "Zhi", "target": ".babelrc", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "island205", "target": "webpack.conf.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi", "target": "package.json", "color": "#999999", "width": 2.291759469228055, "weight": 0.3333333333333333}, {"source": "\u66f9\u78ca", "target": "table-footer.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "README.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "iamkun", "target": "tab-bar.vue", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "vok123", "target": "main.vue", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Gonzalo Nandez", "target": "CHANGELOG.es.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ziyoung", "target": "index.tpl", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "ziyoung", "target": "form.vue", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Zhi Cun", "target": "side-nav.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "index.tpl", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "jiang.an", "target": "date-picker.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "jiang.an", "target": "datetime-picker.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "checkbox.scss", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Zhi Cun", "target": "ca.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "\u738b\u5c0f\u767d", "target": "directive.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u738b\u5c0f\u767d", "target": "main.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "autocomplete.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "input.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Debiancc", "target": "month-table.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Debiancc", "target": "year-table.scss", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "i18n.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "kg.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ileechee", "target": "tag.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "ileechee", "target": "tag.vue", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "ileechee", "target": "tag.spec.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "radio.scss", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Zhi", "target": "versions.json", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5}, {"source": "Zhi", "target": "index.js", "color": "#999999", "width": 1.8862943611198906, "weight": 0.4}, {"source": "iamkun", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.14285714285714285}, {"source": "iamkun", "target": "form.vue", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "iamkun", "target": "index.tpl", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "iamkun", "target": "version.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "iamkun", "target": "deploy-ci.sh", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "iamkun", "target": "deploy-faas.sh", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Zhi", "target": "deploy-faas.sh", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Zhi", "target": "webpack.common.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "YuCheng Lin", "target": "date.vue", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "YuCheng Lin", "target": "picker.vue", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "YuCheng Lin", "target": "date-picker.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "iamkun", "target": "release.sh", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Zhi", "target": "release.sh", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Zhi Cun", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.42857142857142855}, {"source": "Zhi Cun", "target": "CHANGELOG.es.md", "color": "#999999", "width": 1.8862943611198906, "weight": 0.4444444444444444}, {"source": "Zhi Cun", "target": "CHANGELOG.zh-CN.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.42857142857142855}, {"source": "iamkun", "target": "date-picker.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "iamkun", "target": "checkbox.scss", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "iamkun", "target": "datetime-picker.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jiewei Qian", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jiewei Qian", "target": "CHANGELOG.es.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jiewei Qian", "target": "CHANGELOG.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Zhi", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "Zhi", "target": "CHANGELOG.es.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2222222222222222}, {"source": "Zhi", "target": "CHANGELOG.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "Zhi Cun", "target": "table-footer.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "tree-node.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "release.sh", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Zhi Cun", "target": "package.json", "color": "#999999", "width": 2.291759469228055, "weight": 0.3333333333333333}, {"source": "Zhi Cun", "target": "webpack.conf.js", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5714285714285714}, {"source": "ziyoung", "target": "versions.json", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "ziyoung", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "Zhi Cun", "target": "tab-bar.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "hetech", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "hetech", "target": "CHANGELOG.es.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "hetech", "target": "CHANGELOG.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Zhi Cun", "target": "versions.json", "color": "#999999", "width": 1.5986122886681098, "weight": 0.375}, {"source": "Zhi Cun", "target": "deploy-faas.sh", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Zhi Cun", "target": "index.js", "color": "#999999", "width": 2.1094379124341005, "weight": 0.5}, {"source": "HarlanLuo", "target": "table-body.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "HarlanLuo", "target": "table.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "xunmeng", "target": "table.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "hetech", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "hetech", "target": "yarn.lock", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Zhi Cun", "target": "version.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "deploy-ci.sh", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": ".babelrc", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Zhi Cun", "target": ".eslintrc", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "build-entry.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "webpack.common.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Zhi Cun", "target": "webpack.component.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "webpack.demo.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "webpack.test.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "app.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "common.css", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "demo-block.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "footer.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "header.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "theme-picker.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "cascader.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "checkbox.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "collapse.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "color-picker.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "date-picker.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Zhi Cun", "target": "datetime-picker.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Zhi Cun", "target": "input-number.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "input.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "popover.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "radio.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "rate.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "select.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "slider.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "switch.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "tabs.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "time-picker.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "tooltip.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "transfer.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "entry.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "component.tpl", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "index.vue", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "route.config.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "karma.conf.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "message-box.spec.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "tree.spec.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "util.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Zhi Cun", "target": "yarn.lock", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Zhi Cun", "target": "tag.spec.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "main.vue", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Zhi Cun", "target": "fi.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "date.vue", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "tag.vue", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "en.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "tag.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "ua.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "ru-RU.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "pagination.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "resource.tpl", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhi Cun", "target": "form.vue", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Zhi Cun", "target": "autocomplete.scss", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "picker.vue", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Zhi Cun", "target": "date-table.vue", "color": "#999999", "width": 0.5, "weight": 0.5}], "nodes": [{"id": "mimimi", "text": "mimimi", "color": "#E00B6B", "size": 5.5}, {"id": ".gitignore", "text": ".gitignore", "color": "#2E5EAA", "size": 5.5}, {"id": "liuchuzhang", "text": "liuchuzhang", "color": "#E00B6B", "size": 5.5}, {"id": "autocomplete.scss", "text": "autocomplete.scss", "color": "#2E5EAA", "size": 6.0}, {"id": "iamkun", "text": "iamkun", "color": "#E00B6B", "size": 11.0}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 6.0}, {"id": "ziyoung", "text": "ziyoung", "color": "#E00B6B", "size": 7.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 7.5}, {"id": "Jiewei Qian", "text": "Jiewei Qian", "color": "#E00B6B", "size": 7.0}, {"id": "main.vue", "text": "main.vue", "color": "#2E5EAA", "size": 6.5}, {"id": "Jaume Sala", "text": "Jaume Sala", "color": "#E00B6B", "size": 5.5}, {"id": "ca.js", "text": "ca.js", "color": "#2E5EAA", "size": 6.0}, {"id": "Jenni", "text": "Jenni", "color": "#E00B6B", "size": 5.5}, {"id": "fi.js", "text": "fi.js", "color": "#2E5EAA", "size": 6.0}, {"id": "Pan", "text": "Pan", "color": "#E00B6B", "size": 5.5}, {"id": "checkbox.scss", "text": "checkbox.scss", "color": "#2E5EAA", "size": 6.5}, {"id": "Sean", "text": "Sean", "color": "#E00B6B", "size": 5.5}, {"id": "date-table.vue", "text": "date-table.vue", "color": "#2E5EAA", "size": 6.0}, {"id": "ohhoney1", "text": "ohhoney1", "color": "#E00B6B", "size": 5.5}, {"id": "radio.scss", "text": "radio.scss", "color": "#2E5EAA", "size": 6.0}, {"id": "Zhi", "text": "Zhi", "color": "#E00B6B", "size": 10.5}, {"id": "webpack.conf.js", "text": "webpack.conf.js", "color": "#2E5EAA", "size": 6.5}, {"id": ".babelrc", "text": ".babelrc", "color": "#2E5EAA", "size": 6.0}, {"id": "island205", "text": "island205", "color": "#E00B6B", "size": 5.5}, {"id": "\u66f9\u78ca", "text": "\u66f9\u78ca", "color": "#E00B6B", "size": 5.5}, {"id": "table-footer.js", "text": "table-footer.js", "color": "#2E5EAA", "size": 6.0}, {"id": "Zhi Cun", "text": "Zhi Cun", "color": "#E00B6B", "size": 44.5}, {"id": "tab-bar.vue", "text": "tab-bar.vue", "color": "#2E5EAA", "size": 6.0}, {"id": "vok123", "text": "vok123", "color": "#E00B6B", "size": 5.5}, {"id": "Gonzalo Nandez", "text": "Gonzalo Nandez", "color": "#E00B6B", "size": 5.5}, {"id": "CHANGELOG.es.md", "text": "CHANGELOG.es.md", "color": "#2E5EAA", "size": 7.5}, {"id": "index.tpl", "text": "index.tpl", "color": "#2E5EAA", "size": 6.5}, {"id": "form.vue", "text": "form.vue", "color": "#2E5EAA", "size": 6.5}, {"id": "side-nav.vue", "text": "side-nav.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "jiang.an", "text": "jiang.an", "color": "#E00B6B", "size": 6.0}, {"id": "date-picker.md", "text": "date-picker.md", "color": "#2E5EAA", "size": 6.5}, {"id": "datetime-picker.md", "text": "datetime-picker.md", "color": "#2E5EAA", "size": 6.5}, {"id": "\u738b\u5c0f\u767d", "text": "\u738b\u5c0f\u767d", "color": "#E00B6B", "size": 6.0}, {"id": "directive.js", "text": "directive.js", "color": "#2E5EAA", "size": 5.5}, {"id": "main.js", "text": "main.js", "color": "#2E5EAA", "size": 5.5}, {"id": "autocomplete.vue", "text": "autocomplete.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "input.vue", "text": "input.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "Debiancc", "text": "Debiancc", "color": "#E00B6B", "size": 6.0}, {"id": "month-table.scss", "text": "month-table.scss", "color": "#2E5EAA", "size": 5.5}, {"id": "year-table.scss", "text": "year-table.scss", "color": "#2E5EAA", "size": 5.5}, {"id": "i18n.md", "text": "i18n.md", "color": "#2E5EAA", "size": 5.5}, {"id": "kg.js", "text": "kg.js", "color": "#2E5EAA", "size": 5.5}, {"id": "ileechee", "text": "ileechee", "color": "#E00B6B", "size": 6.5}, {"id": "tag.md", "text": "tag.md", "color": "#2E5EAA", "size": 6.0}, {"id": "tag.vue", "text": "tag.vue", "color": "#2E5EAA", "size": 6.0}, {"id": "tag.spec.js", "text": "tag.spec.js", "color": "#2E5EAA", "size": 6.0}, {"id": "versions.json", "text": "versions.json", "color": "#2E5EAA", "size": 6.5}, {"id": "index.js", "text": "index.js", "color": "#2E5EAA", "size": 6.5}, {"id": "version.js", "text": "version.js", "color": "#2E5EAA", "size": 6.0}, {"id": "deploy-ci.sh", "text": "deploy-ci.sh", "color": "#2E5EAA", "size": 6.0}, {"id": "deploy-faas.sh", "text": "deploy-faas.sh", "color": "#2E5EAA", "size": 6.5}, {"id": "webpack.common.js", "text": "webpack.common.js", "color": "#2E5EAA", "size": 6.0}, {"id": "YuCheng Lin", "text": "YuCheng Lin", "color": "#E00B6B", "size": 6.5}, {"id": "date.vue", "text": "date.vue", "color": "#2E5EAA", "size": 6.0}, {"id": "picker.vue", "text": "picker.vue", "color": "#2E5EAA", "size": 6.0}, {"id": "date-picker.spec.js", "text": "date-picker.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "release.sh", "text": "release.sh", "color": "#2E5EAA", "size": 6.5}, {"id": "CHANGELOG.en-US.md", "text": "CHANGELOG.en-US.md", "color": "#2E5EAA", "size": 7.0}, {"id": "CHANGELOG.zh-CN.md", "text": "CHANGELOG.zh-CN.md", "color": "#2E5EAA", "size": 7.0}, {"id": "tree-node.vue", "text": "tree-node.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "hetech", "text": "hetech", "color": "#E00B6B", "size": 7.5}, {"id": "HarlanLuo", "text": "HarlanLuo", "color": "#E00B6B", "size": 6.0}, {"id": "table-body.js", "text": "table-body.js", "color": "#2E5EAA", "size": 5.5}, {"id": "table.spec.js", "text": "table.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "xunmeng", "text": "xunmeng", "color": "#E00B6B", "size": 5.5}, {"id": "table.md", "text": "table.md", "color": "#2E5EAA", "size": 5.5}, {"id": "yarn.lock", "text": "yarn.lock", "color": "#2E5EAA", "size": 6.0}, {"id": ".eslintrc", "text": ".eslintrc", "color": "#2E5EAA", "size": 5.5}, {"id": "build-entry.js", "text": "build-entry.js", "color": "#2E5EAA", "size": 5.5}, {"id": "webpack.component.js", "text": "webpack.component.js", "color": "#2E5EAA", "size": 5.5}, {"id": "webpack.demo.js", "text": "webpack.demo.js", "color": "#2E5EAA", "size": 5.5}, {"id": "webpack.test.js", "text": "webpack.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "app.vue", "text": "app.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "common.css", "text": "common.css", "color": "#2E5EAA", "size": 5.5}, {"id": "demo-block.vue", "text": "demo-block.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "footer.vue", "text": "footer.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "header.vue", "text": "header.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "theme-picker.vue", "text": "theme-picker.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "cascader.md", "text": "cascader.md", "color": "#2E5EAA", "size": 5.5}, {"id": "checkbox.md", "text": "checkbox.md", "color": "#2E5EAA", "size": 5.5}, {"id": "collapse.md", "text": "collapse.md", "color": "#2E5EAA", "size": 5.5}, {"id": "color-picker.md", "text": "color-picker.md", "color": "#2E5EAA", "size": 5.5}, {"id": "input-number.md", "text": "input-number.md", "color": "#2E5EAA", "size": 5.5}, {"id": "input.md", "text": "input.md", "color": "#2E5EAA", "size": 5.5}, {"id": "popover.md", "text": "popover.md", "color": "#2E5EAA", "size": 5.5}, {"id": "radio.md", "text": "radio.md", "color": "#2E5EAA", "size": 5.5}, {"id": "rate.md", "text": "rate.md", "color": "#2E5EAA", "size": 5.5}, {"id": "select.md", "text": "select.md", "color": "#2E5EAA", "size": 5.5}, {"id": "slider.md", "text": "slider.md", "color": "#2E5EAA", "size": 5.5}, {"id": "switch.md", "text": "switch.md", "color": "#2E5EAA", "size": 5.5}, {"id": "tabs.md", "text": "tabs.md", "color": "#2E5EAA", "size": 5.5}, {"id": "time-picker.md", "text": "time-picker.md", "color": "#2E5EAA", "size": 5.5}, {"id": "tooltip.md", "text": "tooltip.md", "color": "#2E5EAA", "size": 5.5}, {"id": "transfer.md", "text": "transfer.md", "color": "#2E5EAA", "size": 5.5}, {"id": "entry.js", "text": "entry.js", "color": "#2E5EAA", "size": 5.5}, {"id": "component.tpl", "text": "component.tpl", "color": "#2E5EAA", "size": 5.5}, {"id": "index.vue", "text": "index.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "route.config.js", "text": "route.config.js", "color": "#2E5EAA", "size": 5.5}, {"id": "karma.conf.js", "text": "karma.conf.js", "color": "#2E5EAA", "size": 5.5}, {"id": "message-box.spec.js", "text": "message-box.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "tree.spec.js", "text": "tree.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "util.js", "text": "util.js", "color": "#2E5EAA", "size": 5.5}, {"id": "en.js", "text": "en.js", "color": "#2E5EAA", "size": 5.5}, {"id": "ua.js", "text": "ua.js", "color": "#2E5EAA", "size": 5.5}, {"id": "ru-RU.js", "text": "ru-RU.js", "color": "#2E5EAA", "size": 5.5}, {"id": "pagination.js", "text": "pagination.js", "color": "#2E5EAA", "size": 5.5}, {"id": "resource.tpl", "text": "resource.tpl", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_JvcdJqTm")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_JvcdJqTm")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_JvcdJqTm")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#JvcdJqTm_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('JvcdJqTm');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('JvcdJqTm');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

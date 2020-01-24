@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_urXnvfyb {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_urXnvfyb line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_urXnvfyb circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="urXnvfyb">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='urXnvfyb_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"urXnvfyb"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "songshu.zss", "target": ".gitignore", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sharajava", "target": "README.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "jimin.jm", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.09090909090909091}, {"source": "Haiqiang Shen", "target": "README.md", "color": "#999999", "width": 2.4459101490553135, "weight": 1.0}, {"source": "Jesson Zhou", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jimin", "target": "README.md", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5}, {"source": "jimin.jm", "target": ".gitignore", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "jimin.jm", "target": "CHANGELOG.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Sola", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "tinycedar", "target": ".travis.yml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u8d75\u79b9\u5149", "target": ".gitignore", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "xiajunhust", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jimin.jm", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "tuohai666", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jimin.jm", "target": "PULL_REQUEST_TEMPLATE.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "slievrly", "target": "PULL_REQUEST_TEMPLATE.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xin Wang", "target": ".travis.yml", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Xin Wang", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "\u4ee3\u7801\u98ce\u6c34\u5e08", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jimin", "target": "pom.xml", "color": "#999999", "width": 1.5986122886681098, "weight": 0.42857142857142855}, {"source": "jimin.jm", "target": "BUG_REPORT.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "jimin.jm", "target": "FEATURE_REQUEST.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "jimin", "target": "PULL_REQUEST_TEMPLATE.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Xin Wang", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.25}], "nodes": [{"id": "songshu.zss", "text": "songshu.zss", "color": "#E00B6B", "size": 5.5}, {"id": ".gitignore", "text": ".gitignore", "color": "#2E5EAA", "size": 6.5}, {"id": "sharajava", "text": "sharajava", "color": "#E00B6B", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 9.0}, {"id": "jimin.jm", "text": "jimin.jm", "color": "#E00B6B", "size": 8.5}, {"id": "Haiqiang Shen", "text": "Haiqiang Shen", "color": "#E00B6B", "size": 5.5}, {"id": "Jesson Zhou", "text": "Jesson Zhou", "color": "#E00B6B", "size": 5.5}, {"id": "jimin", "text": "jimin", "color": "#E00B6B", "size": 6.5}, {"id": "CHANGELOG.md", "text": "CHANGELOG.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Sola", "text": "Sola", "color": "#E00B6B", "size": 5.5}, {"id": "tinycedar", "text": "tinycedar", "color": "#E00B6B", "size": 5.5}, {"id": ".travis.yml", "text": ".travis.yml", "color": "#2E5EAA", "size": 6.0}, {"id": "\u8d75\u79b9\u5149", "text": "\u8d75\u79b9\u5149", "color": "#E00B6B", "size": 5.5}, {"id": "xiajunhust", "text": "xiajunhust", "color": "#E00B6B", "size": 5.5}, {"id": "pom.xml", "text": "pom.xml", "color": "#2E5EAA", "size": 7.5}, {"id": "tuohai666", "text": "tuohai666", "color": "#E00B6B", "size": 5.5}, {"id": "PULL_REQUEST_TEMPLATE.md", "text": "PULL_REQUEST_TEMPLATE.md", "color": "#2E5EAA", "size": 6.5}, {"id": "slievrly", "text": "slievrly", "color": "#E00B6B", "size": 5.5}, {"id": "Xin Wang", "text": "Xin Wang", "color": "#E00B6B", "size": 6.5}, {"id": "\u4ee3\u7801\u98ce\u6c34\u5e08", "text": "\u4ee3\u7801\u98ce\u6c34\u5e08", "color": "#E00B6B", "size": 5.5}, {"id": "BUG_REPORT.md", "text": "BUG_REPORT.md", "color": "#2E5EAA", "size": 5.5}, {"id": "FEATURE_REQUEST.md", "text": "FEATURE_REQUEST.md", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_urXnvfyb")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_urXnvfyb")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_urXnvfyb")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#urXnvfyb_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('urXnvfyb');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('urXnvfyb');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

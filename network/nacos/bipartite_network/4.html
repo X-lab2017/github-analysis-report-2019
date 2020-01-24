@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_xUEkrdId {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_xUEkrdId line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_xUEkrdId circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="xUEkrdId">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='xUEkrdId_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"xUEkrdId"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "xiaochun.xxc", "target": "CPInstancesAPI_ITCase.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "hxy1991", "target": "DiskUtil.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "hxy1991", "target": "PropertyUtil.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "InstanceController.java", "color": "#999999", "width": 1.8862943611198906, "weight": 0.6666666666666666}, {"source": "nkorange", "target": "ApiController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "DistroFilter.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "nkorange", "target": "TaskDispatcher.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2}, {"source": "Keep", "target": "DiskUtil.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "SwitchEntry.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "SwitchManager.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "index.html", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "nkorange", "target": "CPInstancesAPI_ITCase.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "nkorange", "target": "Cluster.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "nkorange", "target": "Service.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "water.lyl", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "water.lyl", "target": "ServerHttpAgent.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "water.lyl", "target": "JSONUtils.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "water.lyl", "target": "ConfigSubService.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Fury Zhu", "target": "startup.sh", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "nkorange", "target": "ClusterController.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xxc", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "SLKun", "target": "Log4J2NacosLogging.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "SLKun", "target": "nacos-log4j2.xml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "dungu.zpf", "target": "nacos-default.properties", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "dungu.zpf", "target": "application.properties", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "\u5f97\u5c11", "target": "NacosNamingService.java", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5714285714285714}, {"source": "\u5f97\u5c11", "target": "StringUtils.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5f97\u5c11", "target": "ServerListManager.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.3}, {"source": "\u5f97\u5c11", "target": "ParamUtil.java", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5714285714285714}, {"source": "sofior", "target": "NamespaceController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "ServiceManager.java", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "nkorange", "target": "RaftStore.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "nkorange", "target": "pom.xml", "color": "#999999", "width": 2.4459101490553135, "weight": 0.4375}, {"source": "nkorange", "target": "DeregisterInstance_ITCase.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "nkorange", "target": "MultiTenant_InstanceAPI_ITCase.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "nkorange", "target": "NacosConfigService.java", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "water.lyl", "target": "NacosConfigService.java", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "nkorange", "target": "DistroConsistencyServiceImpl.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "nkorange", "target": "RaftConsistencyServiceImpl.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "nkorange", "target": "RaftCore.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "nkorange", "target": "OperatorController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "RaftController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "ServiceController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "Instance.java", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "nkorange", "target": "HttpClient.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "peachyy", "target": "LabelSelector.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "peachyy", "target": "LabelSelectorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fury Zhu", "target": "ServiceManager.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.375}, {"source": "pbting", "target": "ServerListManager.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "startup.sh", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "yanlinly", "target": "NacosConfigService.java", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "nkorange", "target": "ServerListManager.java", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "Eric Hettiaratchi", "target": "StringUtilsTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fury Zhu", "target": "MultiTenant_InstanceAPI_ITCase.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "DeregisterInstance_ITCase.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "TaskDispatcher.java", "color": "#999999", "width": 2.291759469228055, "weight": 0.6}, {"source": "xiaochun.xxc", "target": "Cmdb_ITCase.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Albert-Hugo", "target": "Instance.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "huangyonghui", "target": "Instance.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.42857142857142855}, {"source": "paulzhangcc", "target": "ServiceManager.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "nkorange", "target": "LabelSelector.java", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Fury Zhu", "target": "UtilsAndCommonsTest.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Fury Zhu", "target": "STSConfig.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fury Zhu", "target": "index.html", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "ServerHttpAgent.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "XCXCXCXCX", "target": "HealthCheckExtendProvider.java", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "Fury Zhu", "target": "RaftStore.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "InstanceController.java", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Fury Zhu", "target": "pom.xml", "color": "#999999", "width": 1.1931471805599454, "weight": 0.125}, {"source": "huangyonghui", "target": "NamingEvent.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huangyonghui", "target": "EventDispatcher.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "XCXCXCXCX", "target": "AbstractHealthChecker.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "XCXCXCXCX", "target": "nacos-health-plugin-example-1.0.jar", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "XCXCXCXCX", "target": "HealthCheckProcessorDelegate.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "XCXCXCXCX", "target": "HealthCheckType.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "XCXCXCXCX", "target": "JsonAdapter.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fury Zhu", "target": "Instance.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2222222222222222}, {"source": "XCXCXCXCX", "target": "ClusterController.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "rushsky518", "target": "DumpService.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Albert-Hugo", "target": "Log4J2NacosLogging.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Andy", "target": "CatalogControllerTest.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Andy", "target": "ClusterControllerTest.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Andy", "target": "ServiceManagerTest.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Andy", "target": "ServiceTest.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "chuntaojun", "target": "NoneSelector.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "nkorange", "target": "DataSyncer.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "nkorange", "target": "ClientBeatCheckTask.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "nkorange", "target": "ServerStatusSynchronizer.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "LabelSelector.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.6}, {"source": "chuntaojun", "target": "Constants.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chuntaojun", "target": "NamingService.java", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "chuntaojun", "target": "NacosNamingService.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.42857142857142855}, {"source": "chuntaojun", "target": "NamingProxy.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "chuntaojun", "target": "UtilAndComs.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Fury Zhu", "target": "ParamUtil.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.42857142857142855}, {"source": "Fury Zhu", "target": "NamespaceController.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "ServerListManager.java", "color": "#999999", "width": 1.5986122886681098, "weight": 0.3}, {"source": "Fury Zhu", "target": "NacosConfigService.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "Fury Zhu", "target": "NewConfig.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "yarn.lock", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "main.css", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "main.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "EventDispatcher.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "LoadChange", "target": "NewConfig.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "LoadChange", "target": "yarn.lock", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "LoadChange", "target": "main.css", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "LoadChange", "target": "main.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zhichen", "target": "webpack.base.conf.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zhichen", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zhichen", "target": "validateContent.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zhichen", "target": "main.css", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zhichen", "target": "main.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "xuechaos", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "xuechaos", "target": "ClientWorker.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "xuechaos", "target": "ServerListManager.java", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "xuechaos", "target": "HostReactor.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "xuechaos", "target": "PersistService.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "xuechaos", "target": "GroupCapacityPersistService.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "xuechaos", "target": "TenantCapacityPersistService.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "xuechaos", "target": "RunningConfig.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "xuechaos", "target": "DistroFilter.java", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "dungu.zpf", "target": "DistroConsistencyServiceImpl.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "dungu.zpf", "target": "TaskDispatcher.java", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "dungu.zpf", "target": "RaftConsistencyServiceImpl.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "dungu.zpf", "target": "RaftCore.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "dungu.zpf", "target": "InstanceController.java", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "dungu.zpf", "target": "Instances.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "dungu.zpf", "target": "ServiceManager.java", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "dungu.zpf", "target": "HealthCheckTask.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "dungu.zpf", "target": "HttpClient.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "dungu.zpf", "target": "NamingProxy.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "dungu.zpf", "target": "DistroFilter.java", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "\u5f97\u5c11", "target": "pom.xml", "color": "#999999", "width": 1.5986122886681098, "weight": 0.1875}, {"source": "\u5f97\u5c11", "target": "CHANGELOG.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5f97\u5c11", "target": "PropertyKeyConst.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5f97\u5c11", "target": "NacosConfigService.java", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "chuntaojun", "target": "NacosFactory.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chuntaojun", "target": "DumpServiceTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "chuntaojun", "target": "TaskDispatcherTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Andy", "target": "CatalogController.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Andy", "target": "ClusterController.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Andy", "target": "Cluster.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Andy", "target": "Service.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Andy", "target": "ServiceManager.java", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "Andy", "target": "UtilsAndCommons.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Andy", "target": "BaseTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Andy", "target": "InstanceControllerTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Andy", "target": "ClusterTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Andy", "target": "DomainTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Andy", "target": "UtilsAndCommonsTest.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xxc", "target": "JSONUtils.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xxc", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "xxc", "target": "ConfigSubService.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xxc", "target": "UtilsAndCommonsTest.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xxc", "target": "DiskUtil.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xxc", "target": "TaskDispatcher.java", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "xxc", "target": "ServerHttpAgent.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "chuntaojun", "target": "Log4J2NacosLogging.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "chuntaojun", "target": "Instance.java", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "chuntaojun", "target": "ServiceManager.java", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "Fury Zhu", "target": "DistroConsistencyServiceImpl.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "application.properties", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "RaftCore.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Fury Zhu", "target": "nacos-default.properties", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "DistroFilter.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "Fury Zhu", "target": "Instances.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Fury Zhu", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yanlinly", "target": "JSONUtils.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "yanlinly", "target": "TenantCapacityPersistService.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yanlinly", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.07692307692307693}, {"source": "yanlinly", "target": "ConfigSubService.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "yanlinly", "target": "ClientWorker.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yanlinly", "target": "RunningConfig.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yanlinly", "target": "DistroFilter.java", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "yanlinly", "target": "ServerListManager.java", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "yanlinly", "target": "ServerHttpAgent.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "yanlinly", "target": "GroupCapacityPersistService.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yanlinly", "target": "HostReactor.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yanlinly", "target": "PersistService.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "Log4J2NacosLogging.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Fury Zhu", "target": "ClientBeatCheckTask.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "ServerStatusSynchronizer.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fury Zhu", "target": "DataSyncer.java", "color": "#999999", "width": 0.5, "weight": 0.5}], "nodes": [{"id": "xiaochun.xxc", "text": "xiaochun.xxc", "color": "#E00B6B", "size": 6.0}, {"id": "CPInstancesAPI_ITCase.java", "text": "CPInstancesAPI_ITCase.java", "color": "#2E5EAA", "size": 6.0}, {"id": "hxy1991", "text": "hxy1991", "color": "#E00B6B", "size": 6.0}, {"id": "DiskUtil.java", "text": "DiskUtil.java", "color": "#2E5EAA", "size": 6.5}, {"id": "PropertyUtil.java", "text": "PropertyUtil.java", "color": "#2E5EAA", "size": 5.5}, {"id": "nkorange", "text": "nkorange", "color": "#E00B6B", "size": 20.5}, {"id": "InstanceController.java", "text": "InstanceController.java", "color": "#2E5EAA", "size": 6.5}, {"id": "ApiController.java", "text": "ApiController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DistroFilter.java", "text": "DistroFilter.java", "color": "#2E5EAA", "size": 7.5}, {"id": "TaskDispatcher.java", "text": "TaskDispatcher.java", "color": "#2E5EAA", "size": 7.0}, {"id": "Keep", "text": "Keep", "color": "#E00B6B", "size": 5.5}, {"id": "SwitchEntry.java", "text": "SwitchEntry.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SwitchManager.java", "text": "SwitchManager.java", "color": "#2E5EAA", "size": 5.5}, {"id": "index.html", "text": "index.html", "color": "#2E5EAA", "size": 6.0}, {"id": "Cluster.java", "text": "Cluster.java", "color": "#2E5EAA", "size": 6.0}, {"id": "Service.java", "text": "Service.java", "color": "#2E5EAA", "size": 6.0}, {"id": "water.lyl", "text": "water.lyl", "color": "#E00B6B", "size": 7.5}, {"id": "pom.xml", "text": "pom.xml", "color": "#2E5EAA", "size": 8.5}, {"id": "ServerHttpAgent.java", "text": "ServerHttpAgent.java", "color": "#2E5EAA", "size": 7.0}, {"id": "JSONUtils.java", "text": "JSONUtils.java", "color": "#2E5EAA", "size": 6.5}, {"id": "ConfigSubService.java", "text": "ConfigSubService.java", "color": "#2E5EAA", "size": 6.5}, {"id": "Fury Zhu", "text": "Fury Zhu", "color": "#E00B6B", "size": 22.0}, {"id": "startup.sh", "text": "startup.sh", "color": "#2E5EAA", "size": 6.0}, {"id": "ClusterController.java", "text": "ClusterController.java", "color": "#2E5EAA", "size": 6.5}, {"id": "xxc", "text": "xxc", "color": "#E00B6B", "size": 9.0}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 6.0}, {"id": "SLKun", "text": "SLKun", "color": "#E00B6B", "size": 6.0}, {"id": "Log4J2NacosLogging.java", "text": "Log4J2NacosLogging.java", "color": "#2E5EAA", "size": 7.0}, {"id": "nacos-log4j2.xml", "text": "nacos-log4j2.xml", "color": "#2E5EAA", "size": 5.5}, {"id": "dungu.zpf", "text": "dungu.zpf", "color": "#E00B6B", "size": 11.5}, {"id": "nacos-default.properties", "text": "nacos-default.properties", "color": "#2E5EAA", "size": 6.0}, {"id": "application.properties", "text": "application.properties", "color": "#2E5EAA", "size": 6.0}, {"id": "\u5f97\u5c11", "text": "\u5f97\u5c11", "color": "#E00B6B", "size": 9.0}, {"id": "NacosNamingService.java", "text": "NacosNamingService.java", "color": "#2E5EAA", "size": 6.0}, {"id": "StringUtils.java", "text": "StringUtils.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ServerListManager.java", "text": "ServerListManager.java", "color": "#2E5EAA", "size": 8.0}, {"id": "ParamUtil.java", "text": "ParamUtil.java", "color": "#2E5EAA", "size": 6.0}, {"id": "sofior", "text": "sofior", "color": "#E00B6B", "size": 5.5}, {"id": "NamespaceController.java", "text": "NamespaceController.java", "color": "#2E5EAA", "size": 6.0}, {"id": "ServiceManager.java", "text": "ServiceManager.java", "color": "#2E5EAA", "size": 8.0}, {"id": "RaftStore.java", "text": "RaftStore.java", "color": "#2E5EAA", "size": 6.0}, {"id": "DeregisterInstance_ITCase.java", "text": "DeregisterInstance_ITCase.java", "color": "#2E5EAA", "size": 6.0}, {"id": "MultiTenant_InstanceAPI_ITCase.java", "text": "MultiTenant_InstanceAPI_ITCase.java", "color": "#2E5EAA", "size": 6.0}, {"id": "NacosConfigService.java", "text": "NacosConfigService.java", "color": "#2E5EAA", "size": 7.5}, {"id": "DistroConsistencyServiceImpl.java", "text": "DistroConsistencyServiceImpl.java", "color": "#2E5EAA", "size": 6.5}, {"id": "RaftConsistencyServiceImpl.java", "text": "RaftConsistencyServiceImpl.java", "color": "#2E5EAA", "size": 6.0}, {"id": "RaftCore.java", "text": "RaftCore.java", "color": "#2E5EAA", "size": 6.5}, {"id": "OperatorController.java", "text": "OperatorController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RaftController.java", "text": "RaftController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ServiceController.java", "text": "ServiceController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Instance.java", "text": "Instance.java", "color": "#2E5EAA", "size": 7.5}, {"id": "HttpClient.java", "text": "HttpClient.java", "color": "#2E5EAA", "size": 6.0}, {"id": "peachyy", "text": "peachyy", "color": "#E00B6B", "size": 6.0}, {"id": "LabelSelector.java", "text": "LabelSelector.java", "color": "#2E5EAA", "size": 6.5}, {"id": "LabelSelectorTest.java", "text": "LabelSelectorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "pbting", "text": "pbting", "color": "#E00B6B", "size": 5.5}, {"id": "yanlinly", "text": "yanlinly", "color": "#E00B6B", "size": 11.5}, {"id": "Eric Hettiaratchi", "text": "Eric Hettiaratchi", "color": "#E00B6B", "size": 5.5}, {"id": "StringUtilsTest.java", "text": "StringUtilsTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Cmdb_ITCase.java", "text": "Cmdb_ITCase.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Albert-Hugo", "text": "Albert-Hugo", "color": "#E00B6B", "size": 6.0}, {"id": "huangyonghui", "text": "huangyonghui", "color": "#E00B6B", "size": 6.5}, {"id": "paulzhangcc", "text": "paulzhangcc", "color": "#E00B6B", "size": 5.5}, {"id": "UtilsAndCommonsTest.java", "text": "UtilsAndCommonsTest.java", "color": "#2E5EAA", "size": 6.5}, {"id": "STSConfig.java", "text": "STSConfig.java", "color": "#2E5EAA", "size": 5.5}, {"id": "XCXCXCXCX", "text": "XCXCXCXCX", "color": "#E00B6B", "size": 8.5}, {"id": "HealthCheckExtendProvider.java", "text": "HealthCheckExtendProvider.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NamingEvent.java", "text": "NamingEvent.java", "color": "#2E5EAA", "size": 5.5}, {"id": "EventDispatcher.java", "text": "EventDispatcher.java", "color": "#2E5EAA", "size": 6.0}, {"id": "AbstractHealthChecker.java", "text": "AbstractHealthChecker.java", "color": "#2E5EAA", "size": 5.5}, {"id": "nacos-health-plugin-example-1.0.jar", "text": "nacos-health-plugin-example-1.0.jar", "color": "#2E5EAA", "size": 5.5}, {"id": "HealthCheckProcessorDelegate.java", "text": "HealthCheckProcessorDelegate.java", "color": "#2E5EAA", "size": 5.5}, {"id": "HealthCheckType.java", "text": "HealthCheckType.java", "color": "#2E5EAA", "size": 5.5}, {"id": "JsonAdapter.java", "text": "JsonAdapter.java", "color": "#2E5EAA", "size": 5.5}, {"id": "rushsky518", "text": "rushsky518", "color": "#E00B6B", "size": 5.5}, {"id": "DumpService.java", "text": "DumpService.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Andy", "text": "Andy", "color": "#E00B6B", "size": 12.5}, {"id": "CatalogControllerTest.java", "text": "CatalogControllerTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ClusterControllerTest.java", "text": "ClusterControllerTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ServiceManagerTest.java", "text": "ServiceManagerTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ServiceTest.java", "text": "ServiceTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "chuntaojun", "text": "chuntaojun", "color": "#E00B6B", "size": 11.0}, {"id": "NoneSelector.java", "text": "NoneSelector.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DataSyncer.java", "text": "DataSyncer.java", "color": "#2E5EAA", "size": 6.0}, {"id": "ClientBeatCheckTask.java", "text": "ClientBeatCheckTask.java", "color": "#2E5EAA", "size": 6.0}, {"id": "ServerStatusSynchronizer.java", "text": "ServerStatusSynchronizer.java", "color": "#2E5EAA", "size": 6.0}, {"id": "Constants.java", "text": "Constants.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NamingService.java", "text": "NamingService.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NamingProxy.java", "text": "NamingProxy.java", "color": "#2E5EAA", "size": 6.0}, {"id": "UtilAndComs.java", "text": "UtilAndComs.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NewConfig.js", "text": "NewConfig.js", "color": "#2E5EAA", "size": 6.0}, {"id": "yarn.lock", "text": "yarn.lock", "color": "#2E5EAA", "size": 6.0}, {"id": "main.css", "text": "main.css", "color": "#2E5EAA", "size": 6.5}, {"id": "main.js", "text": "main.js", "color": "#2E5EAA", "size": 6.5}, {"id": "LoadChange", "text": "LoadChange", "color": "#E00B6B", "size": 7.0}, {"id": "zhichen", "text": "zhichen", "color": "#E00B6B", "size": 7.5}, {"id": "webpack.base.conf.js", "text": "webpack.base.conf.js", "color": "#2E5EAA", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 5.5}, {"id": "validateContent.js", "text": "validateContent.js", "color": "#2E5EAA", "size": 5.5}, {"id": "xuechaos", "text": "xuechaos", "color": "#E00B6B", "size": 9.5}, {"id": "ClientWorker.java", "text": "ClientWorker.java", "color": "#2E5EAA", "size": 6.0}, {"id": "HostReactor.java", "text": "HostReactor.java", "color": "#2E5EAA", "size": 6.0}, {"id": "PersistService.java", "text": "PersistService.java", "color": "#2E5EAA", "size": 6.0}, {"id": "GroupCapacityPersistService.java", "text": "GroupCapacityPersistService.java", "color": "#2E5EAA", "size": 6.0}, {"id": "TenantCapacityPersistService.java", "text": "TenantCapacityPersistService.java", "color": "#2E5EAA", "size": 6.0}, {"id": "RunningConfig.java", "text": "RunningConfig.java", "color": "#2E5EAA", "size": 6.0}, {"id": "Instances.java", "text": "Instances.java", "color": "#2E5EAA", "size": 6.0}, {"id": "HealthCheckTask.java", "text": "HealthCheckTask.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CHANGELOG.md", "text": "CHANGELOG.md", "color": "#2E5EAA", "size": 5.5}, {"id": "PropertyKeyConst.java", "text": "PropertyKeyConst.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NacosFactory.java", "text": "NacosFactory.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DumpServiceTest.java", "text": "DumpServiceTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "TaskDispatcherTest.java", "text": "TaskDispatcherTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CatalogController.java", "text": "CatalogController.java", "color": "#2E5EAA", "size": 5.5}, {"id": "UtilsAndCommons.java", "text": "UtilsAndCommons.java", "color": "#2E5EAA", "size": 5.5}, {"id": "BaseTest.java", "text": "BaseTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "InstanceControllerTest.java", "text": "InstanceControllerTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ClusterTest.java", "text": "ClusterTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DomainTest.java", "text": "DomainTest.java", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_xUEkrdId")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_xUEkrdId")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_xUEkrdId")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#xUEkrdId_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('xUEkrdId');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('xUEkrdId');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

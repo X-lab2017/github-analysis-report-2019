@@ -136,7 +136,7 @@ From the collaboration diagram of the `tidb` project, there are multiple core ma
 
 ![vue_04](./static/vue_04.png)
 
-From this we can see that for different types of projects, their community collaboration network also showed a completely different form. Please click [here]() for more monthly collaboration diagrams of top projects in 2019.
+From this we can see that for different types of projects, their community collaboration network also showed a completely different form. Please click [here](./network) for more monthly collaboration diagrams of top projects in 2019.
 
 **References**
 
@@ -260,4 +260,4 @@ Due to the large size of the original data, for convenience, the original data w
 
 ### Analysis program
 
-The analysis program is open source along with the report at [https://github.com/X-lab2017/github-analysis-report-2019](https://github.com/X-lab2017/github-analysis-report-2019 ). Please refer to the project description for specific usage.
+The analysis program is open source along with the report at [https://github.com/X-lab2017/github-analysis-report-2019](https://github.com/X-lab2017/github-analysis-report-2019). Please refer to the project description for specific usage.

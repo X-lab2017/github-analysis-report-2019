@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_FeBpjwUr {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_FeBpjwUr line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_FeBpjwUr circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="FeBpjwUr">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='FeBpjwUr_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"FeBpjwUr"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Long Xiong", "target": "n_10-signs-you-will-suck-at-programming.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5f90\u73a5", "target": "things-nobody-ever-taught-me-about-css.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "great-design-vs-good-design-whats-the-difference-here-s-the-truth.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "gentle-introduction-multithreading.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5f90\u73a5", "target": "scheduling-in-react.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "planning-for-responsive-images.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Haitao Liu", "target": "lazy-var-in-ios-swift.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Swants", "target": "swift-api-pollution.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "advanced-tooling-for-web-components.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "encapsulating-style-and-structure-with-shadow-dom.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lsvih", "target": "why-were-bullish-on-crypto-collectibles-nfts.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lsvih", "target": "an-illustrated-and-musical-guide-to-map-reduce-and-filter-array-methods.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Mirosalva", "target": "crafting-reusable-html-templates.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "will-node-js-forever-be-the-sluggish-golang.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lsvih", "target": "which-deep-learning-framework-is-growing-fastest.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lsvih", "target": "millions-of-active-websockets-with-node-js.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Simon Ming", "target": "java-and-etcd-together-at-last-with-jetcd.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zhujingdi", "target": "distributed-transactions-in-spring-with-and-without-xa-part-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "radial_g", "target": "distributed-transactions-in-spring-with-and-without-xa-part-3.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "QiaoN", "target": "creating-good-roadmaps-6-practical-steps-product-leaders.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9a6c\u7334\u70e7\u9152", "target": "hyphenation-in-css.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jack Tang", "target": "running-jupyter-notebooks-on-remote-servers.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "getting-creative-with-the-console-api.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "wenny", "target": "The-Android-Lifecycle-cheat-sheet-part-IV.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u718a\u8d24\u4ec1", "target": "an-illustrated-and-musical-guide-to-map-reduce-and-filter-array-methods.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "cc Jia", "target": "which-deep-learning-framework-is-growing-fastest.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "patterns-generic-repository-with-typescript-and-node-js.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "LeviDing", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "launching-the-front-end-tooling-survey-2019.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "dependency-injection-in-a-multi-module-project.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "\u5f90\u73a5", "target": "advanced-tooling-for-web-components.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "normalization-vs-standardization-quantitative-analysis.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "Jack Tang", "target": "patterns-generic-repository-with-typescript-and-node-js.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "xilihuasi", "target": "redux-tutorial.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "building-accessible-websites-and-apps-is-a-moral-obligation.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Mirosalva", "target": "data-binding-lessons-learnt.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "a-guide-to-css-grid-and-accessibility.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "kotlin-standard-functions-cheat-sheet.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Weslie", "target": "swift-api-pollution.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Rickon", "target": "introducing-workmanager.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "mvvm-rxswift-on-ios-part-1.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "yzw7489757", "target": "creating-a-custom-element-from-scratch.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u8d75\u5c0f\u751f", "target": "deep-learning-competence.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "hyphenation-in-css.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jack Tang", "target": "your-first-cli-tool-with-rust.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "how-we-built-the-fastest-conference-website-in-the-world.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "\u8d75\u5c0f\u751f", "target": "how-to-configure-image-data-augmentation-when-training-deep-learning-neural-networks.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "lsvih", "target": "using-closest-to-return-the-correct-dom-element.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "backend.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sun", "target": "heuristic-principles-for-mobile-interfaces.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u5f90\u73a5", "target": "encapsulating-style-and-structure-with-shadow-dom.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "front-end.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Mirosalva", "target": "cross-stitching-plaid-and-androidx.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "portandbridge", "target": "why-were-bullish-on-crypto-collectibles-nfts.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "cyril", "target": "how-to-simplify-your-design.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Daltan He", "target": "running-jupyter-notebooks-on-remote-servers.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Weslie", "target": "practical-mvvm-rxswift.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "launching-the-front-end-tooling-survey-2019.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "DevMcryYu", "target": "how-to-build-a-circular-slider-in-flutter.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "workmanager-basics.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "Lucas biu", "target": "using-closest-to-return-the-correct-dom-element.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jack Tang", "target": "improving-app-performance-with-art-optimizing-profiles-in-the-cloud.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Weslie", "target": "mvvm-rxswift-on-ios-part-1.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "LeviDing", "target": "native-image-lazy-loading-for-the-web.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "slide-an-image-to-reveal-text-with-css-animations.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5939\u7f1d", "target": "will-node-js-forever-be-the-sluggish-golang.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "QiaoN", "target": "python-architecture-stuff-do-we-need-more.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "how-to-avoid-these-7-mistakes-i-made-as-a-junior-developer.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "sun", "target": "mistakes-weve-drawn-a-few.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Long Xiong", "target": "unit-testing-react-components.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "android.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "ios.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "AI.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "how-do-you-figure.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "others.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "blockchain.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "product.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "the-absolute-easiest-way-to-debug-node-js-with-vscode.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "retries-timeouts-backoff.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "what-i-wish-i-knew-when-i-started-to-work-with-react-js.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Hyde Song", "target": "heuristic-principles-for-mobile-interfaces.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Mirosalva", "target": "millions-of-active-websockets-with-node-js.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u5f90\u73a5", "target": "how-we-built-the-fastest-conference-website-in-the-world.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Swants", "target": "swift-code-formatters.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Qiu Hu", "target": "how-to-avoid-these-7-mistakes-i-made-as-a-junior-developer.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "google-santa-tracker-moving-to-an-android-app-bundle.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "elixir-phoenix-absinthe-graphql-react-apollo-absurdly-deep-dive-1.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "room-coroutines.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Madv-Feximin", "target": "kotlin-standard-functions-cheat-sheet.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "a-guide-to-css-grid-and-accessibility.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Tom Huang", "target": "native-image-lazy-loading-for-the-web.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Mirosalva", "target": "dependency-injection-in-a-multi-module-project.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "LeviDing", "target": "commit-messages-guide.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Mirosalva", "target": "great-design-vs-good-design-whats-the-difference-here-s-the-truth.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "understanding-webviews.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "minimize-for-loop-usage-in-python.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Tom Huang", "target": "improving-app-performance-with-art-optimizing-profiles-in-the-cloud.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u8d75\u5c0f\u751f", "target": "convolutional-layers-for-deep-learning-neural-networks.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "inclusively-hidden.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "android-studio-project-marble-apply-changes.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Long Xiong", "target": "what-i-wish-i-knew-when-i-started-to-work-with-react-js.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "sun", "target": "structuring-your-ios-app-for-split-testing.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "logistic-regression-on-mnist-with-pytorch.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "cc Jia", "target": "normalization-vs-standardization-quantitative-analysis.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "lsvih", "target": "publishing-machine-learning-api-with-python-flask.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Hyde Song", "target": "how-do-you-figure.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "lsvih", "target": "design-patterns-in-modern-javascript-development.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "gunicorn-3-means-of-concurrency.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "how-to-configure-image-data-augmentation-when-training-deep-learning-neural-networks.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "qiuyuezhong", "target": "minimize-for-loop-usage-in-python.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sun", "target": "an-overview-of-go-tooling.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "icy", "target": "patterns-generic-repository-with-typescript-and-node-js.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "cc Jia", "target": "how-to-configure-image-data-augmentation-when-training-deep-learning-neural-networks.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "sun", "target": "art-direction-for-the-web-using-css-shapes.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "build-a-drag-and-drop-dnd-layout-builder-with-react-and-immutablejs.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "elixir-phoenix-absinthe-graphql-react-apollo-absurdly-deep-dive-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "integrals.md", "color": "#999999", "width": 2.4459101490553135, "weight": 1.0}], "nodes": [{"id": "Long Xiong", "text": "Long Xiong", "color": "#E00B6B", "size": 6.5}, {"id": "n_10-signs-you-will-suck-at-programming.md", "text": "n_10-signs-you-will-suck-at-programming.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u5f90\u73a5", "text": "\u5f90\u73a5", "color": "#E00B6B", "size": 7.5}, {"id": "things-nobody-ever-taught-me-about-css.md", "text": "things-nobody-ever-taught-me-about-css.md", "color": "#2E5EAA", "size": 5.5}, {"id": "sun", "text": "sun", "color": "#E00B6B", "size": 9.5}, {"id": "great-design-vs-good-design-whats-the-difference-here-s-the-truth.md", "text": "great-design-vs-good-design-whats-the-difference-here-s-the-truth.md", "color": "#2E5EAA", "size": 6.0}, {"id": "LeviDing", "text": "LeviDing", "color": "#E00B6B", "size": 23.0}, {"id": "gentle-introduction-multithreading.md", "text": "gentle-introduction-multithreading.md", "color": "#2E5EAA", "size": 5.5}, {"id": "scheduling-in-react.md", "text": "scheduling-in-react.md", "color": "#2E5EAA", "size": 5.5}, {"id": "planning-for-responsive-images.md", "text": "planning-for-responsive-images.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Haitao Liu", "text": "Haitao Liu", "color": "#E00B6B", "size": 5.5}, {"id": "lazy-var-in-ios-swift.md", "text": "lazy-var-in-ios-swift.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Swants", "text": "Swants", "color": "#E00B6B", "size": 6.0}, {"id": "swift-api-pollution.md", "text": "swift-api-pollution.md", "color": "#2E5EAA", "size": 6.0}, {"id": "advanced-tooling-for-web-components.md", "text": "advanced-tooling-for-web-components.md", "color": "#2E5EAA", "size": 6.0}, {"id": "encapsulating-style-and-structure-with-shadow-dom.md", "text": "encapsulating-style-and-structure-with-shadow-dom.md", "color": "#2E5EAA", "size": 6.0}, {"id": "lsvih", "text": "lsvih", "color": "#E00B6B", "size": 12.5}, {"id": "why-were-bullish-on-crypto-collectibles-nfts.md", "text": "why-were-bullish-on-crypto-collectibles-nfts.md", "color": "#2E5EAA", "size": 6.0}, {"id": "an-illustrated-and-musical-guide-to-map-reduce-and-filter-array-methods.md", "text": "an-illustrated-and-musical-guide-to-map-reduce-and-filter-array-methods.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Mirosalva", "text": "Mirosalva", "color": "#E00B6B", "size": 8.0}, {"id": "crafting-reusable-html-templates.md", "text": "crafting-reusable-html-templates.md", "color": "#2E5EAA", "size": 5.5}, {"id": "will-node-js-forever-be-the-sluggish-golang.md", "text": "will-node-js-forever-be-the-sluggish-golang.md", "color": "#2E5EAA", "size": 6.0}, {"id": "which-deep-learning-framework-is-growing-fastest.md", "text": "which-deep-learning-framework-is-growing-fastest.md", "color": "#2E5EAA", "size": 6.0}, {"id": "millions-of-active-websockets-with-node-js.md", "text": "millions-of-active-websockets-with-node-js.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Simon Ming", "text": "Simon Ming", "color": "#E00B6B", "size": 5.5}, {"id": "java-and-etcd-together-at-last-with-jetcd.md", "text": "java-and-etcd-together-at-last-with-jetcd.md", "color": "#2E5EAA", "size": 5.5}, {"id": "zhujingdi", "text": "zhujingdi", "color": "#E00B6B", "size": 5.5}, {"id": "distributed-transactions-in-spring-with-and-without-xa-part-2.md", "text": "distributed-transactions-in-spring-with-and-without-xa-part-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "radial_g", "text": "radial_g", "color": "#E00B6B", "size": 5.5}, {"id": "distributed-transactions-in-spring-with-and-without-xa-part-3.md", "text": "distributed-transactions-in-spring-with-and-without-xa-part-3.md", "color": "#2E5EAA", "size": 5.5}, {"id": "QiaoN", "text": "QiaoN", "color": "#E00B6B", "size": 6.0}, {"id": "creating-good-roadmaps-6-practical-steps-product-leaders.md", "text": "creating-good-roadmaps-6-practical-steps-product-leaders.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u9a6c\u7334\u70e7\u9152", "text": "\u9a6c\u7334\u70e7\u9152", "color": "#E00B6B", "size": 5.5}, {"id": "hyphenation-in-css.md", "text": "hyphenation-in-css.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Jack Tang", "text": "Jack Tang", "color": "#E00B6B", "size": 7.0}, {"id": "running-jupyter-notebooks-on-remote-servers.md", "text": "running-jupyter-notebooks-on-remote-servers.md", "color": "#2E5EAA", "size": 6.0}, {"id": "getting-creative-with-the-console-api.md", "text": "getting-creative-with-the-console-api.md", "color": "#2E5EAA", "size": 5.5}, {"id": "wenny", "text": "wenny", "color": "#E00B6B", "size": 5.5}, {"id": "The-Android-Lifecycle-cheat-sheet-part-IV.md", "text": "The-Android-Lifecycle-cheat-sheet-part-IV.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u718a\u8d24\u4ec1", "text": "\u718a\u8d24\u4ec1", "color": "#E00B6B", "size": 5.5}, {"id": "cc Jia", "text": "cc Jia", "color": "#E00B6B", "size": 6.5}, {"id": "patterns-generic-repository-with-typescript-and-node-js.md", "text": "patterns-generic-repository-with-typescript-and-node-js.md", "color": "#2E5EAA", "size": 6.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 5.5}, {"id": "launching-the-front-end-tooling-survey-2019.md", "text": "launching-the-front-end-tooling-survey-2019.md", "color": "#2E5EAA", "size": 6.0}, {"id": "dependency-injection-in-a-multi-module-project.md", "text": "dependency-injection-in-a-multi-module-project.md", "color": "#2E5EAA", "size": 6.0}, {"id": "normalization-vs-standardization-quantitative-analysis.md", "text": "normalization-vs-standardization-quantitative-analysis.md", "color": "#2E5EAA", "size": 6.0}, {"id": "xilihuasi", "text": "xilihuasi", "color": "#E00B6B", "size": 5.5}, {"id": "redux-tutorial.md", "text": "redux-tutorial.md", "color": "#2E5EAA", "size": 5.5}, {"id": "building-accessible-websites-and-apps-is-a-moral-obligation.md", "text": "building-accessible-websites-and-apps-is-a-moral-obligation.md", "color": "#2E5EAA", "size": 5.5}, {"id": "data-binding-lessons-learnt.md", "text": "data-binding-lessons-learnt.md", "color": "#2E5EAA", "size": 5.5}, {"id": "a-guide-to-css-grid-and-accessibility.md", "text": "a-guide-to-css-grid-and-accessibility.md", "color": "#2E5EAA", "size": 6.0}, {"id": "kotlin-standard-functions-cheat-sheet.md", "text": "kotlin-standard-functions-cheat-sheet.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Weslie", "text": "Weslie", "color": "#E00B6B", "size": 6.5}, {"id": "Rickon", "text": "Rickon", "color": "#E00B6B", "size": 5.5}, {"id": "introducing-workmanager.md", "text": "introducing-workmanager.md", "color": "#2E5EAA", "size": 5.5}, {"id": "mvvm-rxswift-on-ios-part-1.md", "text": "mvvm-rxswift-on-ios-part-1.md", "color": "#2E5EAA", "size": 6.0}, {"id": "yzw7489757", "text": "yzw7489757", "color": "#E00B6B", "size": 5.5}, {"id": "creating-a-custom-element-from-scratch.md", "text": "creating-a-custom-element-from-scratch.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u8d75\u5c0f\u751f", "text": "\u8d75\u5c0f\u751f", "color": "#E00B6B", "size": 6.5}, {"id": "deep-learning-competence.md", "text": "deep-learning-competence.md", "color": "#2E5EAA", "size": 5.5}, {"id": "your-first-cli-tool-with-rust.md", "text": "your-first-cli-tool-with-rust.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how-we-built-the-fastest-conference-website-in-the-world.md", "text": "how-we-built-the-fastest-conference-website-in-the-world.md", "color": "#2E5EAA", "size": 6.0}, {"id": "how-to-configure-image-data-augmentation-when-training-deep-learning-neural-networks.md", "text": "how-to-configure-image-data-augmentation-when-training-deep-learning-neural-networks.md", "color": "#2E5EAA", "size": 6.5}, {"id": "using-closest-to-return-the-correct-dom-element.md", "text": "using-closest-to-return-the-correct-dom-element.md", "color": "#2E5EAA", "size": 6.0}, {"id": "backend.md", "text": "backend.md", "color": "#2E5EAA", "size": 5.5}, {"id": "heuristic-principles-for-mobile-interfaces.md", "text": "heuristic-principles-for-mobile-interfaces.md", "color": "#2E5EAA", "size": 6.0}, {"id": "front-end.md", "text": "front-end.md", "color": "#2E5EAA", "size": 5.5}, {"id": "cross-stitching-plaid-and-androidx.md", "text": "cross-stitching-plaid-and-androidx.md", "color": "#2E5EAA", "size": 5.5}, {"id": "portandbridge", "text": "portandbridge", "color": "#E00B6B", "size": 5.5}, {"id": "cyril", "text": "cyril", "color": "#E00B6B", "size": 5.5}, {"id": "how-to-simplify-your-design.md", "text": "how-to-simplify-your-design.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Daltan He", "text": "Daltan He", "color": "#E00B6B", "size": 5.5}, {"id": "practical-mvvm-rxswift.md", "text": "practical-mvvm-rxswift.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Yuqi", "text": "Yuqi", "color": "#E00B6B", "size": 6.0}, {"id": "DevMcryYu", "text": "DevMcryYu", "color": "#E00B6B", "size": 5.5}, {"id": "how-to-build-a-circular-slider-in-flutter.md", "text": "how-to-build-a-circular-slider-in-flutter.md", "color": "#2E5EAA", "size": 5.5}, {"id": "workmanager-basics.md", "text": "workmanager-basics.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Lucas biu", "text": "Lucas biu", "color": "#E00B6B", "size": 5.5}, {"id": "improving-app-performance-with-art-optimizing-profiles-in-the-cloud.md", "text": "improving-app-performance-with-art-optimizing-profiles-in-the-cloud.md", "color": "#2E5EAA", "size": 6.0}, {"id": "native-image-lazy-loading-for-the-web.md", "text": "native-image-lazy-loading-for-the-web.md", "color": "#2E5EAA", "size": 6.0}, {"id": "slide-an-image-to-reveal-text-with-css-animations.md", "text": "slide-an-image-to-reveal-text-with-css-animations.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u5939\u7f1d", "text": "\u5939\u7f1d", "color": "#E00B6B", "size": 5.5}, {"id": "python-architecture-stuff-do-we-need-more.md", "text": "python-architecture-stuff-do-we-need-more.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how-to-avoid-these-7-mistakes-i-made-as-a-junior-developer.md", "text": "how-to-avoid-these-7-mistakes-i-made-as-a-junior-developer.md", "color": "#2E5EAA", "size": 6.0}, {"id": "mistakes-weve-drawn-a-few.md", "text": "mistakes-weve-drawn-a-few.md", "color": "#2E5EAA", "size": 5.5}, {"id": "unit-testing-react-components.md", "text": "unit-testing-react-components.md", "color": "#2E5EAA", "size": 5.5}, {"id": "android.md", "text": "android.md", "color": "#2E5EAA", "size": 5.5}, {"id": "ios.md", "text": "ios.md", "color": "#2E5EAA", "size": 5.5}, {"id": "AI.md", "text": "AI.md", "color": "#2E5EAA", "size": 5.5}, {"id": "how-do-you-figure.md", "text": "how-do-you-figure.md", "color": "#2E5EAA", "size": 6.0}, {"id": "others.md", "text": "others.md", "color": "#2E5EAA", "size": 5.5}, {"id": "blockchain.md", "text": "blockchain.md", "color": "#2E5EAA", "size": 5.5}, {"id": "product.md", "text": "product.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-absolute-easiest-way-to-debug-node-js-with-vscode.md", "text": "the-absolute-easiest-way-to-debug-node-js-with-vscode.md", "color": "#2E5EAA", "size": 5.5}, {"id": "retries-timeouts-backoff.md", "text": "retries-timeouts-backoff.md", "color": "#2E5EAA", "size": 5.5}, {"id": "what-i-wish-i-knew-when-i-started-to-work-with-react-js.md", "text": "what-i-wish-i-knew-when-i-started-to-work-with-react-js.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Hyde Song", "text": "Hyde Song", "color": "#E00B6B", "size": 6.0}, {"id": "swift-code-formatters.md", "text": "swift-code-formatters.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Qiu Hu", "text": "Qiu Hu", "color": "#E00B6B", "size": 5.5}, {"id": "google-santa-tracker-moving-to-an-android-app-bundle.md", "text": "google-santa-tracker-moving-to-an-android-app-bundle.md", "color": "#2E5EAA", "size": 5.5}, {"id": "elixir-phoenix-absinthe-graphql-react-apollo-absurdly-deep-dive-1.md", "text": "elixir-phoenix-absinthe-graphql-react-apollo-absurdly-deep-dive-1.md", "color": "#2E5EAA", "size": 5.5}, {"id": "room-coroutines.md", "text": "room-coroutines.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Madv-Feximin", "text": "Madv-Feximin", "color": "#E00B6B", "size": 5.5}, {"id": "Tom Huang", "text": "Tom Huang", "color": "#E00B6B", "size": 6.0}, {"id": "commit-messages-guide.md", "text": "commit-messages-guide.md", "color": "#2E5EAA", "size": 5.5}, {"id": "understanding-webviews.md", "text": "understanding-webviews.md", "color": "#2E5EAA", "size": 5.5}, {"id": "minimize-for-loop-usage-in-python.md", "text": "minimize-for-loop-usage-in-python.md", "color": "#2E5EAA", "size": 6.0}, {"id": "convolutional-layers-for-deep-learning-neural-networks.md", "text": "convolutional-layers-for-deep-learning-neural-networks.md", "color": "#2E5EAA", "size": 5.5}, {"id": "inclusively-hidden.md", "text": "inclusively-hidden.md", "color": "#2E5EAA", "size": 5.5}, {"id": "android-studio-project-marble-apply-changes.md", "text": "android-studio-project-marble-apply-changes.md", "color": "#2E5EAA", "size": 5.5}, {"id": "structuring-your-ios-app-for-split-testing.md", "text": "structuring-your-ios-app-for-split-testing.md", "color": "#2E5EAA", "size": 5.5}, {"id": "logistic-regression-on-mnist-with-pytorch.md", "text": "logistic-regression-on-mnist-with-pytorch.md", "color": "#2E5EAA", "size": 5.5}, {"id": "publishing-machine-learning-api-with-python-flask.md", "text": "publishing-machine-learning-api-with-python-flask.md", "color": "#2E5EAA", "size": 5.5}, {"id": "design-patterns-in-modern-javascript-development.md", "text": "design-patterns-in-modern-javascript-development.md", "color": "#2E5EAA", "size": 5.5}, {"id": "gunicorn-3-means-of-concurrency.md", "text": "gunicorn-3-means-of-concurrency.md", "color": "#2E5EAA", "size": 5.5}, {"id": "qiuyuezhong", "text": "qiuyuezhong", "color": "#E00B6B", "size": 5.5}, {"id": "an-overview-of-go-tooling.md", "text": "an-overview-of-go-tooling.md", "color": "#2E5EAA", "size": 5.5}, {"id": "icy", "text": "icy", "color": "#E00B6B", "size": 5.5}, {"id": "art-direction-for-the-web-using-css-shapes.md", "text": "art-direction-for-the-web-using-css-shapes.md", "color": "#2E5EAA", "size": 5.5}, {"id": "build-a-drag-and-drop-dnd-layout-builder-with-react-and-immutablejs.md", "text": "build-a-drag-and-drop-dnd-layout-builder-with-react-and-immutablejs.md", "color": "#2E5EAA", "size": 5.5}, {"id": "elixir-phoenix-absinthe-graphql-react-apollo-absurdly-deep-dive-2.md", "text": "elixir-phoenix-absinthe-graphql-react-apollo-absurdly-deep-dive-2.md", "color": "#2E5EAA", "size": 5.5}, {"id": "integrals.md", "text": "integrals.md", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_FeBpjwUr")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_FeBpjwUr")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_FeBpjwUr")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#FeBpjwUr_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('FeBpjwUr');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('FeBpjwUr');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

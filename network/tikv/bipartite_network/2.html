@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_rTIzxltl {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_rTIzxltl line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_rTIzxltl circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="rTIzxltl">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='rTIzxltl_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"rTIzxltl"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Connor", "target": "pd.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ana Hobden", "target": "CODE_OF_CONDUCT.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zhangjinpeng1987", "target": "kv.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Wenxuan Shi", "target": "pull_request_template.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qupeng", "target": "local_metrics.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Calvin Weng", "target": "CODE_COMMENT_STYLE.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "test_stale_read.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jay", "target": "lib.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "Jay", "target": "server.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "Brian Anderson", "target": "Cargo.lock", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "Brian Anderson", "target": "Cargo.toml", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Brian Anderson", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Ana Hobden", "target": "Cargo.toml", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zhangjinpeng1987", "target": "metrics.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zhangjinpeng1987", "target": "region_snapshot.rs", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "zhangjinpeng1987", "target": "store.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Wenxuan Shi", "target": "mod.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2}, {"source": "Brian Anderson", "target": "lib.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Ana Hobden", "target": "Makefile", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zhangjinpeng1987", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "zhangjinpeng1987", "target": "mod.rs", "color": "#999999", "width": 1.5986122886681098, "weight": 0.3}, {"source": "zhangjinpeng1987", "target": "test-custom.toml", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "MyonKeminta", "target": "debug.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "MyonKeminta", "target": "kv.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zhangjinpeng1987", "target": "peer.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Fu Chen", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "dorianzheng", "target": "Cargo.lock", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "Cargo.lock", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "Neil Shen", "target": "service.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "server.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Neil Shen", "target": "test_rpc_client.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "MyonKeminta", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "MyonKeminta", "target": "node.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "MyonKeminta", "target": "raft_client.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "MyonKeminta", "target": "server.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "MyonKeminta", "target": "snap.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "MyonKeminta", "target": "transport.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jay", "target": "peer.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Jay", "target": "Cargo.lock", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "Jay", "target": "Cargo.toml", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jay", "target": "raft_client.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Jay", "target": "kv.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jay", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "zhangjinpeng1987", "target": "Cargo.lock", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "zhangjinpeng1987", "target": "txn.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "buffer.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "byte.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "error.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Wenxuan Shi", "target": "number.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "lib.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Wenxuan Shi", "target": "test_util.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Wenxuan Shi", "target": "dag.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "fixture.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "table.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Wenxuan Shi", "target": "endpoint.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Wenxuan Shi", "target": "tracker.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "store.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Wenxuan Shi", "target": "peer_storage.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Wenxuan Shi", "target": "compact.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Wenxuan Shi", "target": "region.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Wenxuan Shi", "target": "split_check.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "test_conf_change.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zhangjinpeng1987", "target": "cluster.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zhangjinpeng1987", "target": "util.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zhangjinpeng1987", "target": "security.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zhangjinpeng1987", "target": "table.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zhangjinpeng1987", "target": "bootstrap.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zhangjinpeng1987", "target": "apply.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zhangjinpeng1987", "target": "peer_storage.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zhangjinpeng1987", "target": "snap.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zhangjinpeng1987", "target": "compact.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zhangjinpeng1987", "target": "consistency_check.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zhangjinpeng1987", "target": "raftlog_gc.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zhangjinpeng1987", "target": "read.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zhangjinpeng1987", "target": "region.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zhangjinpeng1987", "target": "test_bootstrap.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "cluster.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Neil Shen", "target": "pd.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "errors.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "apply.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Neil Shen", "target": "peer.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Neil Shen", "target": "local_metrics.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "util.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Neil Shen", "target": "read.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Neil Shen", "target": "mod.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2}, {"source": "Neil Shen", "target": "test_multi.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "test_single.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "test_split_region.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "CrLF0710", "target": "Makefile", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "CrLF0710", "target": "lib.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "CrLF0710", "target": "test_util.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "CrLF0710", "target": "node.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "CrLF0710", "target": "transport_simulate.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "CrLF0710", "target": "util.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "CrLF0710", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "CrLF0710", "target": "endpoint.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "CrLF0710", "target": "error.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "CrLF0710", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "CrLF0710", "target": "dispatcher.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "CrLF0710", "target": "errors.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "CrLF0710", "target": "cmd_resp.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "CrLF0710", "target": "apply.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "CrLF0710", "target": "msg.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "CrLF0710", "target": "peer_storage.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "CrLF0710", "target": "snap.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "CrLF0710", "target": "compact.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "CrLF0710", "target": "raftlog_gc.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "CrLF0710", "target": "debug.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "CrLF0710", "target": "raft_client.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "CrLF0710", "target": "resolve.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "CrLF0710", "target": "server.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Neil Shen", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Neil Shen", "target": "sst_service.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "half.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "keys.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "size.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "table.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Neil Shen", "target": "bootstrap.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "store.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Neil Shen", "target": "msg.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "peer_storage.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Neil Shen", "target": "region_snapshot.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Neil Shen", "target": "snap.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Neil Shen", "target": "compact.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Neil Shen", "target": "consistency_check.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "raftlog_gc.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Neil Shen", "target": "region.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Neil Shen", "target": "debug.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Neil Shen", "target": "properties.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "test_bootstrap.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "test_compact_after_delete.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "test_tombstone.rs", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "Connor", "text": "Connor", "color": "#E00B6B", "size": 5.5}, {"id": "pd.rs", "text": "pd.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "Ana Hobden", "text": "Ana Hobden", "color": "#E00B6B", "size": 6.5}, {"id": "CODE_OF_CONDUCT.md", "text": "CODE_OF_CONDUCT.md", "color": "#2E5EAA", "size": 5.5}, {"id": "zhangjinpeng1987", "text": "zhangjinpeng1987", "color": "#E00B6B", "size": 17.0}, {"id": "kv.rs", "text": "kv.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "Wenxuan Shi", "text": "Wenxuan Shi", "color": "#E00B6B", "size": 14.5}, {"id": "pull_request_template.md", "text": "pull_request_template.md", "color": "#2E5EAA", "size": 5.5}, {"id": "qupeng", "text": "qupeng", "color": "#E00B6B", "size": 5.5}, {"id": "local_metrics.rs", "text": "local_metrics.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "Calvin Weng", "text": "Calvin Weng", "color": "#E00B6B", "size": 5.5}, {"id": "CODE_COMMENT_STYLE.md", "text": "CODE_COMMENT_STYLE.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Neil Shen", "text": "Neil Shen", "color": "#E00B6B", "size": 24.0}, {"id": "test_stale_read.rs", "text": "test_stale_read.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "Jay", "text": "Jay", "color": "#E00B6B", "size": 9.0}, {"id": "lib.rs", "text": "lib.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "server.rs", "text": "server.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "Brian Anderson", "text": "Brian Anderson", "color": "#E00B6B", "size": 7.0}, {"id": "Cargo.lock", "text": "Cargo.lock", "color": "#2E5EAA", "size": 7.5}, {"id": "Cargo.toml", "text": "Cargo.toml", "color": "#2E5EAA", "size": 6.5}, {"id": "config.rs", "text": "config.rs", "color": "#2E5EAA", "size": 7.5}, {"id": "metrics.rs", "text": "metrics.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "region_snapshot.rs", "text": "region_snapshot.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "store.rs", "text": "store.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "mod.rs", "text": "mod.rs", "color": "#2E5EAA", "size": 8.0}, {"id": "Makefile", "text": "Makefile", "color": "#2E5EAA", "size": 6.0}, {"id": "test-custom.toml", "text": "test-custom.toml", "color": "#2E5EAA", "size": 5.5}, {"id": "MyonKeminta", "text": "MyonKeminta", "color": "#E00B6B", "size": 9.0}, {"id": "debug.rs", "text": "debug.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "peer.rs", "text": "peer.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "Fu Chen", "text": "Fu Chen", "color": "#E00B6B", "size": 5.5}, {"id": "dorianzheng", "text": "dorianzheng", "color": "#E00B6B", "size": 5.5}, {"id": "service.rs", "text": "service.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_rpc_client.rs", "text": "test_rpc_client.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "node.rs", "text": "node.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "raft_client.rs", "text": "raft_client.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "snap.rs", "text": "snap.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "transport.rs", "text": "transport.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "txn.rs", "text": "txn.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "buffer.rs", "text": "buffer.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "byte.rs", "text": "byte.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "error.rs", "text": "error.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "number.rs", "text": "number.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_util.rs", "text": "test_util.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "dag.rs", "text": "dag.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "fixture.rs", "text": "fixture.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "table.rs", "text": "table.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "endpoint.rs", "text": "endpoint.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "tracker.rs", "text": "tracker.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "peer_storage.rs", "text": "peer_storage.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "compact.rs", "text": "compact.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "region.rs", "text": "region.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "split_check.rs", "text": "split_check.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_conf_change.rs", "text": "test_conf_change.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "cluster.rs", "text": "cluster.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "util.rs", "text": "util.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "security.rs", "text": "security.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "bootstrap.rs", "text": "bootstrap.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "apply.rs", "text": "apply.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "consistency_check.rs", "text": "consistency_check.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "raftlog_gc.rs", "text": "raftlog_gc.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "read.rs", "text": "read.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "test_bootstrap.rs", "text": "test_bootstrap.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "errors.rs", "text": "errors.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "test_multi.rs", "text": "test_multi.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_single.rs", "text": "test_single.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_split_region.rs", "text": "test_split_region.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "CrLF0710", "text": "CrLF0710", "color": "#E00B6B", "size": 16.5}, {"id": "transport_simulate.rs", "text": "transport_simulate.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "dispatcher.rs", "text": "dispatcher.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "cmd_resp.rs", "text": "cmd_resp.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "msg.rs", "text": "msg.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "resolve.rs", "text": "resolve.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "sst_service.rs", "text": "sst_service.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "half.rs", "text": "half.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "keys.rs", "text": "keys.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "size.rs", "text": "size.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "properties.rs", "text": "properties.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_compact_after_delete.rs", "text": "test_compact_after_delete.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_tombstone.rs", "text": "test_tombstone.rs", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_rTIzxltl")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_rTIzxltl")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_rTIzxltl")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#rTIzxltl_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('rTIzxltl');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('rTIzxltl');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

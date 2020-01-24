@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_BvVcZCuq {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_BvVcZCuq line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_BvVcZCuq circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="BvVcZCuq">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='BvVcZCuq_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"BvVcZCuq"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Renovate Bot", "target": "package.json", "color": "#999999", "width": 4.451243718581427, "weight": 0.6190476190476191}, {"source": "Carlos", "target": "apply-decorators.spec.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Paolo Mainardi", "target": "app.module.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "John Biundo", "target": "main.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kanen", "target": "server-rmq.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kanen", "target": "server.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Carlos", "target": "apply-decorators.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "da-mkay", "target": "io-adapter.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": ".commitlintrc.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kamil My\u015bliwiec", "target": "package.json", "color": "#999999", "width": 2.1094379124341005, "weight": 0.15625}, {"source": "Kamil Mysliwiec", "target": "Readme.md", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "Piriyapong Laopongsit", "target": "CONTRIBUTING.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u1106\u116e\u11ab\u110c\u1169\u11bc\u1112\u1167\u11ab", "target": "cats.service.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Piriyapong Laopongsit", "target": "module.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yui Ichioka", "target": "messages.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Livio", "target": ".commitlintrc.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Sebastian Walter", "target": "class-transform-options.interface.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "samples.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Kamil Mysliwiec", "target": "cache-ttl.decorator.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "external-exception-filter.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "cache.constants.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "apply-decorators.ts", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Kamil My\u015bliwiec", "target": "router-explorer.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Renovate Bot", "target": "package-lock.json", "color": "#999999", "width": 4.2841896339182615, "weight": 0.6470588235294118}, {"source": "Kamil My\u015bliwiec", "target": "validation.pipe.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "validation.pipe.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jay McDoniel", "target": "nest-application.interface.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Jay McDoniel", "target": "nest-application.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Kamil Mysliwiec", "target": "package.json", "color": "#999999", "width": 3.6354942159291497, "weight": 0.46938775510204084}, {"source": "Kamil My\u015bliwiec", "target": "router-execution-context.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "router-execution-context.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "dependabot[bot]", "target": "package-lock.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "dependabot[bot]", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Kamil My\u015bliwiec", "target": "tsconfig.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "package-lock.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.0625}, {"source": "Kamil My\u015bliwiec", "target": "server-rmq.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kamil My\u015bliwiec", "target": "server.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kamil My\u015bliwiec", "target": "microservice-configuration.interface.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "client-rmq.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil Mysliwiec", "target": "package-lock.json", "color": "#999999", "width": 3.495732273553991, "weight": 0.40816326530612246}, {"source": "Carlos", "target": "index.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kamil My\u015bliwiec", "target": "nest-cli.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Livio", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "Livio", "target": "app.controller.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Livio", "target": "config.service.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "handler-metadata-storage.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "constants.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "module.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Livio", "target": "config.yml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Livio", "target": "samples.ts", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Kamil My\u015bliwiec", "target": "rmq.context.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "listeners-controller.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "index.ts", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Kamil My\u015bliwiec", "target": "cache.interceptor.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil My\u015bliwiec", "target": "cache.decorator.spec.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kamil Mysliwiec", "target": "cats.service.ts", "color": "#999999", "width": 0.5, "weight": 0.5}], "nodes": [{"id": "Renovate Bot", "text": "Renovate Bot", "color": "#E00B6B", "size": 6.0}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 7.5}, {"id": "Carlos", "text": "Carlos", "color": "#E00B6B", "size": 6.5}, {"id": "apply-decorators.spec.ts", "text": "apply-decorators.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Paolo Mainardi", "text": "Paolo Mainardi", "color": "#E00B6B", "size": 5.5}, {"id": "app.module.ts", "text": "app.module.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "John Biundo", "text": "John Biundo", "color": "#E00B6B", "size": 5.5}, {"id": "main.ts", "text": "main.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "kanen", "text": "kanen", "color": "#E00B6B", "size": 6.0}, {"id": "server-rmq.ts", "text": "server-rmq.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "server.ts", "text": "server.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "apply-decorators.ts", "text": "apply-decorators.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "da-mkay", "text": "da-mkay", "color": "#E00B6B", "size": 5.5}, {"id": "io-adapter.ts", "text": "io-adapter.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Kamil My\u015bliwiec", "text": "Kamil My\u015bliwiec", "color": "#E00B6B", "size": 18.0}, {"id": ".commitlintrc.json", "text": ".commitlintrc.json", "color": "#2E5EAA", "size": 6.0}, {"id": "Kamil Mysliwiec", "text": "Kamil Mysliwiec", "color": "#E00B6B", "size": 7.5}, {"id": "Readme.md", "text": "Readme.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Piriyapong Laopongsit", "text": "Piriyapong Laopongsit", "color": "#E00B6B", "size": 6.0}, {"id": "CONTRIBUTING.md", "text": "CONTRIBUTING.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u1106\u116e\u11ab\u110c\u1169\u11bc\u1112\u1167\u11ab", "text": "\u1106\u116e\u11ab\u110c\u1169\u11bc\u1112\u1167\u11ab", "color": "#E00B6B", "size": 5.5}, {"id": "cats.service.ts", "text": "cats.service.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "module.spec.ts", "text": "module.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Yui Ichioka", "text": "Yui Ichioka", "color": "#E00B6B", "size": 5.5}, {"id": "messages.ts", "text": "messages.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Livio", "text": "Livio", "color": "#E00B6B", "size": 8.0}, {"id": "Sebastian Walter", "text": "Sebastian Walter", "color": "#E00B6B", "size": 5.5}, {"id": "class-transform-options.interface.ts", "text": "class-transform-options.interface.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "samples.ts", "text": "samples.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "cache-ttl.decorator.ts", "text": "cache-ttl.decorator.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "external-exception-filter.ts", "text": "external-exception-filter.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "cache.constants.ts", "text": "cache.constants.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "router-explorer.ts", "text": "router-explorer.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "package-lock.json", "text": "package-lock.json", "color": "#2E5EAA", "size": 7.0}, {"id": "validation.pipe.ts", "text": "validation.pipe.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "validation.pipe.spec.ts", "text": "validation.pipe.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Jay McDoniel", "text": "Jay McDoniel", "color": "#E00B6B", "size": 6.0}, {"id": "nest-application.interface.ts", "text": "nest-application.interface.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "nest-application.ts", "text": "nest-application.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "router-execution-context.ts", "text": "router-execution-context.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "router-execution-context.spec.ts", "text": "router-execution-context.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "dependabot[bot]", "text": "dependabot[bot]", "color": "#E00B6B", "size": 6.0}, {"id": "tsconfig.json", "text": "tsconfig.json", "color": "#2E5EAA", "size": 5.5}, {"id": "microservice-configuration.interface.ts", "text": "microservice-configuration.interface.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "client-rmq.ts", "text": "client-rmq.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "index.ts", "text": "index.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "nest-cli.json", "text": "nest-cli.json", "color": "#2E5EAA", "size": 5.5}, {"id": "app.controller.spec.ts", "text": "app.controller.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "config.service.spec.ts", "text": "config.service.spec.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "handler-metadata-storage.ts", "text": "handler-metadata-storage.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "constants.ts", "text": "constants.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "module.ts", "text": "module.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "config.yml", "text": "config.yml", "color": "#2E5EAA", "size": 5.5}, {"id": "rmq.context.ts", "text": "rmq.context.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "listeners-controller.ts", "text": "listeners-controller.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "cache.interceptor.ts", "text": "cache.interceptor.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "cache.decorator.spec.ts", "text": "cache.decorator.spec.ts", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_BvVcZCuq")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_BvVcZCuq")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_BvVcZCuq")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#BvVcZCuq_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('BvVcZCuq');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('BvVcZCuq');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

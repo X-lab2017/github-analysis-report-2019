@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_owjbzDHO {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_owjbzDHO line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_owjbzDHO circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="owjbzDHO">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='owjbzDHO_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"owjbzDHO"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "\u5434\u665f Wu Sheng", "target": "als_setting.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "README.md", "color": "#999999", "width": 2.1094379124341005, "weight": 0.5}, {"source": "\u5434\u665f Wu Sheng", "target": "CHANGES.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Gao Hongtao", "target": "docker-entrypoint.sh", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yuyujulin", "target": "why_mq_not_involved.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "MQ-involved-architecture.png", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "why_mq_not_involved.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u5434\u665f Wu Sheng", "target": "overview.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Gao Hongtao", "target": "EtcdCoordinator.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Gao Hongtao", "target": "NacosCoordinator.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "accesslog.proto", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "hi-sb", "target": "NettyRoutingFilterInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "AgentRebootITCase.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "SampleVerificationITCase.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e8e\u7389\u6854", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "\u4e8e\u7389\u6854", "target": "assembly.xml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kdump", "target": "MetadataQuery.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Kdump", "target": "TimeInfo.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Gao Hongtao", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "xiaoy00", "target": "powered-by.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "panjuan", "target": "backend-cluster.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "panjuan", "target": "backend-receivers.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "LICENSE", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "create_source_release.sh", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "committer.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "StringFormatGroup.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "pom.xml", "color": "#999999", "width": 1.8862943611198906, "weight": 0.4}, {"source": "\u5eb7\u667a\u51ac", "target": "DistributedTraceId.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5eb7\u667a\u51ac", "target": "ExitSpan.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5eb7\u667a\u51ac", "target": "http.proto", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "CoreModuleProvider.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "\u5434\u665f Wu Sheng", "target": "RemoteSenderService.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "PxxMetrics.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "PxxMetricsTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "backend-ui-setup.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "known-oap-backend-dependencies.txt", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "ServiceInstance.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "MetadataQueryEsDAO.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u5434\u665f Wu Sheng", "target": "H2MetadataQueryDAO.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wuguangkuo", "target": "Config.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "wuguangkuo", "target": "FileWriter.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wuguangkuo", "target": "FileWriterTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wuguangkuo", "target": "agent.config", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wuguangkuo", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Dhi Aurrahman", "target": "config.yaml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Dhi Aurrahman", "target": "Makefile", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Dhi Aurrahman", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Dhi Aurrahman", "target": "docker-compose.yaml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Dhi Aurrahman", "target": "envoy.yaml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Dhi Aurrahman", "target": "log4j2.xml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e8e\u7389\u6854", "target": "NettyRoutingFilterInterceptor.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jared Tan", "target": "backend-storage.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jared Tan", "target": "Client.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jared Tan", "target": "ElasticSearchClient.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jared Tan", "target": "ITElasticSearchClient.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jared Tan", "target": "StorageModuleElasticsearchConfig.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jared Tan", "target": "StorageModuleElasticsearchProvider.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "SummerOfServenteen", "target": "ControllerForLowVersionConstructorInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "SummerOfServenteen", "target": "AbstractSpring4Instrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "SummerOfServenteen", "target": "ControllerForLowVersionInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "SummerOfServenteen", "target": "RestControllerForLowVersionInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "SummerOfServenteen", "target": "RestControllerInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "SummerOfServenteen", "target": "skywalking-plugin.def", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Jared Tan", "target": "Config.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jared Tan", "target": "ServiceAndEndpointRegisterClient.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jared Tan", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "Jared Tan", "target": "Service.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jared Tan", "target": "RegisterServiceHandler.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jared Tan", "target": "MetadataQueryEsDAO.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jared Tan", "target": "H2MetadataQueryDAO.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kezhenxu94", "target": ".gitmodules", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "docker-entrypoint.sh", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kezhenxu94", "target": "ttl.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "CoreModuleConfig.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kezhenxu94", "target": "CoreModuleProvider.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "kezhenxu94", "target": "DataTTLKeeperTimer.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "AbstractQuery.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "AllOfMetricsMatcher.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "AbstractMatcher.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "es_storage.awk", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "rc0-prepare.sh", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "rc1-startup.sh", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "StorageTTLITCase.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Louis Tsui", "target": "ComponentsDefine.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Louis Tsui", "target": "Config.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Louis Tsui", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "Louis Tsui", "target": "HandleRequestInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Louis Tsui", "target": "LightInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Louis Tsui", "target": "skywalking-plugin.def", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Louis Tsui", "target": "HandleRequestInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Louis Tsui", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "Louis Tsui", "target": "Supported-list.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Louis Tsui", "target": "component-libraries.yml", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Stalary", "target": "CallbackAdapter.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "CallbackCache.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "CallbackConstructorInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "CallbackInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "KafkaProducerInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "KafkaTemplateCallbackInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "ProducerConstructorMapInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "AbstractKafkaTemplateInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "KafkaTemplateCallbackInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "KafkaTemplateInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "skywalking-plugin.def", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Stalary", "target": "CallbackInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "ComponentsDefine.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "stone.wlg", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "stone.wlg", "target": "ClusterConnectInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "ClusterConstructorWithStateListenerArgInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "ConnectionInfo.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "Constants.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "DefaultResultSetFutureGetUninterruptiblyInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "SessionManagerExecuteAndExecuteAsyncWithStatementArgInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "ClusterInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "DefaultResultSetFutureInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "SessionManagerInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "skywalking-plugin.def", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "stone.wlg", "target": "ClusterConnectInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "ClusterConstructorWithStateListenerArgInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "DefaultResultSetFutureGetUninterruptiblyInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "SessionManagerExecuteAndExecuteAsyncWithStatementArgInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "stone.wlg", "target": "Supported-list.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "stone.wlg", "target": "component-libraries.yml", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u5434\u665f Wu Sheng", "target": "Config.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "\u5434\u665f Wu Sheng", "target": "JVMService.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "ServiceAndEndpointRegisterClient.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u5434\u665f Wu Sheng", "target": "TraceSegmentServiceClient.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "CoreModuleConfig.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u5434\u665f Wu Sheng", "target": "GRPCRemoteClient.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "RemoteClientManager.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "GRPCRemoteClientRealClient.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "GRPCRemoteClientTestCase.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5434\u665f Wu Sheng", "target": "RemoteClientManagerTestCase.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Stalary", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "lipenghui", "target": "ComponentsDefine.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "lipenghui", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "lipenghui", "target": "ConsumerConstructorInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "ConsumerEnhanceRequiredInfo.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "ProducerConstructorInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "ProducerEnhanceRequiredInfo.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "PulsarConsumerInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "PulsarProducerInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "SendCallbackEnhanceRequiredInfo.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "SendCallbackInterceptor.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "PulsarConsumerInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "PulsarProducerInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "SendCallbackInstrumentation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "skywalking-plugin.def", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "lipenghui", "target": "ConsumerConstructorInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "MockMessage.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "ProducerConstructorInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "PulsarConsumerInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "PulsarProducerInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "SendCallbackInterceptorTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lipenghui", "target": "Supported-list.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "\u5434\u665f Wu Sheng", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.1}], "nodes": [{"id": "\u5434\u665f Wu Sheng", "text": "\u5434\u665f Wu Sheng", "color": "#E00B6B", "size": 20.0}, {"id": "als_setting.md", "text": "als_setting.md", "color": "#2E5EAA", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 8.0}, {"id": "CHANGES.md", "text": "CHANGES.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Gao Hongtao", "text": "Gao Hongtao", "color": "#E00B6B", "size": 7.0}, {"id": "docker-entrypoint.sh", "text": "docker-entrypoint.sh", "color": "#2E5EAA", "size": 6.0}, {"id": "yuyujulin", "text": "yuyujulin", "color": "#E00B6B", "size": 5.5}, {"id": "why_mq_not_involved.md", "text": "why_mq_not_involved.md", "color": "#2E5EAA", "size": 6.0}, {"id": "MQ-involved-architecture.png", "text": "MQ-involved-architecture.png", "color": "#2E5EAA", "size": 5.5}, {"id": "overview.md", "text": "overview.md", "color": "#2E5EAA", "size": 5.5}, {"id": "EtcdCoordinator.java", "text": "EtcdCoordinator.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NacosCoordinator.java", "text": "NacosCoordinator.java", "color": "#2E5EAA", "size": 5.5}, {"id": "accesslog.proto", "text": "accesslog.proto", "color": "#2E5EAA", "size": 5.5}, {"id": "hi-sb", "text": "hi-sb", "color": "#E00B6B", "size": 5.5}, {"id": "NettyRoutingFilterInterceptor.java", "text": "NettyRoutingFilterInterceptor.java", "color": "#2E5EAA", "size": 6.0}, {"id": "AgentRebootITCase.java", "text": "AgentRebootITCase.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SampleVerificationITCase.java", "text": "SampleVerificationITCase.java", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e8e\u7389\u6854", "text": "\u4e8e\u7389\u6854", "color": "#E00B6B", "size": 6.5}, {"id": "pom.xml", "text": "pom.xml", "color": "#2E5EAA", "size": 8.5}, {"id": "assembly.xml", "text": "assembly.xml", "color": "#2E5EAA", "size": 5.5}, {"id": "Kdump", "text": "Kdump", "color": "#E00B6B", "size": 6.0}, {"id": "MetadataQuery.java", "text": "MetadataQuery.java", "color": "#2E5EAA", "size": 5.5}, {"id": "TimeInfo.java", "text": "TimeInfo.java", "color": "#2E5EAA", "size": 5.5}, {"id": "xiaoy00", "text": "xiaoy00", "color": "#E00B6B", "size": 5.5}, {"id": "powered-by.md", "text": "powered-by.md", "color": "#2E5EAA", "size": 5.5}, {"id": "panjuan", "text": "panjuan", "color": "#E00B6B", "size": 6.0}, {"id": "backend-cluster.md", "text": "backend-cluster.md", "color": "#2E5EAA", "size": 5.5}, {"id": "backend-receivers.md", "text": "backend-receivers.md", "color": "#2E5EAA", "size": 5.5}, {"id": "LICENSE", "text": "LICENSE", "color": "#2E5EAA", "size": 5.5}, {"id": "create_source_release.sh", "text": "create_source_release.sh", "color": "#2E5EAA", "size": 5.5}, {"id": "committer.md", "text": "committer.md", "color": "#2E5EAA", "size": 5.5}, {"id": "kezhenxu94", "text": "kezhenxu94", "color": "#E00B6B", "size": 13.5}, {"id": "StringFormatGroup.java", "text": "StringFormatGroup.java", "color": "#2E5EAA", "size": 5.5}, {"id": "\u5eb7\u667a\u51ac", "text": "\u5eb7\u667a\u51ac", "color": "#E00B6B", "size": 6.5}, {"id": "DistributedTraceId.java", "text": "DistributedTraceId.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ExitSpan.java", "text": "ExitSpan.java", "color": "#2E5EAA", "size": 5.5}, {"id": "http.proto", "text": "http.proto", "color": "#2E5EAA", "size": 5.5}, {"id": "CoreModuleProvider.java", "text": "CoreModuleProvider.java", "color": "#2E5EAA", "size": 6.0}, {"id": "RemoteSenderService.java", "text": "RemoteSenderService.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PxxMetrics.java", "text": "PxxMetrics.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PxxMetricsTest.java", "text": "PxxMetricsTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "backend-ui-setup.md", "text": "backend-ui-setup.md", "color": "#2E5EAA", "size": 5.5}, {"id": "known-oap-backend-dependencies.txt", "text": "known-oap-backend-dependencies.txt", "color": "#2E5EAA", "size": 5.5}, {"id": "ServiceInstance.java", "text": "ServiceInstance.java", "color": "#2E5EAA", "size": 5.5}, {"id": "MetadataQueryEsDAO.java", "text": "MetadataQueryEsDAO.java", "color": "#2E5EAA", "size": 6.0}, {"id": "H2MetadataQueryDAO.java", "text": "H2MetadataQueryDAO.java", "color": "#2E5EAA", "size": 6.0}, {"id": "wuguangkuo", "text": "wuguangkuo", "color": "#E00B6B", "size": 7.5}, {"id": "Config.java", "text": "Config.java", "color": "#2E5EAA", "size": 7.0}, {"id": "FileWriter.java", "text": "FileWriter.java", "color": "#2E5EAA", "size": 5.5}, {"id": "FileWriterTest.java", "text": "FileWriterTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "agent.config", "text": "agent.config", "color": "#2E5EAA", "size": 5.5}, {"id": "Dhi Aurrahman", "text": "Dhi Aurrahman", "color": "#E00B6B", "size": 8.0}, {"id": "config.yaml", "text": "config.yaml", "color": "#2E5EAA", "size": 5.5}, {"id": "Makefile", "text": "Makefile", "color": "#2E5EAA", "size": 5.5}, {"id": "docker-compose.yaml", "text": "docker-compose.yaml", "color": "#2E5EAA", "size": 5.5}, {"id": "envoy.yaml", "text": "envoy.yaml", "color": "#2E5EAA", "size": 5.5}, {"id": "log4j2.xml", "text": "log4j2.xml", "color": "#2E5EAA", "size": 5.5}, {"id": "Jared Tan", "text": "Jared Tan", "color": "#E00B6B", "size": 11.5}, {"id": "backend-storage.md", "text": "backend-storage.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Client.java", "text": "Client.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ElasticSearchClient.java", "text": "ElasticSearchClient.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ITElasticSearchClient.java", "text": "ITElasticSearchClient.java", "color": "#2E5EAA", "size": 5.5}, {"id": "StorageModuleElasticsearchConfig.java", "text": "StorageModuleElasticsearchConfig.java", "color": "#2E5EAA", "size": 5.5}, {"id": "StorageModuleElasticsearchProvider.java", "text": "StorageModuleElasticsearchProvider.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SummerOfServenteen", "text": "SummerOfServenteen", "color": "#E00B6B", "size": 8.0}, {"id": "ControllerForLowVersionConstructorInterceptor.java", "text": "ControllerForLowVersionConstructorInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AbstractSpring4Instrumentation.java", "text": "AbstractSpring4Instrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ControllerForLowVersionInstrumentation.java", "text": "ControllerForLowVersionInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RestControllerForLowVersionInstrumentation.java", "text": "RestControllerForLowVersionInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RestControllerInstrumentation.java", "text": "RestControllerInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "skywalking-plugin.def", "text": "skywalking-plugin.def", "color": "#2E5EAA", "size": 7.5}, {"id": "ServiceAndEndpointRegisterClient.java", "text": "ServiceAndEndpointRegisterClient.java", "color": "#2E5EAA", "size": 6.0}, {"id": "Service.java", "text": "Service.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RegisterServiceHandler.java", "text": "RegisterServiceHandler.java", "color": "#2E5EAA", "size": 5.5}, {"id": ".gitmodules", "text": ".gitmodules", "color": "#2E5EAA", "size": 5.5}, {"id": "ttl.md", "text": "ttl.md", "color": "#2E5EAA", "size": 5.5}, {"id": "CoreModuleConfig.java", "text": "CoreModuleConfig.java", "color": "#2E5EAA", "size": 6.0}, {"id": "DataTTLKeeperTimer.java", "text": "DataTTLKeeperTimer.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AbstractQuery.java", "text": "AbstractQuery.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AllOfMetricsMatcher.java", "text": "AllOfMetricsMatcher.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AbstractMatcher.java", "text": "AbstractMatcher.java", "color": "#2E5EAA", "size": 5.5}, {"id": "es_storage.awk", "text": "es_storage.awk", "color": "#2E5EAA", "size": 5.5}, {"id": "rc0-prepare.sh", "text": "rc0-prepare.sh", "color": "#2E5EAA", "size": 5.5}, {"id": "rc1-startup.sh", "text": "rc1-startup.sh", "color": "#2E5EAA", "size": 5.5}, {"id": "StorageTTLITCase.java", "text": "StorageTTLITCase.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Louis Tsui", "text": "Louis Tsui", "color": "#E00B6B", "size": 10.0}, {"id": "ComponentsDefine.java", "text": "ComponentsDefine.java", "color": "#2E5EAA", "size": 6.5}, {"id": "HandleRequestInterceptor.java", "text": "HandleRequestInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "LightInstrumentation.java", "text": "LightInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "HandleRequestInterceptorTest.java", "text": "HandleRequestInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Supported-list.md", "text": "Supported-list.md", "color": "#2E5EAA", "size": 6.5}, {"id": "component-libraries.yml", "text": "component-libraries.yml", "color": "#2E5EAA", "size": 6.0}, {"id": "Stalary", "text": "Stalary", "color": "#E00B6B", "size": 11.5}, {"id": "CallbackAdapter.java", "text": "CallbackAdapter.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CallbackCache.java", "text": "CallbackCache.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CallbackConstructorInterceptor.java", "text": "CallbackConstructorInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CallbackInterceptor.java", "text": "CallbackInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "KafkaProducerInterceptor.java", "text": "KafkaProducerInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "KafkaTemplateCallbackInterceptor.java", "text": "KafkaTemplateCallbackInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ProducerConstructorMapInterceptor.java", "text": "ProducerConstructorMapInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AbstractKafkaTemplateInstrumentation.java", "text": "AbstractKafkaTemplateInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "KafkaTemplateCallbackInstrumentation.java", "text": "KafkaTemplateCallbackInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "KafkaTemplateInstrumentation.java", "text": "KafkaTemplateInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CallbackInterceptorTest.java", "text": "CallbackInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "stone.wlg", "text": "stone.wlg", "color": "#E00B6B", "size": 14.0}, {"id": "ClusterConnectInterceptor.java", "text": "ClusterConnectInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ClusterConstructorWithStateListenerArgInterceptor.java", "text": "ClusterConstructorWithStateListenerArgInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ConnectionInfo.java", "text": "ConnectionInfo.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Constants.java", "text": "Constants.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DefaultResultSetFutureGetUninterruptiblyInterceptor.java", "text": "DefaultResultSetFutureGetUninterruptiblyInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SessionManagerExecuteAndExecuteAsyncWithStatementArgInterceptor.java", "text": "SessionManagerExecuteAndExecuteAsyncWithStatementArgInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ClusterInstrumentation.java", "text": "ClusterInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DefaultResultSetFutureInstrumentation.java", "text": "DefaultResultSetFutureInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SessionManagerInstrumentation.java", "text": "SessionManagerInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ClusterConnectInterceptorTest.java", "text": "ClusterConnectInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ClusterConstructorWithStateListenerArgInterceptorTest.java", "text": "ClusterConstructorWithStateListenerArgInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DefaultResultSetFutureGetUninterruptiblyInterceptorTest.java", "text": "DefaultResultSetFutureGetUninterruptiblyInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SessionManagerExecuteAndExecuteAsyncWithStatementArgInterceptorTest.java", "text": "SessionManagerExecuteAndExecuteAsyncWithStatementArgInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "JVMService.java", "text": "JVMService.java", "color": "#2E5EAA", "size": 5.5}, {"id": "TraceSegmentServiceClient.java", "text": "TraceSegmentServiceClient.java", "color": "#2E5EAA", "size": 5.5}, {"id": "GRPCRemoteClient.java", "text": "GRPCRemoteClient.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RemoteClientManager.java", "text": "RemoteClientManager.java", "color": "#2E5EAA", "size": 5.5}, {"id": "GRPCRemoteClientRealClient.java", "text": "GRPCRemoteClientRealClient.java", "color": "#2E5EAA", "size": 5.5}, {"id": "GRPCRemoteClientTestCase.java", "text": "GRPCRemoteClientTestCase.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RemoteClientManagerTestCase.java", "text": "RemoteClientManagerTestCase.java", "color": "#2E5EAA", "size": 5.5}, {"id": "lipenghui", "text": "lipenghui", "color": "#E00B6B", "size": 15.5}, {"id": "ConsumerConstructorInterceptor.java", "text": "ConsumerConstructorInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ConsumerEnhanceRequiredInfo.java", "text": "ConsumerEnhanceRequiredInfo.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ProducerConstructorInterceptor.java", "text": "ProducerConstructorInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ProducerEnhanceRequiredInfo.java", "text": "ProducerEnhanceRequiredInfo.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PulsarConsumerInterceptor.java", "text": "PulsarConsumerInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PulsarProducerInterceptor.java", "text": "PulsarProducerInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SendCallbackEnhanceRequiredInfo.java", "text": "SendCallbackEnhanceRequiredInfo.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SendCallbackInterceptor.java", "text": "SendCallbackInterceptor.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PulsarConsumerInstrumentation.java", "text": "PulsarConsumerInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PulsarProducerInstrumentation.java", "text": "PulsarProducerInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SendCallbackInstrumentation.java", "text": "SendCallbackInstrumentation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ConsumerConstructorInterceptorTest.java", "text": "ConsumerConstructorInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "MockMessage.java", "text": "MockMessage.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ProducerConstructorInterceptorTest.java", "text": "ProducerConstructorInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PulsarConsumerInterceptorTest.java", "text": "PulsarConsumerInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PulsarProducerInterceptorTest.java", "text": "PulsarProducerInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SendCallbackInterceptorTest.java", "text": "SendCallbackInterceptorTest.java", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_owjbzDHO")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_owjbzDHO")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_owjbzDHO")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#owjbzDHO_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('owjbzDHO');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('owjbzDHO');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

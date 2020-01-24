@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_HcRYwBXH {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_HcRYwBXH line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_HcRYwBXH circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="HcRYwBXH">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='HcRYwBXH_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"HcRYwBXH"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Song Kun", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ian Luo", "target": "ActivateComparator.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Imteyaz Ahmed Khan", "target": "AccessLogFilter.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Imteyaz Ahmed Khan", "target": "AccessLogData.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wanghbxxxx", "target": "ExtensionLoader.java", "color": "#999999", "width": 1.8862943611198906, "weight": 0.8}, {"source": "kezhenxu94", "target": "AbstractRegistry.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "mjaow", "target": "NettyCodecAdapter.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huazhongming", "target": "Response.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huazhongming", "target": "ExchangeCodec.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huazhongming", "target": "DeprecatedExchangeCodec.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huazhongming", "target": "DubboCodec.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Huang YunKun", "target": "checkstyle.xml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Huang YunKun", "target": "ServiceConfig.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "huazhongming", "target": "ClassHelper.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huazhongming", "target": "StringUtils.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huazhongming", "target": "StringUtilsTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huazhongming", "target": "MockInvoker.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ankit Kumar", "target": "Container.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ankit Kumar", "target": "Main.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ankit Kumar", "target": "Log4jContainer.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ankit Kumar", "target": "LogbackContainer.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ankit Kumar", "target": "SpringContainer.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "xujingfeng", "target": "HashedWheelTimer.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xin Wang", "target": "IOUtilsTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xin Wang", "target": "AbstractInterfaceConfigTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Xin Wang", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Xin Wang", "target": "FileNetworkerTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wanghbxxxx", "target": "AdaptiveClassCodeGenerator.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LiZhen", "target": "ServiceConfigTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ian Luo", "target": "NettyBackedChannelBuffer.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wanghbxxxx", "target": "ClassUtils.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wanghbxxxx", "target": "CtClassBuilder.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wanghbxxxx", "target": "JavassistCompiler.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wanghbxxxx", "target": "ClassUtilsTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huazhongming", "target": "RestProtocol.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kezhenxu94", "target": "URL.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kezhenxu94", "target": "URLTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "ZookeeperRegistry.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "ZookeeperRegistryTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Furkan KAMACI", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yizhenqiang", "target": "dubbo.xsd", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yizhenqiang", "target": "AbstractClient.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yizhenqiang", "target": "DubboProtocol.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yizhenqiang", "target": "LazyConnectExchangeClient.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yizhenqiang", "target": "ReferenceCountExchangeClient.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yizhenqiang", "target": "ReferenceCountExchangeClientTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ken.lj", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "wanghbxxxx", "target": "Version.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wanghbxxxx", "target": "URL.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kezhenxu94", "target": "RestProtocol.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Ian Luo", "target": "RedisRegistry.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ian Luo", "target": "ReferenceConfigCache.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ian Luo", "target": "ReferenceConfigCacheTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "ServiceConfig.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "ken.lj", "target": "MockDispatcher.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ken.lj", "target": "org.apache.dubbo.remoting.Dispatcher", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "ExtensionLoader.java", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "kezhenxu94", "target": "ExtensionLoaderTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "RegistryDirectory.java", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "min", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "huazhongming", "target": "ScriptRouter.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "THY", "target": "CacheListener.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u65f6\u65e0\u4e24\u4e36", "target": "RpcContextFilter.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Forever\u6768", "target": "pom.xml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "CalvinKirs", "target": "HashedWheelTimer.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ian Luo", "target": "DubboMonitorFactory.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Huxing Zhang", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Geng Zhang", "target": "Version.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ian Luo", "target": "RegistryProtocol.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "OrderedPropertiesProvider.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "PropertiesConfiguration.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "MockOrderedPropertiesProvider1.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "MockOrderedPropertiesProvider2.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "PropertiesConfigurationTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "org.apache.dubbo.common.config.OrderedPropertiesProvider", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "AbstractRegistryTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kezhenxu94", "target": "MulticastRegistryTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "AddressListener.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "jefflv", "target": "RegistryDirectory.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Ian Luo", "target": "ReferenceConfig.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Ian Luo", "target": "FutureFilter.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "jefflv", "target": "ReferenceConfig.java", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "jefflv", "target": "FutureFilter.java", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "jefflv", "target": "ImplicitCallBackTest.java", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Ian Luo", "target": "NetUtils.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ian Luo", "target": "NetUtilsTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ian Luo", "target": "ServiceConfig.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "jefflv", "target": "MockDirInvocation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "Invocation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "CacheTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "MockInvocation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "ServiceConfig.java", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "jefflv", "target": "CodecSupport.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "RpcInvocation.java", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jefflv", "target": "RestProtocolTest.java", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "Song Kun", "text": "Song Kun", "color": "#E00B6B", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Ian Luo", "text": "Ian Luo", "color": "#E00B6B", "size": 11.0}, {"id": "ActivateComparator.java", "text": "ActivateComparator.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Imteyaz Ahmed Khan", "text": "Imteyaz Ahmed Khan", "color": "#E00B6B", "size": 6.0}, {"id": "AccessLogFilter.java", "text": "AccessLogFilter.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AccessLogData.java", "text": "AccessLogData.java", "color": "#2E5EAA", "size": 5.5}, {"id": "wanghbxxxx", "text": "wanghbxxxx", "color": "#E00B6B", "size": 9.0}, {"id": "ExtensionLoader.java", "text": "ExtensionLoader.java", "color": "#2E5EAA", "size": 6.0}, {"id": "kezhenxu94", "text": "kezhenxu94", "color": "#E00B6B", "size": 11.0}, {"id": "AbstractRegistry.java", "text": "AbstractRegistry.java", "color": "#2E5EAA", "size": 5.5}, {"id": "mjaow", "text": "mjaow", "color": "#E00B6B", "size": 5.5}, {"id": "NettyCodecAdapter.java", "text": "NettyCodecAdapter.java", "color": "#2E5EAA", "size": 5.5}, {"id": "huazhongming", "text": "huazhongming", "color": "#E00B6B", "size": 10.0}, {"id": "Response.java", "text": "Response.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ExchangeCodec.java", "text": "ExchangeCodec.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DeprecatedExchangeCodec.java", "text": "DeprecatedExchangeCodec.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DubboCodec.java", "text": "DubboCodec.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Huang YunKun", "text": "Huang YunKun", "color": "#E00B6B", "size": 6.0}, {"id": "checkstyle.xml", "text": "checkstyle.xml", "color": "#2E5EAA", "size": 5.5}, {"id": "ServiceConfig.java", "text": "ServiceConfig.java", "color": "#2E5EAA", "size": 7.0}, {"id": "ClassHelper.java", "text": "ClassHelper.java", "color": "#2E5EAA", "size": 5.5}, {"id": "StringUtils.java", "text": "StringUtils.java", "color": "#2E5EAA", "size": 5.5}, {"id": "StringUtilsTest.java", "text": "StringUtilsTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "MockInvoker.java", "text": "MockInvoker.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Ankit Kumar", "text": "Ankit Kumar", "color": "#E00B6B", "size": 7.5}, {"id": "Container.java", "text": "Container.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Main.java", "text": "Main.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Log4jContainer.java", "text": "Log4jContainer.java", "color": "#2E5EAA", "size": 5.5}, {"id": "LogbackContainer.java", "text": "LogbackContainer.java", "color": "#2E5EAA", "size": 5.5}, {"id": "SpringContainer.java", "text": "SpringContainer.java", "color": "#2E5EAA", "size": 5.5}, {"id": "xujingfeng", "text": "xujingfeng", "color": "#E00B6B", "size": 5.5}, {"id": "HashedWheelTimer.java", "text": "HashedWheelTimer.java", "color": "#2E5EAA", "size": 6.0}, {"id": "Xin Wang", "text": "Xin Wang", "color": "#E00B6B", "size": 7.0}, {"id": "IOUtilsTest.java", "text": "IOUtilsTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AbstractInterfaceConfigTest.java", "text": "AbstractInterfaceConfigTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "pom.xml", "text": "pom.xml", "color": "#2E5EAA", "size": 7.5}, {"id": "FileNetworkerTest.java", "text": "FileNetworkerTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AdaptiveClassCodeGenerator.java", "text": "AdaptiveClassCodeGenerator.java", "color": "#2E5EAA", "size": 5.5}, {"id": "LiZhen", "text": "LiZhen", "color": "#E00B6B", "size": 5.5}, {"id": "ServiceConfigTest.java", "text": "ServiceConfigTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NettyBackedChannelBuffer.java", "text": "NettyBackedChannelBuffer.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ClassUtils.java", "text": "ClassUtils.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CtClassBuilder.java", "text": "CtClassBuilder.java", "color": "#2E5EAA", "size": 5.5}, {"id": "JavassistCompiler.java", "text": "JavassistCompiler.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ClassUtilsTest.java", "text": "ClassUtilsTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RestProtocol.java", "text": "RestProtocol.java", "color": "#2E5EAA", "size": 6.0}, {"id": "URL.java", "text": "URL.java", "color": "#2E5EAA", "size": 6.0}, {"id": "URLTest.java", "text": "URLTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ZookeeperRegistry.java", "text": "ZookeeperRegistry.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ZookeeperRegistryTest.java", "text": "ZookeeperRegistryTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Furkan KAMACI", "text": "Furkan KAMACI", "color": "#E00B6B", "size": 5.5}, {"id": "yizhenqiang", "text": "yizhenqiang", "color": "#E00B6B", "size": 8.0}, {"id": "dubbo.xsd", "text": "dubbo.xsd", "color": "#2E5EAA", "size": 5.5}, {"id": "AbstractClient.java", "text": "AbstractClient.java", "color": "#2E5EAA", "size": 5.5}, {"id": "DubboProtocol.java", "text": "DubboProtocol.java", "color": "#2E5EAA", "size": 5.5}, {"id": "LazyConnectExchangeClient.java", "text": "LazyConnectExchangeClient.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ReferenceCountExchangeClient.java", "text": "ReferenceCountExchangeClient.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ReferenceCountExchangeClientTest.java", "text": "ReferenceCountExchangeClientTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ken.lj", "text": "ken.lj", "color": "#E00B6B", "size": 6.5}, {"id": "Version.java", "text": "Version.java", "color": "#2E5EAA", "size": 6.0}, {"id": "RedisRegistry.java", "text": "RedisRegistry.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ReferenceConfigCache.java", "text": "ReferenceConfigCache.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ReferenceConfigCacheTest.java", "text": "ReferenceConfigCacheTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "MockDispatcher.java", "text": "MockDispatcher.java", "color": "#2E5EAA", "size": 5.5}, {"id": "org.apache.dubbo.remoting.Dispatcher", "text": "org.apache.dubbo.remoting.Dispatcher", "color": "#2E5EAA", "size": 5.5}, {"id": "ExtensionLoaderTest.java", "text": "ExtensionLoaderTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RegistryDirectory.java", "text": "RegistryDirectory.java", "color": "#2E5EAA", "size": 6.0}, {"id": "min", "text": "min", "color": "#E00B6B", "size": 5.5}, {"id": "ScriptRouter.java", "text": "ScriptRouter.java", "color": "#2E5EAA", "size": 5.5}, {"id": "THY", "text": "THY", "color": "#E00B6B", "size": 5.5}, {"id": "CacheListener.java", "text": "CacheListener.java", "color": "#2E5EAA", "size": 5.5}, {"id": "\u65f6\u65e0\u4e24\u4e36", "text": "\u65f6\u65e0\u4e24\u4e36", "color": "#E00B6B", "size": 5.5}, {"id": "RpcContextFilter.java", "text": "RpcContextFilter.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Forever\u6768", "text": "Forever\u6768", "color": "#E00B6B", "size": 5.5}, {"id": "CalvinKirs", "text": "CalvinKirs", "color": "#E00B6B", "size": 5.5}, {"id": "DubboMonitorFactory.java", "text": "DubboMonitorFactory.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Huxing Zhang", "text": "Huxing Zhang", "color": "#E00B6B", "size": 5.5}, {"id": "Geng Zhang", "text": "Geng Zhang", "color": "#E00B6B", "size": 5.5}, {"id": "RegistryProtocol.java", "text": "RegistryProtocol.java", "color": "#2E5EAA", "size": 5.5}, {"id": "jefflv", "text": "jefflv", "color": "#E00B6B", "size": 14.5}, {"id": "OrderedPropertiesProvider.java", "text": "OrderedPropertiesProvider.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PropertiesConfiguration.java", "text": "PropertiesConfiguration.java", "color": "#2E5EAA", "size": 5.5}, {"id": "MockOrderedPropertiesProvider1.java", "text": "MockOrderedPropertiesProvider1.java", "color": "#2E5EAA", "size": 5.5}, {"id": "MockOrderedPropertiesProvider2.java", "text": "MockOrderedPropertiesProvider2.java", "color": "#2E5EAA", "size": 5.5}, {"id": "PropertiesConfigurationTest.java", "text": "PropertiesConfigurationTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "org.apache.dubbo.common.config.OrderedPropertiesProvider", "text": "org.apache.dubbo.common.config.OrderedPropertiesProvider", "color": "#2E5EAA", "size": 5.5}, {"id": "AbstractRegistryTest.java", "text": "AbstractRegistryTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "MulticastRegistryTest.java", "text": "MulticastRegistryTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "AddressListener.java", "text": "AddressListener.java", "color": "#2E5EAA", "size": 5.5}, {"id": "ReferenceConfig.java", "text": "ReferenceConfig.java", "color": "#2E5EAA", "size": 6.0}, {"id": "FutureFilter.java", "text": "FutureFilter.java", "color": "#2E5EAA", "size": 6.0}, {"id": "ImplicitCallBackTest.java", "text": "ImplicitCallBackTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NetUtils.java", "text": "NetUtils.java", "color": "#2E5EAA", "size": 5.5}, {"id": "NetUtilsTest.java", "text": "NetUtilsTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "MockDirInvocation.java", "text": "MockDirInvocation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "Invocation.java", "text": "Invocation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CacheTest.java", "text": "CacheTest.java", "color": "#2E5EAA", "size": 5.5}, {"id": "MockInvocation.java", "text": "MockInvocation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "CodecSupport.java", "text": "CodecSupport.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RpcInvocation.java", "text": "RpcInvocation.java", "color": "#2E5EAA", "size": 5.5}, {"id": "RestProtocolTest.java", "text": "RestProtocolTest.java", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_HcRYwBXH")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_HcRYwBXH")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_HcRYwBXH")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#HcRYwBXH_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('HcRYwBXH');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('HcRYwBXH');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

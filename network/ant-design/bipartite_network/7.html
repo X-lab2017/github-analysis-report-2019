@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_jLpRmMfd {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_jLpRmMfd line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_jLpRmMfd circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="jLpRmMfd">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='jLpRmMfd_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"jLpRmMfd"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "\u9648\u5e05", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "\u9648\u5e05", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.25}, {"source": "\u504f\u53f3", "target": "package.json", "color": "#999999", "width": 1.8862943611198906, "weight": 0.2222222222222222}, {"source": "\u9648\u5e05", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "afc163", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.07142857142857142}, {"source": "afc163", "target": "Form.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zombieJ", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.14285714285714285}, {"source": "afc163", "target": "package.json", "color": "#999999", "width": 1.5986122886681098, "weight": 0.16666666666666666}, {"source": "riho", "target": "mixin.less", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "DiamondYuan", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "dependabot-preview[bot]", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "hengkx", "target": "Col.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Tom Xu", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Sanghyeon Lee", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Sanghyeon Lee", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "riho", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Piotr Monwid-Olechnowicz", "target": "responsive.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "index.less", "color": "#999999", "width": 1.8862943611198906, "weight": 0.21052631578947367}, {"source": "MrHeer", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "pengtikui", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ztplz", "target": "index.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Will", "target": "n_404.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Goh Zhao Yang", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "binyellow", "target": "Anchor.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "demo.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "\u8bf8\u5cb3", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Ivan", "target": "MenuItem.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wadezhan", "target": "description.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "Meck Zhu", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "\u5218\u5b8f\u73ba", "target": "index.zh-CN.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "wadezhan", "target": "index.test.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "zombiej", "target": "debug.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "afc163", "target": "index.less", "color": "#999999", "width": 2.5794415416798357, "weight": 0.2962962962962963}, {"source": "zombiej", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "wadezhan", "target": "index.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2222222222222222}, {"source": "Meck Zhu", "target": "CHANGELOG.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jonathan Lee", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jeessy2", "target": "Form.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "jljsj", "target": "MultiDrawer.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "jeessy2", "target": "FormItem.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zombieJ", "target": "lib.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Regan Langford", "target": "use-with-create-react-app.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5218\u5b8f\u73ba", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Kodai Nakamura", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "mixin.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "ye4241", "target": "introduce.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "renderListBody.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Bhavesh Chowdhury", "target": "download.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "resizable-column.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Aleksandr Chernokondratenko", "target": "compatibility.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Michael Adams", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ShiCheng", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u848b\u7487", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "index.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.125}, {"source": "zombieJ", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.14285714285714285}, {"source": "shao", "target": "demo.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "shao", "target": "Anchor.tsx", "color": "#999999", "width": 1.8862943611198906, "weight": 0.8}, {"source": "Ray Booysen", "target": "faq.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Malven", "target": "sv_SE.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "Table.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "wadezhan", "target": "demo.test.js.snap", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2222222222222222}, {"source": "unknown", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "CHANGELOG.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "afc163", "target": "size.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "wave.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "card-style.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "david.lv", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4fe1\u946b-King", "target": "template.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Sivaraj", "target": "ta_IN.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4fe1\u946b-King", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zombiej", "target": "check-commit.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "zombiej", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "zombiej", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "Sivaraj", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "shao", "target": "FormItem.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "afc163", "target": "getting-started.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombiej", "target": "demo.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "zombieJ", "target": "demo.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "shao", "target": "targetOffset.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shao", "target": "easings.ts", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "shao", "target": "scrollTo.test.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "\u9648\u5e05", "target": "demo.test.js.snap", "color": "#999999", "width": 1.1931471805599454, "weight": 0.25}, {"source": "\u9648\u5e05", "target": "index.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.25}, {"source": "Julien Confetti", "target": "fr_BE.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Julien Confetti", "target": "fr_FR.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "zombieJ", "target": "index.test.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "zombieJ", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.07142857142857142}, {"source": "Goh Zhao Yang", "target": "ms_MY.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u8bf8\u5cb3", "target": ".jest.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u8bf8\u5cb3", "target": ".jest.node.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u8bf8\u5cb3", "target": "demo.test.js.snap", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "\u8bf8\u5cb3", "target": "index.test.js.snap", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "n_404.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u504f\u53f3", "target": "index.zh-CN.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.1875}, {"source": "Meck Zhu", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "ztplz", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "ztplz", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "jljsj", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "jljsj", "target": "drawer.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yoyo837", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yoyo837", "target": "mixin.less", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "afc163", "target": "customize-theme.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "afc163", "target": "customize-theme.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Stanley Thijssen", "target": "mixin.less", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Stanley Thijssen", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "mraiguo", "target": "RangePicker.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Hieu Pham", "target": "MenuContext.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Hieu Pham", "target": "MenuItem.tsx", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Hieu Pham", "target": "SubMenu.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Hieu Pham", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "afc163", "target": "Table.filter.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "Table.filter.test.js.snap", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.07142857142857142}, {"source": "\u504f\u53f3", "target": "MenuItem.tsx", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "\u504f\u53f3", "target": "SubMenu.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "shao", "target": "Anchor.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shao", "target": "customizeHighlight.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "shao", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "shao", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.0625}, {"source": "afc163", "target": "use-with-create-react-app.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "afc163", "target": "use-with-create-react-app.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "zombieJ", "target": "utils.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "custom-filter-panel.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombieJ", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "zombieJ", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.07142857142857142}, {"source": "zx6658", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zx6658", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u504f\u53f3", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "LilyWakana", "target": "Input.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LilyWakana", "target": "mixin.less", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "shao", "target": "scrollTo.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}], "nodes": [{"id": "\u9648\u5e05", "text": "\u9648\u5e05", "color": "#E00B6B", "size": 7.5}, {"id": "index.test.js", "text": "index.test.js", "color": "#2E5EAA", "size": 7.5}, {"id": "index.less", "text": "index.less", "color": "#2E5EAA", "size": 12.0}, {"id": "\u504f\u53f3", "text": "\u504f\u53f3", "color": "#E00B6B", "size": 10.0}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 10.5}, {"id": "afc163", "text": "afc163", "color": "#E00B6B", "size": 14.5}, {"id": "index.tsx", "text": "index.tsx", "color": "#2E5EAA", "size": 10.5}, {"id": "Form.tsx", "text": "Form.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "zombieJ", "text": "zombieJ", "color": "#E00B6B", "size": 10.5}, {"id": "riho", "text": "riho", "color": "#E00B6B", "size": 6.0}, {"id": "mixin.less", "text": "mixin.less", "color": "#2E5EAA", "size": 7.5}, {"id": "DiamondYuan", "text": "DiamondYuan", "color": "#E00B6B", "size": 5.5}, {"id": "dependabot-preview[bot]", "text": "dependabot-preview[bot]", "color": "#E00B6B", "size": 5.5}, {"id": "hengkx", "text": "hengkx", "color": "#E00B6B", "size": 5.5}, {"id": "Col.tsx", "text": "Col.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Tom Xu", "text": "Tom Xu", "color": "#E00B6B", "size": 5.5}, {"id": "Sanghyeon Lee", "text": "Sanghyeon Lee", "color": "#E00B6B", "size": 6.0}, {"id": "index.en-US.md", "text": "index.en-US.md", "color": "#2E5EAA", "size": 8.5}, {"id": "index.zh-CN.md", "text": "index.zh-CN.md", "color": "#2E5EAA", "size": 10.5}, {"id": "Piotr Monwid-Olechnowicz", "text": "Piotr Monwid-Olechnowicz", "color": "#E00B6B", "size": 5.5}, {"id": "responsive.md", "text": "responsive.md", "color": "#2E5EAA", "size": 5.5}, {"id": "MrHeer", "text": "MrHeer", "color": "#E00B6B", "size": 5.5}, {"id": "pengtikui", "text": "pengtikui", "color": "#E00B6B", "size": 5.5}, {"id": "ztplz", "text": "ztplz", "color": "#E00B6B", "size": 6.5}, {"id": "Will", "text": "Will", "color": "#E00B6B", "size": 5.5}, {"id": "n_404.md", "text": "n_404.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Goh Zhao Yang", "text": "Goh Zhao Yang", "color": "#E00B6B", "size": 6.0}, {"id": "binyellow", "text": "binyellow", "color": "#E00B6B", "size": 5.5}, {"id": "Anchor.tsx", "text": "Anchor.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "demo.test.js.snap", "text": "demo.test.js.snap", "color": "#2E5EAA", "size": 8.5}, {"id": "\u8bf8\u5cb3", "text": "\u8bf8\u5cb3", "color": "#E00B6B", "size": 7.5}, {"id": "Ivan", "text": "Ivan", "color": "#E00B6B", "size": 5.5}, {"id": "MenuItem.tsx", "text": "MenuItem.tsx", "color": "#2E5EAA", "size": 6.5}, {"id": "wadezhan", "text": "wadezhan", "color": "#E00B6B", "size": 7.0}, {"id": "description.md", "text": "description.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Meck Zhu", "text": "Meck Zhu", "color": "#E00B6B", "size": 6.5}, {"id": "\u5218\u5b8f\u73ba", "text": "\u5218\u5b8f\u73ba", "color": "#E00B6B", "size": 6.0}, {"id": "zombiej", "text": "zombiej", "color": "#E00B6B", "size": 8.0}, {"id": "debug.md", "text": "debug.md", "color": "#2E5EAA", "size": 5.5}, {"id": "CHANGELOG.en-US.md", "text": "CHANGELOG.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Jonathan Lee", "text": "Jonathan Lee", "color": "#E00B6B", "size": 5.5}, {"id": "jeessy2", "text": "jeessy2", "color": "#E00B6B", "size": 6.0}, {"id": "jljsj", "text": "jljsj", "color": "#E00B6B", "size": 6.5}, {"id": "MultiDrawer.test.js", "text": "MultiDrawer.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "FormItem.tsx", "text": "FormItem.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "lib.test.js", "text": "lib.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Regan Langford", "text": "Regan Langford", "color": "#E00B6B", "size": 5.5}, {"id": "use-with-create-react-app.en-US.md", "text": "use-with-create-react-app.en-US.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Kodai Nakamura", "text": "Kodai Nakamura", "color": "#E00B6B", "size": 5.5}, {"id": "ye4241", "text": "ye4241", "color": "#E00B6B", "size": 5.5}, {"id": "introduce.zh-CN.md", "text": "introduce.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "renderListBody.tsx", "text": "renderListBody.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Bhavesh Chowdhury", "text": "Bhavesh Chowdhury", "color": "#E00B6B", "size": 5.5}, {"id": "download.en-US.md", "text": "download.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "resizable-column.md", "text": "resizable-column.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Aleksandr Chernokondratenko", "text": "Aleksandr Chernokondratenko", "color": "#E00B6B", "size": 5.5}, {"id": "compatibility.less", "text": "compatibility.less", "color": "#2E5EAA", "size": 5.5}, {"id": "Michael Adams", "text": "Michael Adams", "color": "#E00B6B", "size": 5.5}, {"id": "ShiCheng", "text": "ShiCheng", "color": "#E00B6B", "size": 5.5}, {"id": "\u848b\u7487", "text": "\u848b\u7487", "color": "#E00B6B", "size": 5.5}, {"id": "shao", "text": "shao", "color": "#E00B6B", "size": 10.5}, {"id": "Ray Booysen", "text": "Ray Booysen", "color": "#E00B6B", "size": 5.5}, {"id": "faq.en-US.md", "text": "faq.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Malven", "text": "Malven", "color": "#E00B6B", "size": 5.5}, {"id": "sv_SE.tsx", "text": "sv_SE.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Table.tsx", "text": "Table.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "unknown", "text": "unknown", "color": "#E00B6B", "size": 5.5}, {"id": "ycjcl868", "text": "ycjcl868", "color": "#E00B6B", "size": 5.5}, {"id": "CHANGELOG.zh-CN.md", "text": "CHANGELOG.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "size.less", "text": "size.less", "color": "#2E5EAA", "size": 5.5}, {"id": "wave.tsx", "text": "wave.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "card-style.less", "text": "card-style.less", "color": "#2E5EAA", "size": 5.5}, {"id": "david.lv", "text": "david.lv", "color": "#E00B6B", "size": 5.5}, {"id": "\u4fe1\u946b-King", "text": "\u4fe1\u946b-King", "color": "#E00B6B", "size": 6.0}, {"id": "template.html", "text": "template.html", "color": "#2E5EAA", "size": 5.5}, {"id": "Sivaraj", "text": "Sivaraj", "color": "#E00B6B", "size": 6.0}, {"id": "ta_IN.tsx", "text": "ta_IN.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "check-commit.js", "text": "check-commit.js", "color": "#2E5EAA", "size": 5.5}, {"id": "getting-started.zh-CN.md", "text": "getting-started.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 5.5}, {"id": "targetOffset.md", "text": "targetOffset.md", "color": "#2E5EAA", "size": 5.5}, {"id": "easings.ts", "text": "easings.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "scrollTo.test.js", "text": "scrollTo.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Julien Confetti", "text": "Julien Confetti", "color": "#E00B6B", "size": 6.0}, {"id": "fr_BE.tsx", "text": "fr_BE.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "fr_FR.tsx", "text": "fr_FR.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "ms_MY.tsx", "text": "ms_MY.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": ".jest.js", "text": ".jest.js", "color": "#2E5EAA", "size": 5.5}, {"id": ".jest.node.js", "text": ".jest.node.js", "color": "#2E5EAA", "size": 5.5}, {"id": "index.test.js.snap", "text": "index.test.js.snap", "color": "#2E5EAA", "size": 5.5}, {"id": "drawer.less", "text": "drawer.less", "color": "#2E5EAA", "size": 5.5}, {"id": "yoyo837", "text": "yoyo837", "color": "#E00B6B", "size": 6.0}, {"id": "customize-theme.en-US.md", "text": "customize-theme.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "customize-theme.zh-CN.md", "text": "customize-theme.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Stanley Thijssen", "text": "Stanley Thijssen", "color": "#E00B6B", "size": 6.0}, {"id": "mraiguo", "text": "mraiguo", "color": "#E00B6B", "size": 5.5}, {"id": "RangePicker.test.js", "text": "RangePicker.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Hieu Pham", "text": "Hieu Pham", "color": "#E00B6B", "size": 7.0}, {"id": "MenuContext.tsx", "text": "MenuContext.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "SubMenu.tsx", "text": "SubMenu.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "Table.filter.test.js", "text": "Table.filter.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Table.filter.test.js.snap", "text": "Table.filter.test.js.snap", "color": "#2E5EAA", "size": 5.5}, {"id": "Anchor.test.js", "text": "Anchor.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "customizeHighlight.md", "text": "customizeHighlight.md", "color": "#2E5EAA", "size": 5.5}, {"id": "use-with-create-react-app.zh-CN.md", "text": "use-with-create-react-app.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "utils.tsx", "text": "utils.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "custom-filter-panel.md", "text": "custom-filter-panel.md", "color": "#2E5EAA", "size": 5.5}, {"id": "zx6658", "text": "zx6658", "color": "#E00B6B", "size": 6.0}, {"id": "LilyWakana", "text": "LilyWakana", "color": "#E00B6B", "size": 6.0}, {"id": "Input.tsx", "text": "Input.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "scrollTo.ts", "text": "scrollTo.ts", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_jLpRmMfd")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_jLpRmMfd")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_jLpRmMfd")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#jLpRmMfd_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('jLpRmMfd');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('jLpRmMfd');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

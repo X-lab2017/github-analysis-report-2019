@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_dcuUoftB {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_dcuUoftB line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_dcuUoftB circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="dcuUoftB">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='dcuUoftB_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"dcuUoftB"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "\u9648\u5609\u6db5", "target": "nav-logo.sketch", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "index.less", "color": "#999999", "width": 2.9849066497880004, "weight": 0.8571428571428571}, {"source": "neverland", "target": "index.js", "color": "#999999", "width": 3.9339872044851463, "weight": 0.8378378378378378}, {"source": "neverland", "target": "README.zh-CN.md", "color": "#999999", "width": 4.110917912644224, "weight": 0.8809523809523809}, {"source": "neverland", "target": "PickerColumn.js", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.14285714285714285}, {"source": "\u9648\u5609\u6db5", "target": "package.json", "color": "#999999", "width": 3.7188758248682006, "weight": 0.625}, {"source": "\u9648\u5609\u6db5", "target": "PULL_REQUEST_TEMPLATE.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "neverland", "target": "quickstart.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "dependabot[bot]", "target": "yarn.lock", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "neverland", "target": "hairline.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "index.spec.js", "color": "#999999", "width": 3.7188758248682006, "weight": 0.9615384615384616}, {"source": "\u9648\u5609\u6db5", "target": "quickstart.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "\u9648\u5609\u6db5", "target": "index.spec.js", "color": "#999999", "width": 0.5, "weight": 0.038461538461538464}, {"source": "neverland", "target": "Sku.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "neverland", "target": "contribution.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "index.vue", "color": "#999999", "width": 0.5, "weight": 0.06666666666666667}, {"source": "codpoe", "target": "Sku.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "neverland", "target": "datetime-picker.spec.js.snap", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "datetime-picker.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "README.zh-CN.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.07142857142857142}, {"source": "neverland", "target": "index.tsx", "color": "#999999", "width": 2.8978952727983707, "weight": 1.0}, {"source": "neverland", "target": "demo.spec.js.snap", "color": "#999999", "width": 2.9849066497880004, "weight": 0.9230769230769231}, {"source": "\u9648\u5609\u6db5", "target": "changelog.en-US.md", "color": "#999999", "width": 2.8978952727983707, "weight": 0.9166666666666666}, {"source": "\u9648\u5609\u6db5", "target": "changelog.zh-CN.md", "color": "#999999", "width": 2.8978952727983707, "weight": 0.8461538461538461}, {"source": "neverland", "target": "var.less", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "neverland", "target": "README.md", "color": "#999999", "width": 3.9965075614664802, "weight": 0.7333333333333333}, {"source": "neverland", "target": "utils.spec.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "neverland", "target": "utils.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "neverland", "target": "index.spec.js.snap", "color": "#999999", "width": 3.333213344056216, "weight": 0.8947368421052632}, {"source": "Sylvaner", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Sylvaner", "target": "README.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "neverland", "target": "Key.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "index.vue", "color": "#999999", "width": 3.1390573296152584, "weight": 0.9333333333333333}, {"source": "\u9648\u5609\u6db5", "target": "README.md", "color": "#999999", "width": 2.6972245773362196, "weight": 0.2}, {"source": "neverland", "target": "package.json", "color": "#999999", "width": 3.20805020110221, "weight": 0.375}, {"source": "neverland", "target": "PULL_REQUEST_TEMPLATE.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "neverland", "target": "lang.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "index.js", "color": "#999999", "width": 1.8862943611198906, "weight": 0.10810810810810811}, {"source": "\u9648\u5609\u6db5", "target": ".gitignore", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "vant-icon-3a7dc2.ttf", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "vant-icon-3a7dc2.woff", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "vant-icon-3a7dc2.woff2", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "build-encode.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "template.tpl", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "encode.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u6d41\u91c7", "target": "index.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "\u6d41\u91c7", "target": "demo.spec.js.snap", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "\u6d41\u91c7", "target": "index.spec.js.snap", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "\u9648\u5609\u6db5", "target": "yarn.lock", "color": "#999999", "width": 2.8978952727983707, "weight": 0.4074074074074074}, {"source": "\u9648\u5609\u6db5", "target": "quickstart.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Santi", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Santi", "target": "es-ES.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "codpoe", "target": "SkuHeader.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "checkbox.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "theme.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "theme.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "yarn.lock", "color": "#999999", "width": 3.0649493574615367, "weight": 0.48148148148148145}, {"source": "neverland", "target": "router.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "webpack.base.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "changelog.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.15384615384615385}, {"source": "\u9648\u5609\u6db5", "target": "card-wrapper.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "highlight.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "SkuActions.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "SkuImgUploader.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "SkuMessages.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "SkuStepper.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "codegen.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "index.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "md-parser.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "tsconfig.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "Toast.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "toast.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "shared.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "data.en-US.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "data.zh-CN.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "directive.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "event.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "scroll.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "changelog.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.08333333333333333}], "nodes": [{"id": "\u9648\u5609\u6db5", "text": "\u9648\u5609\u6db5", "color": "#E00B6B", "size": 20.5}, {"id": "nav-logo.sketch", "text": "nav-logo.sketch", "color": "#2E5EAA", "size": 5.5}, {"id": "neverland", "text": "neverland", "color": "#E00B6B", "size": 24.5}, {"id": "index.less", "text": "index.less", "color": "#2E5EAA", "size": 6.0}, {"id": "index.js", "text": "index.js", "color": "#2E5EAA", "size": 6.5}, {"id": "README.zh-CN.md", "text": "README.zh-CN.md", "color": "#2E5EAA", "size": 6.5}, {"id": "PickerColumn.js", "text": "PickerColumn.js", "color": "#2E5EAA", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 6.0}, {"id": "PULL_REQUEST_TEMPLATE.md", "text": "PULL_REQUEST_TEMPLATE.md", "color": "#2E5EAA", "size": 6.0}, {"id": "quickstart.zh-CN.md", "text": "quickstart.zh-CN.md", "color": "#2E5EAA", "size": 6.0}, {"id": "dependabot[bot]", "text": "dependabot[bot]", "color": "#E00B6B", "size": 5.5}, {"id": "yarn.lock", "text": "yarn.lock", "color": "#2E5EAA", "size": 6.5}, {"id": "hairline.less", "text": "hairline.less", "color": "#2E5EAA", "size": 5.5}, {"id": "index.spec.js", "text": "index.spec.js", "color": "#2E5EAA", "size": 6.0}, {"id": "Sku.js", "text": "Sku.js", "color": "#2E5EAA", "size": 6.0}, {"id": "contribution.zh-CN.md", "text": "contribution.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "index.vue", "text": "index.vue", "color": "#2E5EAA", "size": 6.0}, {"id": "codpoe", "text": "codpoe", "color": "#E00B6B", "size": 6.0}, {"id": "datetime-picker.spec.js.snap", "text": "datetime-picker.spec.js.snap", "color": "#2E5EAA", "size": 5.5}, {"id": "datetime-picker.spec.js", "text": "datetime-picker.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "index.tsx", "text": "index.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "demo.spec.js.snap", "text": "demo.spec.js.snap", "color": "#2E5EAA", "size": 6.0}, {"id": "changelog.en-US.md", "text": "changelog.en-US.md", "color": "#2E5EAA", "size": 6.0}, {"id": "changelog.zh-CN.md", "text": "changelog.zh-CN.md", "color": "#2E5EAA", "size": 6.0}, {"id": "var.less", "text": "var.less", "color": "#2E5EAA", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 7.0}, {"id": "utils.spec.js", "text": "utils.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "utils.ts", "text": "utils.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "index.spec.js.snap", "text": "index.spec.js.snap", "color": "#2E5EAA", "size": 6.0}, {"id": "Sylvaner", "text": "Sylvaner", "color": "#E00B6B", "size": 6.0}, {"id": "Key.js", "text": "Key.js", "color": "#2E5EAA", "size": 5.5}, {"id": "lang.ts", "text": "lang.ts", "color": "#2E5EAA", "size": 5.5}, {"id": ".gitignore", "text": ".gitignore", "color": "#2E5EAA", "size": 5.5}, {"id": "vant-icon-3a7dc2.ttf", "text": "vant-icon-3a7dc2.ttf", "color": "#2E5EAA", "size": 5.5}, {"id": "vant-icon-3a7dc2.woff", "text": "vant-icon-3a7dc2.woff", "color": "#2E5EAA", "size": 5.5}, {"id": "vant-icon-3a7dc2.woff2", "text": "vant-icon-3a7dc2.woff2", "color": "#2E5EAA", "size": 5.5}, {"id": "build-encode.js", "text": "build-encode.js", "color": "#2E5EAA", "size": 5.5}, {"id": "template.tpl", "text": "template.tpl", "color": "#2E5EAA", "size": 5.5}, {"id": "encode.less", "text": "encode.less", "color": "#2E5EAA", "size": 5.5}, {"id": "\u6d41\u91c7", "text": "\u6d41\u91c7", "color": "#E00B6B", "size": 6.5}, {"id": "quickstart.en-US.md", "text": "quickstart.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Santi", "text": "Santi", "color": "#E00B6B", "size": 6.0}, {"id": "es-ES.ts", "text": "es-ES.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "SkuHeader.tsx", "text": "SkuHeader.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "checkbox.js", "text": "checkbox.js", "color": "#2E5EAA", "size": 5.5}, {"id": "theme.en-US.md", "text": "theme.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "theme.zh-CN.md", "text": "theme.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "router.ts", "text": "router.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "webpack.base.js", "text": "webpack.base.js", "color": "#2E5EAA", "size": 5.5}, {"id": "card-wrapper.js", "text": "card-wrapper.js", "color": "#2E5EAA", "size": 5.5}, {"id": "highlight.js", "text": "highlight.js", "color": "#2E5EAA", "size": 5.5}, {"id": "SkuActions.tsx", "text": "SkuActions.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "SkuImgUploader.js", "text": "SkuImgUploader.js", "color": "#2E5EAA", "size": 5.5}, {"id": "SkuMessages.js", "text": "SkuMessages.js", "color": "#2E5EAA", "size": 5.5}, {"id": "SkuStepper.js", "text": "SkuStepper.js", "color": "#2E5EAA", "size": 5.5}, {"id": "codegen.ts", "text": "codegen.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "index.ts", "text": "index.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "md-parser.ts", "text": "md-parser.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "tsconfig.json", "text": "tsconfig.json", "color": "#2E5EAA", "size": 5.5}, {"id": "Toast.js", "text": "Toast.js", "color": "#2E5EAA", "size": 5.5}, {"id": "toast.d.ts", "text": "toast.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "shared.ts", "text": "shared.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "data.en-US.ts", "text": "data.en-US.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "data.zh-CN.ts", "text": "data.zh-CN.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "directive.js", "text": "directive.js", "color": "#2E5EAA", "size": 5.5}, {"id": "event.js", "text": "event.js", "color": "#2E5EAA", "size": 5.5}, {"id": "scroll.js", "text": "scroll.js", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_dcuUoftB")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_dcuUoftB")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_dcuUoftB")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#dcuUoftB_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('dcuUoftB');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('dcuUoftB');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

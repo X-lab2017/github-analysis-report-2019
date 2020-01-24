@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_kREMPTwD {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_kREMPTwD line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_kREMPTwD circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="kREMPTwD">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='kREMPTwD_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"kREMPTwD"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "\u7fa1\u8f99", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Deniz Susman", "target": "sliderMove.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Deniz Susman", "target": "InsideZoomView.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ovilia", "target": "barPolar.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "KEYS", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ovilia", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Ovilia", "target": "PieView.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u7fa1\u8f99", "target": "ISSUE_TEMPLATE.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Ovilia", "target": "ISSUE_TEMPLATE.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Ovilia", "target": "labelLayout.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Ovilia", "target": "pieLayout.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u7fa1\u8f99", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "abigale Li", "target": "SankeySeries.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "abigale Li", "target": "AxisModel.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "symbol.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "symbol2.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "graphic.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "sankeyLayout.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "sushuang", "target": "ThemeRiverSeries.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "model.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Day Day Up", "target": "SunburstPiece.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "abigale Li", "target": "sankeyLayout.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "abigale Li", "target": "amd2common.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "textStyle.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "format.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "sushuang", "target": "LICENSE", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "forceHelper.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "layoutHelper.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "treemapLayout.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "Time.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "sushuang", "target": "number.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ende93", "target": "EffectSymbol.js", "color": "#999999", "width": 0.5, "weight": 1.0}], "nodes": [{"id": "\u7fa1\u8f99", "text": "\u7fa1\u8f99", "color": "#E00B6B", "size": 6.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Deniz Susman", "text": "Deniz Susman", "color": "#E00B6B", "size": 6.0}, {"id": "sliderMove.js", "text": "sliderMove.js", "color": "#2E5EAA", "size": 5.5}, {"id": "InsideZoomView.js", "text": "InsideZoomView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Ovilia", "text": "Ovilia", "color": "#E00B6B", "size": 8.0}, {"id": "barPolar.js", "text": "barPolar.js", "color": "#2E5EAA", "size": 5.5}, {"id": "sushuang", "text": "sushuang", "color": "#E00B6B", "size": 12.5}, {"id": "KEYS", "text": "KEYS", "color": "#2E5EAA", "size": 5.5}, {"id": "PieView.js", "text": "PieView.js", "color": "#2E5EAA", "size": 5.5}, {"id": "ISSUE_TEMPLATE.md", "text": "ISSUE_TEMPLATE.md", "color": "#2E5EAA", "size": 6.0}, {"id": "labelLayout.js", "text": "labelLayout.js", "color": "#2E5EAA", "size": 5.5}, {"id": "pieLayout.js", "text": "pieLayout.js", "color": "#2E5EAA", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 5.5}, {"id": "abigale Li", "text": "abigale Li", "color": "#E00B6B", "size": 7.0}, {"id": "SankeySeries.js", "text": "SankeySeries.js", "color": "#2E5EAA", "size": 5.5}, {"id": "AxisModel.js", "text": "AxisModel.js", "color": "#2E5EAA", "size": 5.5}, {"id": "symbol.js", "text": "symbol.js", "color": "#2E5EAA", "size": 5.5}, {"id": "symbol2.html", "text": "symbol2.html", "color": "#2E5EAA", "size": 5.5}, {"id": "graphic.js", "text": "graphic.js", "color": "#2E5EAA", "size": 5.5}, {"id": "sankeyLayout.js", "text": "sankeyLayout.js", "color": "#2E5EAA", "size": 6.0}, {"id": "ThemeRiverSeries.js", "text": "ThemeRiverSeries.js", "color": "#2E5EAA", "size": 5.5}, {"id": "model.js", "text": "model.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Day Day Up", "text": "Day Day Up", "color": "#E00B6B", "size": 5.5}, {"id": "SunburstPiece.js", "text": "SunburstPiece.js", "color": "#2E5EAA", "size": 5.5}, {"id": "amd2common.js", "text": "amd2common.js", "color": "#2E5EAA", "size": 5.5}, {"id": "textStyle.js", "text": "textStyle.js", "color": "#2E5EAA", "size": 5.5}, {"id": "format.js", "text": "format.js", "color": "#2E5EAA", "size": 5.5}, {"id": "LICENSE", "text": "LICENSE", "color": "#2E5EAA", "size": 5.5}, {"id": "forceHelper.js", "text": "forceHelper.js", "color": "#2E5EAA", "size": 5.5}, {"id": "layoutHelper.js", "text": "layoutHelper.js", "color": "#2E5EAA", "size": 5.5}, {"id": "treemapLayout.js", "text": "treemapLayout.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Time.js", "text": "Time.js", "color": "#2E5EAA", "size": 5.5}, {"id": "number.js", "text": "number.js", "color": "#2E5EAA", "size": 5.5}, {"id": "ende93", "text": "ende93", "color": "#E00B6B", "size": 5.5}, {"id": "EffectSymbol.js", "text": "EffectSymbol.js", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_kREMPTwD")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_kREMPTwD")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_kREMPTwD")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#kREMPTwD_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('kREMPTwD');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('kREMPTwD');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

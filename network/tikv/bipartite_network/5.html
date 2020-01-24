@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_oyAKHqoD {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_oyAKHqoD line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_oyAKHqoD circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="oyAKHqoD">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='oyAKHqoD_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"oyAKHqoD"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Wenxuan Shi", "target": "check-bins-for-jemalloc.sh", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "analyze.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Lei Zhao", "target": "txn.rs", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "niedhui", "target": "byte.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "niedhui", "target": "error.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "niedhui", "target": "lib.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "niedhui", "target": "number.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Wenxuan Shi", "target": "Cargo.lock", "color": "#999999", "width": 2.5794415416798357, "weight": 0.47058823529411764}, {"source": "Wenxuan Shi", "target": "Cargo.toml", "color": "#999999", "width": 2.5794415416798357, "weight": 0.5}, {"source": "Wenxuan Shi", "target": "prime.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "lib.rs", "color": "#999999", "width": 2.291759469228055, "weight": 0.46153846153846156}, {"source": "Wenxuan Shi", "target": "profiler_dummy.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "profiler_unix.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Lonng", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jay", "target": "peer.rs", "color": "#999999", "width": 2.5794415416798357, "weight": 0.4}, {"source": "Jay", "target": "mod.rs", "color": "#999999", "width": 1.8862943611198906, "weight": 0.2}, {"source": "Jay", "target": "msg.rs", "color": "#999999", "width": 2.1094379124341005, "weight": 0.8333333333333334}, {"source": "Neil Shen", "target": "config-template.toml", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Neil Shen", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "kennytm", "target": "logging.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kennytm", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jay", "target": "Cargo.lock", "color": "#999999", "width": 1.1931471805599454, "weight": 0.11764705882352941}, {"source": "Wenxuan Shi", "target": "expr_def_builder.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "lib.rs", "color": "#999999", "width": 0.5, "weight": 0.07692307692307693}, {"source": "Neil Shen", "target": "logging.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "mutable.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "util.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "Neil Shen", "target": "CHANGELOG.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Neil Shen", "target": "Cargo.lock", "color": "#999999", "width": 1.1931471805599454, "weight": 0.11764705882352941}, {"source": "Neil Shen", "target": "test_compact_log.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jay", "target": "store.rs", "color": "#999999", "width": 1.5986122886681098, "weight": 0.2727272727272727}, {"source": "Jay", "target": "test_conf_change.rs", "color": "#999999", "width": 1.8862943611198906, "weight": 0.6666666666666666}, {"source": "Neil Shen", "target": "test_service.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "siddontang", "target": "gen-dockerfile.sh", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Andr\u00e9 Isaksson Kraft", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Calvin Weng", "target": "tikv-logo.png", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "Calvin Weng", "target": "tikv.svg", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ryan Leung", "target": "threads_linux.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Connor", "target": "peer.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Neil Shen", "target": "snap.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "Neil Shen", "target": "region.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Brian Anderson", "target": "Cargo.toml", "color": "#999999", "width": 1.5986122886681098, "weight": 0.3333333333333333}, {"source": "Brian Anderson", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Brian Anderson", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "Brian Anderson", "target": "signal_handler.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Brian Anderson", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "Brian Anderson", "target": "lib.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2222222222222222}, {"source": "yiwu-arbug", "target": "Cargo.lock", "color": "#999999", "width": 0.5, "weight": 0.0625}, {"source": "Jay", "target": "cluster.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jay", "target": "test_snap.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Jay", "target": "test_split_region.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Neil Shen", "target": "peer_storage.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Neil Shen", "target": "debug.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "zhangjinpeng1987", "target": "mod.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.13333333333333333}, {"source": "zhangjinpeng1987", "target": "scheduler.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "Wenxuan Shi", "target": "buffer.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Wenxuan Shi", "target": "byte.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Wenxuan Shi", "target": "error.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Wenxuan Shi", "target": "number.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "cluster.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Neil Shen", "target": "pd.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Neil Shen", "target": "bootstrap.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "mod.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.1}, {"source": "Calvin Weng", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Fu Chen", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Fu Chen", "target": "process.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Fu Chen", "target": "sched_pool.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fu Chen", "target": "scheduler.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jay", "target": "Cargo.toml", "color": "#999999", "width": 1.1931471805599454, "weight": 0.125}, {"source": "qupeng", "target": "transport_simulate.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "qupeng", "target": "peer.rs", "color": "#999999", "width": 1.8862943611198906, "weight": 0.2}, {"source": "qupeng", "target": "test_lease_read.rs", "color": "#999999", "width": 1.8862943611198906, "weight": 0.6666666666666666}, {"source": "Connor", "target": "config-template.toml", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Connor", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Lei Zhao", "target": "config-template.toml", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "Lei Zhao", "target": "process.rs", "color": "#999999", "width": 1.5986122886681098, "weight": 0.42857142857142855}, {"source": "Lei Zhao", "target": "scheduler.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "Wenxuan Shi", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.05}, {"source": "Neil Shen", "target": "apply.rs", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5714285714285714}, {"source": "Ana Hobden", "target": "config-template.toml", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Ana Hobden", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "kennytm", "target": "analyze.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "ShuNing", "target": "peer.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2222222222222222}, {"source": "ShuNing", "target": "test_conf_change.rs", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Yilin Chen", "target": "future.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yilin Chen", "target": "lib.rs", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "Yilin Chen", "target": "threadpool.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yilin Chen", "target": "endpoint.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Yilin Chen", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "Yilin Chen", "target": "apply.rs", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "Yilin Chen", "target": "msg.rs", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Yilin Chen", "target": "resolve.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yilin Chen", "target": "snap.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "qupeng", "target": "Cargo.lock", "color": "#999999", "width": 0.5, "weight": 0.058823529411764705}, {"source": "qupeng", "target": "mod.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.1}, {"source": "qupeng", "target": "latch.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qupeng", "target": "process.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "qupeng", "target": "scheduler.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "Jay", "target": "server.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "Jay", "target": "transport_simulate.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "Jay", "target": "raft_client.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jay", "target": "transport.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Neil Shen", "target": "Cargo.toml", "color": "#999999", "width": 0.5, "weight": 0.0625}, {"source": "Neil Shen", "target": "peer.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.1}, {"source": "Neil Shen", "target": "read.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Neil Shen", "target": "kv.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Ryan Leung", "target": "Makefile", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Ryan Leung", "target": "store.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Ryan Leung", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Lonng", "target": "analyze.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "H-ZeX", "target": "Cargo.lock", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "H-ZeX", "target": "Cargo.toml", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "H-ZeX", "target": "util.rs", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "H-ZeX", "target": "kv_generator.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "H-ZeX", "target": "file.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "H-ZeX", "target": "lib.rs", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "H-ZeX", "target": "analyze.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "H-ZeX", "target": "cmsketch.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "H-ZeX", "target": "store.rs", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "H-ZeX", "target": "test_multi.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Iosmanthus Teng", "target": "Cargo.lock", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Iosmanthus Teng", "target": "Cargo.toml", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Stefano Probst", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "kennytm", "target": "GOVERNANCE.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Iosmanthus Teng", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Iosmanthus Teng", "target": "expr_def_builder.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Iosmanthus Teng", "target": "errors.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Iosmanthus Teng", "target": "debug.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "qupeng", "target": "fixture.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qupeng", "target": "server.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "qupeng", "target": "endpoint.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "qupeng", "target": "readpool_impl.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qupeng", "target": "node.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "qupeng", "target": "sched_pool.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Jay", "target": "config.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.25}, {"source": "Jay", "target": "peer_storage.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jay", "target": "test-custom.toml", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Jay", "target": "test_region_heartbeat.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Jay", "target": "test_lease_read.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "Wenxuan Shi", "target": "store.rs", "color": "#999999", "width": 0.5, "weight": 0.09090909090909091}, {"source": "qupeng", "target": "snap.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "wjHuang", "target": "store.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "wjHuang", "target": "peer.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "wjHuang", "target": "test_conf_change.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "wjHuang", "target": "test_merge.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qupeng", "target": "read.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jay", "target": "apply.rs", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "zhangjinpeng1987", "target": "store.rs", "color": "#999999", "width": 1.1931471805599454, "weight": 0.18181818181818182}, {"source": "zhangjinpeng1987", "target": "peer.rs", "color": "#999999", "width": 0.5, "weight": 0.06666666666666667}, {"source": "ShuNing", "target": "util.rs", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "ShuNing", "target": "read.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "ShuNing", "target": "metrics.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "ShuNing", "target": "kv.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "ShuNing", "target": "test_service.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "ShuNing", "target": "test_raftkv.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "qupeng", "target": "store.rs", "color": "#999999", "width": 0.5, "weight": 0.09090909090909091}, {"source": "qupeng", "target": "test_stale_read.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yiwu-arbug", "target": "lib.rs", "color": "#999999", "width": 0.5, "weight": 0.07692307692307693}, {"source": "yiwu-arbug", "target": "engine_metrics.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yiwu-arbug", "target": "metrics_flusher.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yiwu-arbug", "target": "cluster.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "yiwu-arbug", "target": "util.rs", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "yiwu-arbug", "target": "bootstrap.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yiwu-arbug", "target": "apply.rs", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "yiwu-arbug", "target": "peer_storage.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "yiwu-arbug", "target": "region_snapshot.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yiwu-arbug", "target": "snap.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "yiwu-arbug", "target": "region.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "yiwu-arbug", "target": "debug.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "yiwu-arbug", "target": "rocksdb_engine.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yiwu-arbug", "target": "test_upgrade.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "yiwu-arbug", "target": "test_bootstrap.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zhangjinpeng1987", "target": "error.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zhangjinpeng1987", "target": "debug.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "zhangjinpeng1987", "target": "kv.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zhangjinpeng1987", "target": "metrics.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zhangjinpeng1987", "target": "reader.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "zhangjinpeng1987", "target": "txn.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "zhangjinpeng1987", "target": "process.rs", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "zhangjinpeng1987", "target": "test_service.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Jay", "target": "CHANGELOG.md", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Jay", "target": "util.rs", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "Neil Shen", "target": "test_pending_peers.rs", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Lei Zhao", "target": "Cargo.lock", "color": "#999999", "width": 0.5, "weight": 0.058823529411764705}, {"source": "Lei Zhao", "target": "server.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Lei Zhao", "target": "config.rs", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "Lei Zhao", "target": "debug.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "Lei Zhao", "target": "metrics.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Lei Zhao", "target": "node.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "Lei Zhao", "target": "kv.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "Lei Zhao", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.05}, {"source": "Lei Zhao", "target": "reader.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Lei Zhao", "target": "test_service.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "n_5kbpers", "target": "node.rs", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "n_5kbpers", "target": "server.rs", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "n_5kbpers", "target": "peer.rs", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "n_5kbpers", "target": "store.rs", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "n_5kbpers", "target": "mod.rs", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "n_5kbpers", "target": "util.rs", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "n_5kbpers", "target": "read.rs", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "n_5kbpers", "target": "transport.rs", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "n_5kbpers", "target": "test_bootstrap.rs", "color": "#999999", "width": 0.5, "weight": 0.5}], "nodes": [{"id": "Wenxuan Shi", "text": "Wenxuan Shi", "color": "#E00B6B", "size": 12.5}, {"id": "check-bins-for-jemalloc.sh", "text": "check-bins-for-jemalloc.sh", "color": "#2E5EAA", "size": 5.5}, {"id": "analyze.rs", "text": "analyze.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "Lei Zhao", "text": "Lei Zhao", "color": "#E00B6B", "size": 12.0}, {"id": "txn.rs", "text": "txn.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "niedhui", "text": "niedhui", "color": "#E00B6B", "size": 7.0}, {"id": "byte.rs", "text": "byte.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "error.rs", "text": "error.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "lib.rs", "text": "lib.rs", "color": "#2E5EAA", "size": 8.5}, {"id": "number.rs", "text": "number.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "Cargo.lock", "text": "Cargo.lock", "color": "#2E5EAA", "size": 9.0}, {"id": "Cargo.toml", "text": "Cargo.toml", "color": "#2E5EAA", "size": 8.0}, {"id": "prime.rs", "text": "prime.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "profiler_dummy.rs", "text": "profiler_dummy.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "profiler_unix.rs", "text": "profiler_unix.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "Lonng", "text": "Lonng", "color": "#E00B6B", "size": 6.0}, {"id": "mod.rs", "text": "mod.rs", "color": "#2E5EAA", "size": 12.0}, {"id": "Jay", "text": "Jay", "color": "#E00B6B", "size": 16.0}, {"id": "peer.rs", "text": "peer.rs", "color": "#2E5EAA", "size": 9.0}, {"id": "msg.rs", "text": "msg.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "Neil Shen", "text": "Neil Shen", "color": "#E00B6B", "size": 17.0}, {"id": "config-template.toml", "text": "config-template.toml", "color": "#2E5EAA", "size": 7.0}, {"id": "config.rs", "text": "config.rs", "color": "#2E5EAA", "size": 8.5}, {"id": "kennytm", "text": "kennytm", "color": "#E00B6B", "size": 7.0}, {"id": "logging.rs", "text": "logging.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "expr_def_builder.rs", "text": "expr_def_builder.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "mutable.rs", "text": "mutable.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "util.rs", "text": "util.rs", "color": "#2E5EAA", "size": 8.0}, {"id": "CHANGELOG.md", "text": "CHANGELOG.md", "color": "#2E5EAA", "size": 6.0}, {"id": "test_compact_log.rs", "text": "test_compact_log.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "store.rs", "text": "store.rs", "color": "#2E5EAA", "size": 9.0}, {"id": "test_conf_change.rs", "text": "test_conf_change.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "test_service.rs", "text": "test_service.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "siddontang", "text": "siddontang", "color": "#E00B6B", "size": 5.5}, {"id": "gen-dockerfile.sh", "text": "gen-dockerfile.sh", "color": "#2E5EAA", "size": 5.5}, {"id": "Andr\u00e9 Isaksson Kraft", "text": "Andr\u00e9 Isaksson Kraft", "color": "#E00B6B", "size": 5.5}, {"id": "Calvin Weng", "text": "Calvin Weng", "color": "#E00B6B", "size": 6.5}, {"id": "tikv-logo.png", "text": "tikv-logo.png", "color": "#2E5EAA", "size": 5.5}, {"id": "tikv.svg", "text": "tikv.svg", "color": "#2E5EAA", "size": 5.5}, {"id": "Ryan Leung", "text": "Ryan Leung", "color": "#E00B6B", "size": 7.0}, {"id": "threads_linux.rs", "text": "threads_linux.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "Connor", "text": "Connor", "color": "#E00B6B", "size": 6.5}, {"id": "snap.rs", "text": "snap.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "region.rs", "text": "region.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "Brian Anderson", "text": "Brian Anderson", "color": "#E00B6B", "size": 8.0}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 6.5}, {"id": "signal_handler.rs", "text": "signal_handler.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "yiwu-arbug", "text": "yiwu-arbug", "color": "#E00B6B", "size": 13.0}, {"id": "cluster.rs", "text": "cluster.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "test_snap.rs", "text": "test_snap.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_split_region.rs", "text": "test_split_region.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "peer_storage.rs", "text": "peer_storage.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "debug.rs", "text": "debug.rs", "color": "#2E5EAA", "size": 7.5}, {"id": "zhangjinpeng1987", "text": "zhangjinpeng1987", "color": "#E00B6B", "size": 11.0}, {"id": "scheduler.rs", "text": "scheduler.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "buffer.rs", "text": "buffer.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "pd.rs", "text": "pd.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "bootstrap.rs", "text": "bootstrap.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "Fu Chen", "text": "Fu Chen", "color": "#E00B6B", "size": 7.0}, {"id": "process.rs", "text": "process.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "sched_pool.rs", "text": "sched_pool.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "qupeng", "text": "qupeng", "color": "#E00B6B", "size": 14.0}, {"id": "transport_simulate.rs", "text": "transport_simulate.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "test_lease_read.rs", "text": "test_lease_read.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "apply.rs", "text": "apply.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "Ana Hobden", "text": "Ana Hobden", "color": "#E00B6B", "size": 6.0}, {"id": "ShuNing", "text": "ShuNing", "color": "#E00B6B", "size": 9.0}, {"id": "Yilin Chen", "text": "Yilin Chen", "color": "#E00B6B", "size": 9.5}, {"id": "future.rs", "text": "future.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "threadpool.rs", "text": "threadpool.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "endpoint.rs", "text": "endpoint.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "resolve.rs", "text": "resolve.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "latch.rs", "text": "latch.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "server.rs", "text": "server.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "raft_client.rs", "text": "raft_client.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "transport.rs", "text": "transport.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "read.rs", "text": "read.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "kv.rs", "text": "kv.rs", "color": "#2E5EAA", "size": 7.0}, {"id": "Makefile", "text": "Makefile", "color": "#2E5EAA", "size": 5.5}, {"id": "H-ZeX", "text": "H-ZeX", "color": "#E00B6B", "size": 10.0}, {"id": "kv_generator.rs", "text": "kv_generator.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "file.rs", "text": "file.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "cmsketch.rs", "text": "cmsketch.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_multi.rs", "text": "test_multi.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "Iosmanthus Teng", "text": "Iosmanthus Teng", "color": "#E00B6B", "size": 8.0}, {"id": "Stefano Probst", "text": "Stefano Probst", "color": "#E00B6B", "size": 5.5}, {"id": "GOVERNANCE.md", "text": "GOVERNANCE.md", "color": "#2E5EAA", "size": 5.5}, {"id": "errors.rs", "text": "errors.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "fixture.rs", "text": "fixture.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "readpool_impl.rs", "text": "readpool_impl.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "node.rs", "text": "node.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "test-custom.toml", "text": "test-custom.toml", "color": "#2E5EAA", "size": 5.5}, {"id": "test_region_heartbeat.rs", "text": "test_region_heartbeat.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "wjHuang", "text": "wjHuang", "color": "#E00B6B", "size": 7.0}, {"id": "test_merge.rs", "text": "test_merge.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "metrics.rs", "text": "metrics.rs", "color": "#2E5EAA", "size": 6.5}, {"id": "test_raftkv.rs", "text": "test_raftkv.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_stale_read.rs", "text": "test_stale_read.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "engine_metrics.rs", "text": "engine_metrics.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "metrics_flusher.rs", "text": "metrics_flusher.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "region_snapshot.rs", "text": "region_snapshot.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "rocksdb_engine.rs", "text": "rocksdb_engine.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_upgrade.rs", "text": "test_upgrade.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "test_bootstrap.rs", "text": "test_bootstrap.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "reader.rs", "text": "reader.rs", "color": "#2E5EAA", "size": 6.0}, {"id": "test_pending_peers.rs", "text": "test_pending_peers.rs", "color": "#2E5EAA", "size": 5.5}, {"id": "n_5kbpers", "text": "n_5kbpers", "color": "#E00B6B", "size": 9.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_oyAKHqoD")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_oyAKHqoD")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_oyAKHqoD")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#oyAKHqoD_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('oyAKHqoD');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('oyAKHqoD');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

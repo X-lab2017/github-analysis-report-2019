@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_pQofXTxM {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_pQofXTxM line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_pQofXTxM circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="pQofXTxM">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='pQofXTxM_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"pQofXTxM"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "neverland", "target": "hairline.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "codpoe", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "package.json", "color": "#999999", "width": 4.055348061489413, "weight": 0.8333333333333334}, {"source": "\u9648\u5609\u6db5", "target": "design.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "utils.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "main.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "neverland", "target": "index.less", "color": "#999999", "width": 2.291759469228055, "weight": 0.35294117647058826}, {"source": "neverland", "target": "index.js", "color": "#999999", "width": 3.832204510175204, "weight": 0.7368421052631579}, {"source": "neverland", "target": "package.json", "color": "#999999", "width": 2.4459101490553135, "weight": 0.16666666666666666}, {"source": "\u9648\u5609\u6db5", "target": "changelog.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "toast.d.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "iam2r", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "webpack.site.dev.ts", "color": "#999999", "width": 2.1094379124341005, "weight": 1.0}, {"source": "NoahSun", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "index.ts", "color": "#999999", "width": 2.1094379124341005, "weight": 0.8333333333333334}, {"source": "\u9648\u5609\u6db5", "target": "index.js", "color": "#999999", "width": 2.1094379124341005, "weight": 0.13157894736842105}, {"source": "Waiter", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.25}, {"source": "\u9648\u5609\u6db5", "target": "App.vue", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "gen-style-deps-map.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "Lindy", "target": "index.less", "color": "#999999", "width": 1.8862943611198906, "weight": 0.23529411764705882}, {"source": "neverland", "target": "index.spec.js.snap", "color": "#999999", "width": 2.802585092994046, "weight": 0.625}, {"source": "neverland", "target": "index.spec.js", "color": "#999999", "width": 3.495732273553991, "weight": 0.9090909090909091}, {"source": "neverland", "target": "theme.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "neverland", "target": "theme.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "neverland", "target": "index.tsx", "color": "#999999", "width": 2.4459101490553135, "weight": 0.6363636363636364}, {"source": "neverland", "target": "var.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.25}, {"source": "neverland", "target": "shared.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "demo.spec.js.snap", "color": "#999999", "width": 2.291759469228055, "weight": 0.5}, {"source": "\u9648\u5609\u6db5", "target": "changelog.en-US.md", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "changelog.zh-CN.md", "color": "#999999", "width": 2.291759469228055, "weight": 1.0}, {"source": "neverland", "target": "README.md", "color": "#999999", "width": 3.832204510175204, "weight": 0.8}, {"source": "neverland", "target": "README.zh-CN.md", "color": "#999999", "width": 3.832204510175204, "weight": 0.8}, {"source": "\u9648\u5609\u6db5", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.02857142857142857}, {"source": "\u9648\u5609\u6db5", "target": "README.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.02857142857142857}, {"source": "neverland", "target": "index.vue", "color": "#999999", "width": 2.4459101490553135, "weight": 0.5833333333333334}, {"source": "neverland", "target": "index.ts", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Fyerl", "target": "index.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Fyerl", "target": "index.spec.js.snap", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "tango5614", "target": "TimePicker.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "tango5614", "target": "time-picker.spec.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "ImagePreview.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "neverland", "target": "image-preview.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "constant.ts", "color": "#999999", "width": 2.802585092994046, "weight": 1.0}, {"source": "neverland", "target": "Title.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "Nav.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "DemoHome.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "DemoHomeNav.vue", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "jest.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "babel.config.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "neverland", "target": "quickstart.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "webpack.package.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "webpack.site.prd.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "dev.ts", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "build.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "clean.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "gen-package-entry.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "lint.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "webpack.base.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "commit-lint.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Lindy", "target": "var.less", "color": "#999999", "width": 1.5986122886681098, "weight": 0.375}, {"source": "\u9648\u5609\u6db5", "target": "index.html", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "yarn.lock", "color": "#999999", "width": 2.291759469228055, "weight": 0.5454545454545454}, {"source": "neverland", "target": "babel.config.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "neverland", "target": "yarn.lock", "color": "#999999", "width": 2.1094379124341005, "weight": 0.45454545454545453}, {"source": "rex", "target": "README.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.10344827586206896}, {"source": "rex", "target": "README.zh-CN.md", "color": "#999999", "width": 1.5986122886681098, "weight": 0.10344827586206896}, {"source": "rex", "target": "index.vue", "color": "#999999", "width": 1.5986122886681098, "weight": 0.25}, {"source": "rex", "target": "demo.spec.js.snap", "color": "#999999", "width": 1.8862943611198906, "weight": 0.3333333333333333}, {"source": "rex", "target": "index.spec.js.snap", "color": "#999999", "width": 1.5986122886681098, "weight": 0.1875}, {"source": "rex", "target": "index.less", "color": "#999999", "width": 1.8862943611198906, "weight": 0.23529411764705882}, {"source": "rex", "target": "index.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.18181818181818182}, {"source": "neverland", "target": "Detail.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "rex", "target": "index.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.06896551724137931}, {"source": "rex", "target": "var.less", "color": "#999999", "width": 1.5986122886681098, "weight": 0.375}, {"source": "rex", "target": "Detail.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Lindy", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.1}, {"source": "Lindy", "target": "README.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.1}, {"source": "Lindy", "target": "index.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.18181818181818182}, {"source": "Lindy", "target": "demo.spec.js.snap", "color": "#999999", "width": 1.1931471805599454, "weight": 0.16666666666666666}, {"source": "Lindy", "target": "index.spec.js.snap", "color": "#999999", "width": 1.1931471805599454, "weight": 0.125}, {"source": "Lindy", "target": "index.spec.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.1}, {"source": "Waiter", "target": "README.md", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "Waiter", "target": "README.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "Waiter", "target": "Sku.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Waiter", "target": "SkuStepper.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Waiter", "target": "index.vue", "color": "#999999", "width": 0.5, "weight": 0.125}, {"source": "Waiter", "target": "lang.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "compile-sfc.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "neverland", "target": "link-open.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "compile-css.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "compile-less.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "compile-sass.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "compile-style.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "gen-package-style.ts", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "gen-component-style.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "gen-site-desktop-shared.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5609\u6db5", "target": "gen-site-mobile-shared.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "rex", "target": "Item.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Lindy", "target": "index.vue", "color": "#999999", "width": 0.5, "weight": 0.08333333333333333}], "nodes": [{"id": "neverland", "text": "neverland", "color": "#E00B6B", "size": 18.0}, {"id": "hairline.less", "text": "hairline.less", "color": "#2E5EAA", "size": 5.5}, {"id": "codpoe", "text": "codpoe", "color": "#E00B6B", "size": 5.5}, {"id": "index.less", "text": "index.less", "color": "#2E5EAA", "size": 7.5}, {"id": "\u9648\u5609\u6db5", "text": "\u9648\u5609\u6db5", "color": "#E00B6B", "size": 24.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 6.0}, {"id": "design.zh-CN.md", "text": "design.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "utils.ts", "text": "utils.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "main.js", "text": "main.js", "color": "#2E5EAA", "size": 5.5}, {"id": "index.js", "text": "index.js", "color": "#2E5EAA", "size": 8.0}, {"id": "changelog.md", "text": "changelog.md", "color": "#2E5EAA", "size": 5.5}, {"id": "toast.d.ts", "text": "toast.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "iam2r", "text": "iam2r", "color": "#E00B6B", "size": 5.5}, {"id": "webpack.site.dev.ts", "text": "webpack.site.dev.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "NoahSun", "text": "NoahSun", "color": "#E00B6B", "size": 5.5}, {"id": "index.ts", "text": "index.ts", "color": "#2E5EAA", "size": 6.0}, {"id": "Waiter", "text": "Waiter", "color": "#E00B6B", "size": 8.5}, {"id": "App.vue", "text": "App.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "gen-style-deps-map.ts", "text": "gen-style-deps-map.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Lindy", "text": "Lindy", "color": "#E00B6B", "size": 9.5}, {"id": "index.spec.js.snap", "text": "index.spec.js.snap", "color": "#2E5EAA", "size": 7.0}, {"id": "index.spec.js", "text": "index.spec.js", "color": "#2E5EAA", "size": 6.0}, {"id": "theme.en-US.md", "text": "theme.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "theme.zh-CN.md", "text": "theme.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "index.tsx", "text": "index.tsx", "color": "#2E5EAA", "size": 6.5}, {"id": "var.less", "text": "var.less", "color": "#2E5EAA", "size": 6.5}, {"id": "shared.ts", "text": "shared.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "demo.spec.js.snap", "text": "demo.spec.js.snap", "color": "#2E5EAA", "size": 6.5}, {"id": "changelog.en-US.md", "text": "changelog.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "changelog.zh-CN.md", "text": "changelog.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 7.5}, {"id": "README.zh-CN.md", "text": "README.zh-CN.md", "color": "#2E5EAA", "size": 7.5}, {"id": "index.vue", "text": "index.vue", "color": "#2E5EAA", "size": 7.0}, {"id": "Fyerl", "text": "Fyerl", "color": "#E00B6B", "size": 6.0}, {"id": "tango5614", "text": "tango5614", "color": "#E00B6B", "size": 6.0}, {"id": "TimePicker.js", "text": "TimePicker.js", "color": "#2E5EAA", "size": 5.5}, {"id": "time-picker.spec.js", "text": "time-picker.spec.js", "color": "#2E5EAA", "size": 5.5}, {"id": "ImagePreview.js", "text": "ImagePreview.js", "color": "#2E5EAA", "size": 5.5}, {"id": "image-preview.d.ts", "text": "image-preview.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "constant.ts", "text": "constant.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Title.js", "text": "Title.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Nav.vue", "text": "Nav.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "DemoHome.vue", "text": "DemoHome.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "DemoHomeNav.vue", "text": "DemoHomeNav.vue", "color": "#2E5EAA", "size": 5.5}, {"id": "jest.ts", "text": "jest.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "babel.config.js", "text": "babel.config.js", "color": "#2E5EAA", "size": 6.0}, {"id": "quickstart.zh-CN.md", "text": "quickstart.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "webpack.package.ts", "text": "webpack.package.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "webpack.site.prd.ts", "text": "webpack.site.prd.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "dev.ts", "text": "dev.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "build.ts", "text": "build.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "clean.ts", "text": "clean.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "gen-package-entry.ts", "text": "gen-package-entry.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "lint.ts", "text": "lint.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "webpack.base.ts", "text": "webpack.base.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "commit-lint.ts", "text": "commit-lint.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "index.html", "text": "index.html", "color": "#2E5EAA", "size": 5.5}, {"id": "yarn.lock", "text": "yarn.lock", "color": "#2E5EAA", "size": 6.0}, {"id": "rex", "text": "rex", "color": "#E00B6B", "size": 10.5}, {"id": "Detail.js", "text": "Detail.js", "color": "#2E5EAA", "size": 6.0}, {"id": "Sku.js", "text": "Sku.js", "color": "#2E5EAA", "size": 5.5}, {"id": "SkuStepper.js", "text": "SkuStepper.js", "color": "#2E5EAA", "size": 5.5}, {"id": "lang.ts", "text": "lang.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "compile-sfc.ts", "text": "compile-sfc.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "link-open.js", "text": "link-open.js", "color": "#2E5EAA", "size": 5.5}, {"id": "compile-css.ts", "text": "compile-css.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "compile-less.ts", "text": "compile-less.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "compile-sass.ts", "text": "compile-sass.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "compile-style.ts", "text": "compile-style.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "gen-package-style.ts", "text": "gen-package-style.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "gen-component-style.ts", "text": "gen-component-style.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "gen-site-desktop-shared.ts", "text": "gen-site-desktop-shared.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "gen-site-mobile-shared.ts", "text": "gen-site-mobile-shared.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Item.tsx", "text": "Item.tsx", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_pQofXTxM")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_pQofXTxM")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_pQofXTxM")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#pQofXTxM_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('pQofXTxM');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('pQofXTxM');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

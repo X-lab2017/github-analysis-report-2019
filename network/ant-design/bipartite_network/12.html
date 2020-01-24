@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_GgFPtnCH {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_GgFPtnCH line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_GgFPtnCH circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="GgFPtnCH">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='GgFPtnCH_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"GgFPtnCH"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "coderge", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "dark.less", "color": "#999999", "width": 3.0649493574615367, "weight": 1.0}, {"source": "zombiej", "target": "index.test.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2222222222222222}, {"source": "\u504f\u53f3", "target": "index.less", "color": "#999999", "width": 2.4459101490553135, "weight": 0.2916666666666667}, {"source": "afc163", "target": "size.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "default.less", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.08333333333333333}, {"source": "ycjcl868", "target": "progress.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "customize-theme.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "afc163", "target": "Table.filter.test.js.snap", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "en-US.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "ycjcl868", "target": "package.json", "color": "#999999", "width": 2.802585092994046, "weight": 0.3333333333333333}, {"source": "ycjcl868", "target": "index.less", "color": "#999999", "width": 2.1094379124341005, "weight": 0.2}, {"source": "\u504f\u53f3", "target": "common.less", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "ycjcl868", "target": "Circle.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": ".antd-tools.config.js", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "\u53f6\u67ab", "target": "FormItem.tsx", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "ycjcl868", "target": "mixin.less", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "afc163", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.08}, {"source": "afc163", "target": "interactive.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "lighthouse-ci.yml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "Editable.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "PeachScript", "target": "webpack.config.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Kim, Harim", "target": "head.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u53f6\u67ab", "target": "Form.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "dist.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "depfu[bot]", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Wei Zhu", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.06666666666666667}, {"source": "chenshuai2144", "target": "package.json", "color": "#999999", "width": 1.5986122886681098, "weight": 0.3333333333333333}, {"source": "zombiej", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "xiaohuoni", "target": "index.jsx", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "afc163", "target": "home.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Theo Satloff", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "xiaohuoni", "target": ".eslintrc.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "\u9648\u6770", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "TsesamLi", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombiej", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2}, {"source": "woodsand", "target": "getting-started.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9a97\u4f60\u662f\u5c0f\u732b\u54aa", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.4}, {"source": "\u504f\u53f3", "target": "deploy-site.yml", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Guichi Zhao", "target": "customized-form-controls.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "dependabot-preview[bot]", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5c0f\u806a", "target": "virtual-list.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "bisheng.config.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "common.less", "color": "#999999", "width": 1.8862943611198906, "weight": 0.4444444444444444}, {"source": "ycjcl868", "target": "demo.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "afc163", "target": "MainContent.jsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.3333333333333333}, {"source": "ycjcl868", "target": "netlify.toml", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "demo.less", "color": "#999999", "width": 2.802585092994046, "weight": 0.8333333333333334}, {"source": "He Linming", "target": "interface.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "index.less", "color": "#999999", "width": 1.5986122886681098, "weight": 0.17647058823529413}, {"source": "xrkffgg", "target": "index.less", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "MainContent.jsx", "color": "#999999", "width": 1.8862943611198906, "weight": 0.6666666666666666}, {"source": "\u7ea6\u4fee\u4e9a", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "Header.jsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "ycjcl868", "target": "highlight.less", "color": "#999999", "width": 1.8862943611198906, "weight": 1.0}, {"source": "ycjcl868", "target": "markdown.less", "color": "#999999", "width": 1.5986122886681098, "weight": 0.75}, {"source": "ycjcl868", "target": "index.jsx", "color": "#999999", "width": 2.5794415416798357, "weight": 0.8888888888888888}, {"source": "ycjcl868", "target": "custom-icon.less", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "chenshuai2144", "target": "generateColorLess.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "\u53f6\u67ab", "target": "FormList.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "index.en-US.md", "color": "#999999", "width": 1.8862943611198906, "weight": 0.4}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "package.json", "color": "#999999", "width": 1.1931471805599454, "weight": 0.11764705882352941}, {"source": "ycjcl868", "target": "infinite-load.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombiej", "target": "pagination.test.js.snap", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9648\u5c0f\u806a", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "ycjcl868", "target": "card-top.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "animation.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "error.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9a97\u4f60\u662f\u5c0f\u732b\u54aa", "target": "mixin.less", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "zombiej", "target": ".eslintrc.js", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "ycjcl868", "target": "group.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u9a97\u4f60\u662f\u5c0f\u732b\u54aa", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "ycjcl868", "target": "index.zh-CN.md", "color": "#999999", "width": 2.1094379124341005, "weight": 0.4166666666666667}, {"source": "zombiej", "target": "other.test.js.snap", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "plainnany", "target": "draggable.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "docsearch.less", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "toc.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "en-US.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "ycjcl868", "target": "template.html", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "faq.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "icons.less", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "afc163", "target": "demo.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.16666666666666666}, {"source": "ycjcl868", "target": "header.less", "color": "#999999", "width": 1.8862943611198906, "weight": 0.5714285714285714}, {"source": "Yash Joshi", "target": "single.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yash Joshi", "target": "mixin.less", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "\u504f\u53f3", "target": "nav.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "basic.md", "color": "#999999", "width": 0.5, "weight": 0.2}, {"source": "liyuanqiu", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u8bf8\u5cb3", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yaindrop", "target": "reaction.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "ComponentDoc.jsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Yash Joshi", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "ycjcl868", "target": "common.less", "color": "#999999", "width": 1.8862943611198906, "weight": 0.4444444444444444}, {"source": "ycjcl868", "target": "content.md", "color": "#999999", "width": 1.5986122886681098, "weight": 1.0}, {"source": "ycjcl868", "target": "nav.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "form-in-drawer.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "actions.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "basic.md", "color": "#999999", "width": 1.8862943611198906, "weight": 0.8}, {"source": "ycjcl868", "target": "breadcrumb.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "ghost.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "responsive.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "damon.chen", "target": ".eslintrc.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "Table.filter.test.js", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "empty.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "simple.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "custom-filter-panel.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": ".eslintignore", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": ".jest.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "index.test.js", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2222222222222222}, {"source": "\u504f\u53f3", "target": "Tree.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "index.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u504f\u53f3", "target": "line.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u53f6\u67ab", "target": "Paragraph.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u53f6\u67ab", "target": "Title.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "PeachScript", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "afc163", "target": "use-in-typescript.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "use-in-typescript.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "use-with-create-react-app.en-US.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "use-with-create-react-app.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "customize-theme.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4fe1\u946b-King", "target": "package.json", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "FormItem.tsx", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "index.test.js", "color": "#999999", "width": 1.5986122886681098, "weight": 0.3333333333333333}, {"source": "\u9a97\u4f60\u662f\u5c0f\u732b\u54aa", "target": "custom-typings.d.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Chuck", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Chuck", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.08333333333333333}, {"source": "afc163", "target": "README-zh_CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "afc163", "target": "introduce.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "afc163", "target": "introduce.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "\u504f\u53f3", "target": "check-site.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u504f\u53f3", "target": "label-placement.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "ComponentDoc.jsx", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wwwxy", "target": "index.en-US.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "wwwxy", "target": "index.zh-CN.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.5}, {"source": "Rustin", "target": "Input.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Rustin", "target": "Skeleton.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Rustin", "target": "demo.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Rustin", "target": "index.test.js.snap", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Rustin", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.1111111111111111}, {"source": "Rustin", "target": "index.en-US.md", "color": "#999999", "width": 0.5, "weight": 0.1}, {"source": "Rustin", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "Rustin", "target": "index.zh-CN.md", "color": "#999999", "width": 0.5, "weight": 0.09090909090909091}, {"source": "Rustin", "target": "index.less", "color": "#999999", "width": 0.5, "weight": 0.09090909090909091}, {"source": "Rustin", "target": "upload.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Rustin", "target": "utils.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Hami Abdi", "target": "AUTHORS.txt", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Hami Abdi", "target": "inline-login.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "icon-pic-searcher.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "flex-align.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "flex-order.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "Header.jsx", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "chenshuai2144", "target": "header.less", "color": "#999999", "width": 0.5, "weight": 0.14285714285714285}, {"source": "chenshuai2144", "target": "markdown.less", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "chenshuai2144", "target": "theme.less", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "chenshuai2144", "target": "Header.jsx", "color": "#999999", "width": 0.5, "weight": 0.25}, {"source": "ycjcl868", "target": "generateColorLess.js", "color": "#999999", "width": 0.5, "weight": 0.3333333333333333}, {"source": "ycjcl868", "target": "ThemeIcon.jsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "zh-CN.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "no-wrapper.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "title.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "custom.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "render-in-current.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "user-profile.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "customize.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "confirm-promise.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "confirm-router.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "confirm.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "locale.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "ycjcl868", "target": "inner.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "size.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "step-next.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "ycjcl868", "target": "page-nav.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "header.less", "color": "#999999", "width": 1.1931471805599454, "weight": 0.2857142857142857}, {"source": "afc163", "target": "theme.less", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "afc163", "target": "demo.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "afc163", "target": "complex-form-control.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.16666666666666666}, {"source": "zombiej", "target": "Background.tsx", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "zombiej", "target": "MorePage.less", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "Table.pagination.test.js", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u4e8c\u8d27\u673a\u5668\u4eba", "target": "usePagination.ts", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "DiamondYuan", "target": "index.test.js", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "DiamondYuan", "target": "index.tsx", "color": "#999999", "width": 0.5, "weight": 0.5}], "nodes": [{"id": "coderge", "text": "coderge", "color": "#E00B6B", "size": 5.5}, {"id": "index.zh-CN.md", "text": "index.zh-CN.md", "color": "#2E5EAA", "size": 8.5}, {"id": "ycjcl868", "text": "ycjcl868", "color": "#E00B6B", "size": 37.5}, {"id": "dark.less", "text": "dark.less", "color": "#2E5EAA", "size": 5.5}, {"id": "zombiej", "text": "zombiej", "color": "#E00B6B", "size": 9.0}, {"id": "index.test.js", "text": "index.test.js", "color": "#2E5EAA", "size": 7.5}, {"id": "\u504f\u53f3", "text": "\u504f\u53f3", "color": "#E00B6B", "size": 13.0}, {"id": "index.less", "text": "index.less", "color": "#2E5EAA", "size": 10.5}, {"id": "afc163", "text": "afc163", "color": "#E00B6B", "size": 18.5}, {"id": "size.less", "text": "size.less", "color": "#2E5EAA", "size": 5.5}, {"id": "default.less", "text": "default.less", "color": "#2E5EAA", "size": 5.5}, {"id": "package.json", "text": "package.json", "color": "#2E5EAA", "size": 11.5}, {"id": "progress.tsx", "text": "progress.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "customize-theme.en-US.md", "text": "customize-theme.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Table.filter.test.js.snap", "text": "Table.filter.test.js.snap", "color": "#2E5EAA", "size": 5.5}, {"id": "en-US.js", "text": "en-US.js", "color": "#2E5EAA", "size": 6.0}, {"id": "common.less", "text": "common.less", "color": "#2E5EAA", "size": 6.5}, {"id": "Circle.tsx", "text": "Circle.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": ".antd-tools.config.js", "text": ".antd-tools.config.js", "color": "#2E5EAA", "size": 5.5}, {"id": "\u53f6\u67ab", "text": "\u53f6\u67ab", "color": "#E00B6B", "size": 7.5}, {"id": "FormItem.tsx", "text": "FormItem.tsx", "color": "#2E5EAA", "size": 6.0}, {"id": "mixin.less", "text": "mixin.less", "color": "#2E5EAA", "size": 6.5}, {"id": "interactive.md", "text": "interactive.md", "color": "#2E5EAA", "size": 5.5}, {"id": "lighthouse-ci.yml", "text": "lighthouse-ci.yml", "color": "#2E5EAA", "size": 5.5}, {"id": "Editable.tsx", "text": "Editable.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "PeachScript", "text": "PeachScript", "color": "#E00B6B", "size": 6.0}, {"id": "webpack.config.js", "text": "webpack.config.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Kim, Harim", "text": "Kim, Harim", "color": "#E00B6B", "size": 5.5}, {"id": "head.md", "text": "head.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Form.tsx", "text": "Form.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "dist.test.js", "text": "dist.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "depfu[bot]", "text": "depfu[bot]", "color": "#E00B6B", "size": 5.5}, {"id": "Wei Zhu", "text": "Wei Zhu", "color": "#E00B6B", "size": 5.5}, {"id": "chenshuai2144", "text": "chenshuai2144", "color": "#E00B6B", "size": 8.0}, {"id": "xiaohuoni", "text": "xiaohuoni", "color": "#E00B6B", "size": 6.0}, {"id": "index.jsx", "text": "index.jsx", "color": "#2E5EAA", "size": 6.0}, {"id": "home.less", "text": "home.less", "color": "#2E5EAA", "size": 5.5}, {"id": "Theo Satloff", "text": "Theo Satloff", "color": "#E00B6B", "size": 5.5}, {"id": ".eslintrc.js", "text": ".eslintrc.js", "color": "#2E5EAA", "size": 6.5}, {"id": "\u9648\u6770", "text": "\u9648\u6770", "color": "#E00B6B", "size": 5.5}, {"id": "index.tsx", "text": "index.tsx", "color": "#2E5EAA", "size": 8.0}, {"id": "TsesamLi", "text": "TsesamLi", "color": "#E00B6B", "size": 5.5}, {"id": "woodsand", "text": "woodsand", "color": "#E00B6B", "size": 5.5}, {"id": "getting-started.en-US.md", "text": "getting-started.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u9a97\u4f60\u662f\u5c0f\u732b\u54aa", "text": "\u9a97\u4f60\u662f\u5c0f\u732b\u54aa", "color": "#E00B6B", "size": 7.0}, {"id": "deploy-site.yml", "text": "deploy-site.yml", "color": "#2E5EAA", "size": 5.5}, {"id": "Guichi Zhao", "text": "Guichi Zhao", "color": "#E00B6B", "size": 5.5}, {"id": "customized-form-controls.md", "text": "customized-form-controls.md", "color": "#2E5EAA", "size": 5.5}, {"id": "dependabot-preview[bot]", "text": "dependabot-preview[bot]", "color": "#E00B6B", "size": 5.5}, {"id": "\u9648\u5c0f\u806a", "text": "\u9648\u5c0f\u806a", "color": "#E00B6B", "size": 6.0}, {"id": "virtual-list.md", "text": "virtual-list.md", "color": "#2E5EAA", "size": 5.5}, {"id": "bisheng.config.js", "text": "bisheng.config.js", "color": "#2E5EAA", "size": 5.5}, {"id": "demo.test.js.snap", "text": "demo.test.js.snap", "color": "#2E5EAA", "size": 6.0}, {"id": "MainContent.jsx", "text": "MainContent.jsx", "color": "#2E5EAA", "size": 6.0}, {"id": "netlify.toml", "text": "netlify.toml", "color": "#2E5EAA", "size": 5.5}, {"id": "demo.less", "text": "demo.less", "color": "#2E5EAA", "size": 6.0}, {"id": "He Linming", "text": "He Linming", "color": "#E00B6B", "size": 5.5}, {"id": "interface.tsx", "text": "interface.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4e8c\u8d27\u673a\u5668\u4eba", "text": "\u4e8c\u8d27\u673a\u5668\u4eba", "color": "#E00B6B", "size": 10.5}, {"id": "xrkffgg", "text": "xrkffgg", "color": "#E00B6B", "size": 5.5}, {"id": "\u7ea6\u4fee\u4e9a", "text": "\u7ea6\u4fee\u4e9a", "color": "#E00B6B", "size": 5.5}, {"id": "Header.jsx", "text": "Header.jsx", "color": "#2E5EAA", "size": 6.5}, {"id": "highlight.less", "text": "highlight.less", "color": "#2E5EAA", "size": 5.5}, {"id": "markdown.less", "text": "markdown.less", "color": "#2E5EAA", "size": 6.0}, {"id": "custom-icon.less", "text": "custom-icon.less", "color": "#2E5EAA", "size": 5.5}, {"id": "generateColorLess.js", "text": "generateColorLess.js", "color": "#2E5EAA", "size": 6.0}, {"id": "FormList.tsx", "text": "FormList.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "index.en-US.md", "text": "index.en-US.md", "color": "#2E5EAA", "size": 8.0}, {"id": "infinite-load.md", "text": "infinite-load.md", "color": "#2E5EAA", "size": 5.5}, {"id": "pagination.test.js.snap", "text": "pagination.test.js.snap", "color": "#2E5EAA", "size": 5.5}, {"id": "card-top.md", "text": "card-top.md", "color": "#2E5EAA", "size": 5.5}, {"id": "animation.md", "text": "animation.md", "color": "#2E5EAA", "size": 5.5}, {"id": "error.md", "text": "error.md", "color": "#2E5EAA", "size": 5.5}, {"id": "group.md", "text": "group.md", "color": "#2E5EAA", "size": 5.5}, {"id": "other.test.js.snap", "text": "other.test.js.snap", "color": "#2E5EAA", "size": 5.5}, {"id": "plainnany", "text": "plainnany", "color": "#E00B6B", "size": 5.5}, {"id": "draggable.md", "text": "draggable.md", "color": "#2E5EAA", "size": 5.5}, {"id": "docsearch.less", "text": "docsearch.less", "color": "#2E5EAA", "size": 5.5}, {"id": "toc.less", "text": "toc.less", "color": "#2E5EAA", "size": 5.5}, {"id": "template.html", "text": "template.html", "color": "#2E5EAA", "size": 5.5}, {"id": "faq.zh-CN.md", "text": "faq.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "icons.less", "text": "icons.less", "color": "#2E5EAA", "size": 5.5}, {"id": "header.less", "text": "header.less", "color": "#2E5EAA", "size": 6.5}, {"id": "Yash Joshi", "text": "Yash Joshi", "color": "#E00B6B", "size": 6.5}, {"id": "single.less", "text": "single.less", "color": "#2E5EAA", "size": 5.5}, {"id": "nav.less", "text": "nav.less", "color": "#2E5EAA", "size": 5.5}, {"id": "basic.md", "text": "basic.md", "color": "#2E5EAA", "size": 6.0}, {"id": "liyuanqiu", "text": "liyuanqiu", "color": "#E00B6B", "size": 5.5}, {"id": "\u8bf8\u5cb3", "text": "\u8bf8\u5cb3", "color": "#E00B6B", "size": 5.5}, {"id": "Yaindrop", "text": "Yaindrop", "color": "#E00B6B", "size": 5.5}, {"id": "reaction.en-US.md", "text": "reaction.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "ComponentDoc.jsx", "text": "ComponentDoc.jsx", "color": "#2E5EAA", "size": 6.0}, {"id": "content.md", "text": "content.md", "color": "#2E5EAA", "size": 5.5}, {"id": "nav.md", "text": "nav.md", "color": "#2E5EAA", "size": 5.5}, {"id": "form-in-drawer.md", "text": "form-in-drawer.md", "color": "#2E5EAA", "size": 5.5}, {"id": "actions.md", "text": "actions.md", "color": "#2E5EAA", "size": 5.5}, {"id": "breadcrumb.md", "text": "breadcrumb.md", "color": "#2E5EAA", "size": 5.5}, {"id": "ghost.md", "text": "ghost.md", "color": "#2E5EAA", "size": 5.5}, {"id": "responsive.md", "text": "responsive.md", "color": "#2E5EAA", "size": 5.5}, {"id": "damon.chen", "text": "damon.chen", "color": "#E00B6B", "size": 5.5}, {"id": "Table.filter.test.js", "text": "Table.filter.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "empty.tsx", "text": "empty.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "simple.tsx", "text": "simple.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "custom-filter-panel.md", "text": "custom-filter-panel.md", "color": "#2E5EAA", "size": 5.5}, {"id": ".eslintignore", "text": ".eslintignore", "color": "#2E5EAA", "size": 5.5}, {"id": ".jest.js", "text": ".jest.js", "color": "#2E5EAA", "size": 5.5}, {"id": "Tree.tsx", "text": "Tree.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "index.test.js.snap", "text": "index.test.js.snap", "color": "#2E5EAA", "size": 6.0}, {"id": "line.md", "text": "line.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Paragraph.tsx", "text": "Paragraph.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Title.tsx", "text": "Title.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "use-in-typescript.en-US.md", "text": "use-in-typescript.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "use-in-typescript.zh-CN.md", "text": "use-in-typescript.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "use-with-create-react-app.en-US.md", "text": "use-with-create-react-app.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "use-with-create-react-app.zh-CN.md", "text": "use-with-create-react-app.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "customize-theme.zh-CN.md", "text": "customize-theme.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u4fe1\u946b-King", "text": "\u4fe1\u946b-King", "color": "#E00B6B", "size": 5.5}, {"id": "custom-typings.d.ts", "text": "custom-typings.d.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "Chuck", "text": "Chuck", "color": "#E00B6B", "size": 6.0}, {"id": "README-zh_CN.md", "text": "README-zh_CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 5.5}, {"id": "introduce.en-US.md", "text": "introduce.en-US.md", "color": "#2E5EAA", "size": 5.5}, {"id": "introduce.zh-CN.md", "text": "introduce.zh-CN.md", "color": "#2E5EAA", "size": 5.5}, {"id": "check-site.js", "text": "check-site.js", "color": "#2E5EAA", "size": 5.5}, {"id": "label-placement.less", "text": "label-placement.less", "color": "#2E5EAA", "size": 5.5}, {"id": "wwwxy", "text": "wwwxy", "color": "#E00B6B", "size": 6.0}, {"id": "Rustin", "text": "Rustin", "color": "#E00B6B", "size": 10.5}, {"id": "Input.tsx", "text": "Input.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Skeleton.tsx", "text": "Skeleton.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "upload.test.js", "text": "upload.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "utils.tsx", "text": "utils.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "Hami Abdi", "text": "Hami Abdi", "color": "#E00B6B", "size": 6.0}, {"id": "AUTHORS.txt", "text": "AUTHORS.txt", "color": "#2E5EAA", "size": 5.5}, {"id": "inline-login.md", "text": "inline-login.md", "color": "#2E5EAA", "size": 5.5}, {"id": "icon-pic-searcher.less", "text": "icon-pic-searcher.less", "color": "#2E5EAA", "size": 5.5}, {"id": "flex-align.md", "text": "flex-align.md", "color": "#2E5EAA", "size": 5.5}, {"id": "flex-order.md", "text": "flex-order.md", "color": "#2E5EAA", "size": 5.5}, {"id": "theme.less", "text": "theme.less", "color": "#2E5EAA", "size": 6.0}, {"id": "ThemeIcon.jsx", "text": "ThemeIcon.jsx", "color": "#2E5EAA", "size": 5.5}, {"id": "zh-CN.js", "text": "zh-CN.js", "color": "#2E5EAA", "size": 5.5}, {"id": "no-wrapper.md", "text": "no-wrapper.md", "color": "#2E5EAA", "size": 5.5}, {"id": "title.md", "text": "title.md", "color": "#2E5EAA", "size": 5.5}, {"id": "custom.md", "text": "custom.md", "color": "#2E5EAA", "size": 5.5}, {"id": "render-in-current.md", "text": "render-in-current.md", "color": "#2E5EAA", "size": 5.5}, {"id": "user-profile.md", "text": "user-profile.md", "color": "#2E5EAA", "size": 5.5}, {"id": "customize.md", "text": "customize.md", "color": "#2E5EAA", "size": 5.5}, {"id": "confirm-promise.md", "text": "confirm-promise.md", "color": "#2E5EAA", "size": 5.5}, {"id": "confirm-router.md", "text": "confirm-router.md", "color": "#2E5EAA", "size": 5.5}, {"id": "confirm.md", "text": "confirm.md", "color": "#2E5EAA", "size": 5.5}, {"id": "locale.md", "text": "locale.md", "color": "#2E5EAA", "size": 5.5}, {"id": "inner.md", "text": "inner.md", "color": "#2E5EAA", "size": 5.5}, {"id": "size.md", "text": "size.md", "color": "#2E5EAA", "size": 5.5}, {"id": "step-next.md", "text": "step-next.md", "color": "#2E5EAA", "size": 5.5}, {"id": "page-nav.less", "text": "page-nav.less", "color": "#2E5EAA", "size": 5.5}, {"id": "demo.test.js", "text": "demo.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "complex-form-control.md", "text": "complex-form-control.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Background.tsx", "text": "Background.tsx", "color": "#2E5EAA", "size": 5.5}, {"id": "MorePage.less", "text": "MorePage.less", "color": "#2E5EAA", "size": 5.5}, {"id": "Table.pagination.test.js", "text": "Table.pagination.test.js", "color": "#2E5EAA", "size": 5.5}, {"id": "usePagination.ts", "text": "usePagination.ts", "color": "#2E5EAA", "size": 5.5}, {"id": "DiamondYuan", "text": "DiamondYuan", "color": "#E00B6B", "size": 6.0}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_GgFPtnCH")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_GgFPtnCH")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_GgFPtnCH")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#GgFPtnCH_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('GgFPtnCH');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('GgFPtnCH');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><body>
+<style>
+    text.label_GEHpthqJ {
+        text-anchor: middle;
+        font-size: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        fill: #999999;
+        stroke: #ffffff;
+        stroke-width: 0.1px;
+        opacity: 1.0;
+    }
+    .links_GEHpthqJ line {
+    stroke-opacity: 1.0;
+    }
+    .arrows svg:path {
+        stroke: #666;
+    }
+    .nodes_GEHpthqJ circle {
+    stroke: #fff;
+    stroke-width: 0.5px;
+    }
+</style>
+
+<svg width="1800" height="1800" id="GEHpthqJ">        
+    <text x="20" y="20" font-family="sans-serif" font-size="14px" fill="#666" style="cursor: pointer"
+        id='GEHpthqJ_svg_txt'>[save svg]</text>
+</svg>
+
+<script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<script charset="utf-8">
+
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            //d3: "https://d3js.org/d3.v4.min"
+            d3: "https://d3js.org/d3.v4.min.js".replace(".js", "")
+        }
+    });
+    console.log("Detected requireJS");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("Detected no requireJS");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 5;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+}
+
+// wait until d3js has been loaded
+require(["d3"], function(d3) {
+    var svg = d3.select("#"+"GEHpthqJ"), radius = 6, width = +svg.attr("width"), height = +svg.attr("height");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+    var graph = {"links": [{"source": "Tom Huang", "target": "value-oriented-programming.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "why-you-should-leave-react-for-vue-and-never-use-it-again.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Yuqi", "target": "product-management-mental-models-for-everyone.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Hopsken", "target": "a-guide-to-color-accessibility-in-product-design.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Starrier", "target": "java-data-streaming.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "front-end.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "getting-the-most-from-the-new-multi-camera-api.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "LeviDing", "target": "backend.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "android.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "reducing-dimensionality-from-dimensionality-reduction-techniques.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "product.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "design.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "ios.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "Rickon", "target": "write-once-run-everywhere-tests-on-android.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "README.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "HeHuiQiang", "target": "understanding-asynchronous-javascript-the-event-loop.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "snpmyn", "target": "a-patchwork-plaid-monolith-to-modularized-app.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "understanding-asynchronous-javascript-the-event-loop.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "blockchain-platforms-tech-to-watch-in-2019.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "https-medium-com-netflixtechblog-engineering-to-improve-marketing-effectiveness-part-2.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "zero-to-one-with-flutter.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u8d75\u5c0f\u751f", "target": "flask-video-streaming-revisited.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Tom Huang", "target": "state-restoration-tutorial-getting-started.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "walter", "target": "zero-to-one-with-flutter.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "composing-software-an-introduction.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "a-comprehensive-look-back-at-frontend-in-2018.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u6e05\u79cb", "target": "ux-design-practices-how-to-make-web-interface-scannable.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Starrier", "target": "data-visualization-with-bokeh-in-python-part-ii-interactions.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "accepting-payments-with-stripe-vuejs-and-flask.md", "color": "#999999", "width": 1.1931471805599454, "weight": 0.6666666666666666}, {"source": "LeviDing", "target": "why-your-app-should-be-optimized-for-screen-of-all-sizes.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "top-javascript-frameworks-and-topics-to-learn-in-2019.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "i-worked-with-a-data-scientist-heres-what-i-learned.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "publishing-private-apps-just-got-easier.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "dependencies-ios-carthage.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "xilihuasi", "target": "an-introduction-to-css-shapes.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Sam", "target": "our-learnings-from-adopting-graphql.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "icy", "target": "transducers-efficient-data-processing-pipelines-in-javascript.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "front-end-performance-checklist-2019-pdf-pages-2.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Starrier", "target": "data-visualization-with-bokeh-in-python-part-one-getting-started.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "YueYong", "target": "data-visualization-with-bokeh-in-python-part-iii-a-complete-dashboard.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "front-end-performance-checklist-2019-pdf-pages-1.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "writing-a-killer-software-engineering-resume.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "curry-and-function-composition.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "transducers-efficient-data-processing-pipelines-in-javascript.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "front-end-performance-checklist-2019-pdf-pages-3.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "dns-over-tls.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Yuqi", "target": "lenses-composable-getters-and-setterssfor-functional-programming.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "asynchronous-tasks-with-flask-and-redis-queue.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "lets-talk-js-documentation.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Haoze Xu", "target": "top-javascript-frameworks-and-topics-to-learn-in-2019.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "front-end-performance-checklist-2019-pdf-pages-4.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u751f\u7cf8", "target": "accepting-payments-with-stripe-vuejs-and-flask.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "delightful-animations-in-ios.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "wenny", "target": "getting-the-most-from-the-new-multi-camera-api.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u6e05\u79cb", "target": "a-comprehensive-look-back-at-frontend-in-2018.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Cornelius", "target": "a-new-hope-the-future-of-application-platforms.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Starrier", "target": "lets-talk-js-documentation.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Starrier", "target": "engineering-to-improve-marketing-effectiveness-part-1.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5218\u5609\u4e00", "target": "asynchronous-tasks-with-flask-and-redis-queue.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "understanding-javascript-memory-management-using-garbage-collection.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Qiuk17", "target": "publishing-private-apps-just-got-easier.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "n_13-reasons-why-you-should-choose-consider-to-move-to-flutter-in-2019.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "front-end-performance-checklist-2019-pdf-pages-6.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "front-end-performance-checklist-2019-pdf-pages-5.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "bye-bye-mongo-hello-postgres.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Zhengyan Wu", "target": "understanding-javascript-memory-management-using-garbage-collection.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "building-hocs-with-recompose.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Starrier", "target": "https-medium-com-netflixtechblog-engineering-to-improve-marketing-effectiveness-part-2.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "ten-things-you-didnt-know-about-webpagetest-org.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "using-proxy-to-track-javascript-class.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "Hopsken", "target": "front-end-performance-checklist-2019-pdf-pages-1.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "others.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u6d77\u6d0b@TJU", "target": "reducing-dimensionality-from-dimensionality-reduction-techniques.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "AI.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "courier-dropbox-migration-to-grpc.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "js design patterns", "target": "the-state-of-web-browsers.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "\u5b50\u975e", "target": "rust-2018-is-here-but-what-is-it.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "stop-using-default-exports-javascript-module.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "one-year-with-flutter-my-experience.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "DevMcryYu", "target": "mdc-103-flutter.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "SHERlocked93", "target": "building-hocs-with-recompose.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "\u683c\u5b50\u718a", "target": "front-end-performance-checklist-2019-pdf-pages-2.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "dns-over-tls.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "time-series-analysis-in-python-an-introduction.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Weslie", "target": "delightful-animations-in-ios.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "SHERlocked93", "target": "using-proxy-to-track-javascript-class.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "the-state-of-web-browsers-2019-edition.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "n_5-animation-packages-ionic.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "react-native-bridge-for-ios-and-android.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "LeviDing", "target": "the-9-big-design-trends-of-2019.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Hopsken", "target": "stop-using-default-exports-javascript-module.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "the-typescript-tax.md", "color": "#999999", "width": 1.1931471805599454, "weight": 1.0}, {"source": "\u5bd2\u98df\u541b", "target": "i-worked-with-a-data-scientist-heres-what-i-learned.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Weslie", "target": "dependencies-ios-carthage.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "YueYong", "target": "n_13-reasons-why-you-should-choose-consider-to-move-to-flutter-in-2019.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "vue-js-considerations-and-tricks.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "lsvih", "target": "n_5-animation-packages-ionic.md", "color": "#999999", "width": 0.5, "weight": 0.5}, {"source": "LeviDing", "target": "why-isnt-x-a-hook.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "http-3-from-root-to-tip.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "vue-router-the-missing-manual.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "http-2-frequently-asked-questions.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "a-tale-of-webpack-4-and-how-to-finally-configure-it-in-the-right-way.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "google-advanced-search-operators.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "Weslie", "target": "intermediate-design-patterns-in-swift.md", "color": "#999999", "width": 0.5, "weight": 1.0}, {"source": "LeviDing", "target": "integrals.md", "color": "#999999", "width": 2.9849066497880004, "weight": 1.0}], "nodes": [{"id": "Tom Huang", "text": "Tom Huang", "color": "#E00B6B", "size": 6.0}, {"id": "value-oriented-programming.md", "text": "value-oriented-programming.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Yuqi", "text": "Yuqi", "color": "#E00B6B", "size": 6.5}, {"id": "why-you-should-leave-react-for-vue-and-never-use-it-again.md", "text": "why-you-should-leave-react-for-vue-and-never-use-it-again.md", "color": "#2E5EAA", "size": 5.5}, {"id": "product-management-mental-models-for-everyone.md", "text": "product-management-mental-models-for-everyone.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Hopsken", "text": "Hopsken", "color": "#E00B6B", "size": 6.5}, {"id": "a-guide-to-color-accessibility-in-product-design.md", "text": "a-guide-to-color-accessibility-in-product-design.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Starrier", "text": "Starrier", "color": "#E00B6B", "size": 8.0}, {"id": "java-data-streaming.md", "text": "java-data-streaming.md", "color": "#2E5EAA", "size": 5.5}, {"id": "LeviDing", "text": "LeviDing", "color": "#E00B6B", "size": 34.5}, {"id": "front-end.md", "text": "front-end.md", "color": "#2E5EAA", "size": 5.5}, {"id": "getting-the-most-from-the-new-multi-camera-api.md", "text": "getting-the-most-from-the-new-multi-camera-api.md", "color": "#2E5EAA", "size": 6.0}, {"id": "backend.md", "text": "backend.md", "color": "#2E5EAA", "size": 5.5}, {"id": "android.md", "text": "android.md", "color": "#2E5EAA", "size": 5.5}, {"id": "reducing-dimensionality-from-dimensionality-reduction-techniques.md", "text": "reducing-dimensionality-from-dimensionality-reduction-techniques.md", "color": "#2E5EAA", "size": 6.0}, {"id": "product.md", "text": "product.md", "color": "#2E5EAA", "size": 5.5}, {"id": "design.md", "text": "design.md", "color": "#2E5EAA", "size": 5.5}, {"id": "ios.md", "text": "ios.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Rickon", "text": "Rickon", "color": "#E00B6B", "size": 5.5}, {"id": "write-once-run-everywhere-tests-on-android.md", "text": "write-once-run-everywhere-tests-on-android.md", "color": "#2E5EAA", "size": 5.5}, {"id": "README.md", "text": "README.md", "color": "#2E5EAA", "size": 5.5}, {"id": "HeHuiQiang", "text": "HeHuiQiang", "color": "#E00B6B", "size": 5.5}, {"id": "understanding-asynchronous-javascript-the-event-loop.md", "text": "understanding-asynchronous-javascript-the-event-loop.md", "color": "#2E5EAA", "size": 6.0}, {"id": "snpmyn", "text": "snpmyn", "color": "#E00B6B", "size": 5.5}, {"id": "a-patchwork-plaid-monolith-to-modularized-app.md", "text": "a-patchwork-plaid-monolith-to-modularized-app.md", "color": "#2E5EAA", "size": 5.5}, {"id": "blockchain-platforms-tech-to-watch-in-2019.md", "text": "blockchain-platforms-tech-to-watch-in-2019.md", "color": "#2E5EAA", "size": 5.5}, {"id": "https-medium-com-netflixtechblog-engineering-to-improve-marketing-effectiveness-part-2.md", "text": "https-medium-com-netflixtechblog-engineering-to-improve-marketing-effectiveness-part-2.md", "color": "#2E5EAA", "size": 6.0}, {"id": "zero-to-one-with-flutter.md", "text": "zero-to-one-with-flutter.md", "color": "#2E5EAA", "size": 6.0}, {"id": "\u8d75\u5c0f\u751f", "text": "\u8d75\u5c0f\u751f", "color": "#E00B6B", "size": 5.5}, {"id": "flask-video-streaming-revisited.md", "text": "flask-video-streaming-revisited.md", "color": "#2E5EAA", "size": 5.5}, {"id": "state-restoration-tutorial-getting-started.md", "text": "state-restoration-tutorial-getting-started.md", "color": "#2E5EAA", "size": 5.5}, {"id": "walter", "text": "walter", "color": "#E00B6B", "size": 5.5}, {"id": "composing-software-an-introduction.md", "text": "composing-software-an-introduction.md", "color": "#2E5EAA", "size": 5.5}, {"id": "a-comprehensive-look-back-at-frontend-in-2018.md", "text": "a-comprehensive-look-back-at-frontend-in-2018.md", "color": "#2E5EAA", "size": 6.0}, {"id": "\u6e05\u79cb", "text": "\u6e05\u79cb", "color": "#E00B6B", "size": 6.0}, {"id": "ux-design-practices-how-to-make-web-interface-scannable.md", "text": "ux-design-practices-how-to-make-web-interface-scannable.md", "color": "#2E5EAA", "size": 5.5}, {"id": "data-visualization-with-bokeh-in-python-part-ii-interactions.md", "text": "data-visualization-with-bokeh-in-python-part-ii-interactions.md", "color": "#2E5EAA", "size": 5.5}, {"id": "accepting-payments-with-stripe-vuejs-and-flask.md", "text": "accepting-payments-with-stripe-vuejs-and-flask.md", "color": "#2E5EAA", "size": 6.0}, {"id": "why-your-app-should-be-optimized-for-screen-of-all-sizes.md", "text": "why-your-app-should-be-optimized-for-screen-of-all-sizes.md", "color": "#2E5EAA", "size": 5.5}, {"id": "top-javascript-frameworks-and-topics-to-learn-in-2019.md", "text": "top-javascript-frameworks-and-topics-to-learn-in-2019.md", "color": "#2E5EAA", "size": 6.0}, {"id": "i-worked-with-a-data-scientist-heres-what-i-learned.md", "text": "i-worked-with-a-data-scientist-heres-what-i-learned.md", "color": "#2E5EAA", "size": 6.0}, {"id": "publishing-private-apps-just-got-easier.md", "text": "publishing-private-apps-just-got-easier.md", "color": "#2E5EAA", "size": 6.0}, {"id": "dependencies-ios-carthage.md", "text": "dependencies-ios-carthage.md", "color": "#2E5EAA", "size": 6.0}, {"id": "xilihuasi", "text": "xilihuasi", "color": "#E00B6B", "size": 5.5}, {"id": "an-introduction-to-css-shapes.md", "text": "an-introduction-to-css-shapes.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Sam", "text": "Sam", "color": "#E00B6B", "size": 5.5}, {"id": "our-learnings-from-adopting-graphql.md", "text": "our-learnings-from-adopting-graphql.md", "color": "#2E5EAA", "size": 5.5}, {"id": "icy", "text": "icy", "color": "#E00B6B", "size": 5.5}, {"id": "transducers-efficient-data-processing-pipelines-in-javascript.md", "text": "transducers-efficient-data-processing-pipelines-in-javascript.md", "color": "#2E5EAA", "size": 6.0}, {"id": "front-end-performance-checklist-2019-pdf-pages-2.md", "text": "front-end-performance-checklist-2019-pdf-pages-2.md", "color": "#2E5EAA", "size": 6.0}, {"id": "data-visualization-with-bokeh-in-python-part-one-getting-started.md", "text": "data-visualization-with-bokeh-in-python-part-one-getting-started.md", "color": "#2E5EAA", "size": 5.5}, {"id": "YueYong", "text": "YueYong", "color": "#E00B6B", "size": 6.0}, {"id": "data-visualization-with-bokeh-in-python-part-iii-a-complete-dashboard.md", "text": "data-visualization-with-bokeh-in-python-part-iii-a-complete-dashboard.md", "color": "#2E5EAA", "size": 5.5}, {"id": "front-end-performance-checklist-2019-pdf-pages-1.md", "text": "front-end-performance-checklist-2019-pdf-pages-1.md", "color": "#2E5EAA", "size": 6.0}, {"id": "writing-a-killer-software-engineering-resume.md", "text": "writing-a-killer-software-engineering-resume.md", "color": "#2E5EAA", "size": 5.5}, {"id": "curry-and-function-composition.md", "text": "curry-and-function-composition.md", "color": "#2E5EAA", "size": 5.5}, {"id": "front-end-performance-checklist-2019-pdf-pages-3.md", "text": "front-end-performance-checklist-2019-pdf-pages-3.md", "color": "#2E5EAA", "size": 5.5}, {"id": "dns-over-tls.md", "text": "dns-over-tls.md", "color": "#2E5EAA", "size": 6.0}, {"id": "lenses-composable-getters-and-setterssfor-functional-programming.md", "text": "lenses-composable-getters-and-setterssfor-functional-programming.md", "color": "#2E5EAA", "size": 5.5}, {"id": "asynchronous-tasks-with-flask-and-redis-queue.md", "text": "asynchronous-tasks-with-flask-and-redis-queue.md", "color": "#2E5EAA", "size": 6.0}, {"id": "lets-talk-js-documentation.md", "text": "lets-talk-js-documentation.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Haoze Xu", "text": "Haoze Xu", "color": "#E00B6B", "size": 5.5}, {"id": "front-end-performance-checklist-2019-pdf-pages-4.md", "text": "front-end-performance-checklist-2019-pdf-pages-4.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u751f\u7cf8", "text": "\u751f\u7cf8", "color": "#E00B6B", "size": 5.5}, {"id": "delightful-animations-in-ios.md", "text": "delightful-animations-in-ios.md", "color": "#2E5EAA", "size": 6.0}, {"id": "wenny", "text": "wenny", "color": "#E00B6B", "size": 5.5}, {"id": "Cornelius", "text": "Cornelius", "color": "#E00B6B", "size": 5.5}, {"id": "a-new-hope-the-future-of-application-platforms.md", "text": "a-new-hope-the-future-of-application-platforms.md", "color": "#2E5EAA", "size": 5.5}, {"id": "engineering-to-improve-marketing-effectiveness-part-1.md", "text": "engineering-to-improve-marketing-effectiveness-part-1.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u5218\u5609\u4e00", "text": "\u5218\u5609\u4e00", "color": "#E00B6B", "size": 5.5}, {"id": "understanding-javascript-memory-management-using-garbage-collection.md", "text": "understanding-javascript-memory-management-using-garbage-collection.md", "color": "#2E5EAA", "size": 6.0}, {"id": "Qiuk17", "text": "Qiuk17", "color": "#E00B6B", "size": 5.5}, {"id": "n_13-reasons-why-you-should-choose-consider-to-move-to-flutter-in-2019.md", "text": "n_13-reasons-why-you-should-choose-consider-to-move-to-flutter-in-2019.md", "color": "#2E5EAA", "size": 6.0}, {"id": "front-end-performance-checklist-2019-pdf-pages-6.md", "text": "front-end-performance-checklist-2019-pdf-pages-6.md", "color": "#2E5EAA", "size": 5.5}, {"id": "front-end-performance-checklist-2019-pdf-pages-5.md", "text": "front-end-performance-checklist-2019-pdf-pages-5.md", "color": "#2E5EAA", "size": 5.5}, {"id": "bye-bye-mongo-hello-postgres.md", "text": "bye-bye-mongo-hello-postgres.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Zhengyan Wu", "text": "Zhengyan Wu", "color": "#E00B6B", "size": 5.5}, {"id": "building-hocs-with-recompose.md", "text": "building-hocs-with-recompose.md", "color": "#2E5EAA", "size": 6.0}, {"id": "ten-things-you-didnt-know-about-webpagetest-org.md", "text": "ten-things-you-didnt-know-about-webpagetest-org.md", "color": "#2E5EAA", "size": 5.5}, {"id": "using-proxy-to-track-javascript-class.md", "text": "using-proxy-to-track-javascript-class.md", "color": "#2E5EAA", "size": 6.0}, {"id": "others.md", "text": "others.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u6d77\u6d0b@TJU", "text": "\u6d77\u6d0b@TJU", "color": "#E00B6B", "size": 5.5}, {"id": "AI.md", "text": "AI.md", "color": "#2E5EAA", "size": 5.5}, {"id": "courier-dropbox-migration-to-grpc.md", "text": "courier-dropbox-migration-to-grpc.md", "color": "#2E5EAA", "size": 5.5}, {"id": "js design patterns", "text": "js design patterns", "color": "#E00B6B", "size": 5.5}, {"id": "the-state-of-web-browsers.md", "text": "the-state-of-web-browsers.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u5b50\u975e", "text": "\u5b50\u975e", "color": "#E00B6B", "size": 5.5}, {"id": "rust-2018-is-here-but-what-is-it.md", "text": "rust-2018-is-here-but-what-is-it.md", "color": "#2E5EAA", "size": 5.5}, {"id": "stop-using-default-exports-javascript-module.md", "text": "stop-using-default-exports-javascript-module.md", "color": "#2E5EAA", "size": 6.0}, {"id": "one-year-with-flutter-my-experience.md", "text": "one-year-with-flutter-my-experience.md", "color": "#2E5EAA", "size": 5.5}, {"id": "DevMcryYu", "text": "DevMcryYu", "color": "#E00B6B", "size": 5.5}, {"id": "mdc-103-flutter.md", "text": "mdc-103-flutter.md", "color": "#2E5EAA", "size": 5.5}, {"id": "SHERlocked93", "text": "SHERlocked93", "color": "#E00B6B", "size": 6.0}, {"id": "\u683c\u5b50\u718a", "text": "\u683c\u5b50\u718a", "color": "#E00B6B", "size": 5.5}, {"id": "lsvih", "text": "lsvih", "color": "#E00B6B", "size": 6.0}, {"id": "time-series-analysis-in-python-an-introduction.md", "text": "time-series-analysis-in-python-an-introduction.md", "color": "#2E5EAA", "size": 5.5}, {"id": "Weslie", "text": "Weslie", "color": "#E00B6B", "size": 6.5}, {"id": "the-state-of-web-browsers-2019-edition.md", "text": "the-state-of-web-browsers-2019-edition.md", "color": "#2E5EAA", "size": 5.5}, {"id": "n_5-animation-packages-ionic.md", "text": "n_5-animation-packages-ionic.md", "color": "#2E5EAA", "size": 6.0}, {"id": "react-native-bridge-for-ios-and-android.md", "text": "react-native-bridge-for-ios-and-android.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-9-big-design-trends-of-2019.md", "text": "the-9-big-design-trends-of-2019.md", "color": "#2E5EAA", "size": 5.5}, {"id": "the-typescript-tax.md", "text": "the-typescript-tax.md", "color": "#2E5EAA", "size": 5.5}, {"id": "\u5bd2\u98df\u541b", "text": "\u5bd2\u98df\u541b", "color": "#E00B6B", "size": 5.5}, {"id": "vue-js-considerations-and-tricks.md", "text": "vue-js-considerations-and-tricks.md", "color": "#2E5EAA", "size": 5.5}, {"id": "why-isnt-x-a-hook.md", "text": "why-isnt-x-a-hook.md", "color": "#2E5EAA", "size": 5.5}, {"id": "http-3-from-root-to-tip.md", "text": "http-3-from-root-to-tip.md", "color": "#2E5EAA", "size": 5.5}, {"id": "vue-router-the-missing-manual.md", "text": "vue-router-the-missing-manual.md", "color": "#2E5EAA", "size": 5.5}, {"id": "http-2-frequently-asked-questions.md", "text": "http-2-frequently-asked-questions.md", "color": "#2E5EAA", "size": 5.5}, {"id": "a-tale-of-webpack-4-and-how-to-finally-configure-it-in-the-right-way.md", "text": "a-tale-of-webpack-4-and-how-to-finally-configure-it-in-the-right-way.md", "color": "#2E5EAA", "size": 5.5}, {"id": "google-advanced-search-operators.md", "text": "google-advanced-search-operators.md", "color": "#2E5EAA", "size": 5.5}, {"id": "intermediate-design-patterns-in-swift.md", "text": "intermediate-design-patterns-in-swift.md", "color": "#2E5EAA", "size": 5.5}, {"id": "integrals.md", "text": "integrals.md", "color": "#2E5EAA", "size": 5.5}]};
+    var directed = false;
+
+    var simulation = d3.forceSimulation()        
+       .force("link", d3.forceLink().id(function(d) { return d.id; }).strength(function(d){return d.weight;}))
+        .force("charge", d3.forceManyBody().strength(-20).distanceMax(1800))
+       .force("repelForce", d3.forceManyBody().strength(-200).distanceMax(100))
+       .force("center", d3.forceCenter(1800 / 2, 1800 / 2))
+       .alphaTarget(0.0);
+
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+    .enter().append("marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 20 20")
+        .attr("refX", 34)
+        .attr("refY", 0)
+        .attr("markerWidth", 15)
+        .attr("markerHeight", 15)
+        .attr("orient", "auto")
+    .append("path")
+        // draws a filled path (triangle) between three points
+        .attr("d", "M0,-5 L20,0 L0,5 z")
+        .attr("fill", '#999')
+        .attr("stroke", 'none');
+
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var link = g.append("g")
+        .attr("class", "links_GEHpthqJ")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) { return d.width; })
+        .attr("stroke", function(d) { return d.color; } );
+
+    if (directed)
+        link.attr("marker-end", "url(#end)");
+
+    var node_g = g.append("g")
+        .attr("class", "nodes_GEHpthqJ")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("g"); 
+
+    var node = node_g.append("circle")
+        .attr('id', function(d) { return d.id; })
+        .attr("r", function(d) { return d.size; })
+        .attr("fill", function(d) { return d.color; })
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    var text = node_g.append("text")
+    .attr("x", [0, -10][0])
+    .attr("y", [0, -10][1]+3)
+    .attr("id", function(d) {return d.id; })
+    .attr("class", "label_GEHpthqJ")
+    .text(function(d) { return d.id; });
+
+    node.append("title")
+        .text(function(d) { return d.text; });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+    zoom_handler(svg);
+
+    // attach event handler for svg export
+    d3.select('#GEHpthqJ_svg_txt').on("click", save_svg);
+
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+
+    function ticked() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+         text.attr("transform", transform);
+
+
+        text.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+    }
+
+    function transform(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    }
+
+    function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    }
+
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }    
+
+    function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+    }
+
+    function to_svg() {
+        // Returns a SVG representation of the current state of the visualisation
+	    var svg  = document.getElementById('GEHpthqJ');
+	    var xml = (new XMLSerializer).serializeToString(svg);
+        return xml;
+    }
+
+    function save_svg() {
+        var svg  = document.getElementById('GEHpthqJ');
+        var xml = (new XMLSerializer).serializeToString(svg);        
+        var blob = new Blob([xml], {type: 'text/xml'});
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, 'network.svg');
+        }
+        else{
+            var elem = window.document.createElement('a');
+            elem.href = window.URL.createObjectURL(blob);
+            elem.download = 'network.svg';
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+        }
+    }
+});
+</script></body>
+</html>
