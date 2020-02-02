@@ -14,15 +14,15 @@
 
 **世界 Top 10 开发者账号**
 
-![global_top_10_dev_act](file:///Users/tianyi/github/github-analysis-report-2019/static/global_top_10_dev_act.png?lastModify=1580617710)
+![global_top_10_dev_act](./static/global_top_10_dev_act.png)
 
 **世界 Top 10 项目**
 
-![global_top_10_dev_act](/Users/tianyi/github/github-analysis-report-2019/static/global_top_10_repo_act.png)
+![global_top_10_dev_act](./static/global_top_10_repo_act.png)
 
 **中国 Top 20 项目分析**
 
-![chinese_top_20_act](file:///Users/tianyi/github/github-analysis-report-2019/static/chinese_top_20_act.png?lastModify=1580617776)
+![chinese_top_20_act](./static/chinese_top_20_act.png)
 
 ## 原始数据
 
