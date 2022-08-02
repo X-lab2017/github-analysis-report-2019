@@ -19,7 +19,7 @@
   "dependencies": {
     "tslib": "^1.10.0",
     "typescript": "^3.7.4",
-    "yargs": "^15.1.0"
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
     "@types/node": "^13.1.4",
